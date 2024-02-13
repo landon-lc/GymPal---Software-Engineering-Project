@@ -6,3 +6,4 @@ This project was created by James Burriss, Landon Casstevens, Brandon Plyler, Mi
 
 - Lead Developer: James Burriss
 - Team Member: Riley Simpson
+- Team Member: Brandon Plyler
