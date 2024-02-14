@@ -4,6 +4,7 @@
 
 This project was created by James Burriss, Landon Casstevens, Brandon Plyler, Michael Gogarty, and Riley Simpson. A general description of the project is to allow users to find gym partners in their area, as well as have a fitness tracking system. There are various implementations to reach these goals. Programming Languages that this project will consist of are Dart and Flutter. Database implementation will be through Firebase. Additionally, Google Maps will be used for geo-location tracking and finding a gym. Created by James Burriss.
 
+- Team Manager: Landon Casstevens
 - Lead Developer: James Burriss
 - Team Member: Riley Simpson
 - Team Member: Michael Gogarty
