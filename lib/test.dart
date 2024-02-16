@@ -7,5 +7,5 @@ void main() {
   f.setAboutMe('A Person Looking For Gym Friends!');
   f.setEmail('RandomEmail@gmail.com');
   f.setPassword('RandomPassword');
-  print(f.getAboutMe() + f.getEmail() + f.getUserName() + f.getPassword());
+  print(f.getAboutMe() + '\n' + f.getEmail() + '\n' + f.getUserName() +  '\n' + f.getPassword()); // use interpolation to compose strings?
 }
