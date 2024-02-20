@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'models/Friend.dart'; // import for when I have to use friend class to display information
 
 void main() {
   runApp(const MyApp());
