@@ -6,8 +6,10 @@ class Friend {
   // find a way to add a profile picture
   String? aboutMe;
   // list of gyms here
+  var gyms = []; // make this settable
 
   // getters
+
   String getUserName() {
     return userName!;
   }
@@ -25,6 +27,7 @@ class Friend {
   }
 
   // setters
+
   void setUserName(String name) {
     userName = name;
   }
@@ -39,5 +42,17 @@ class Friend {
 
   void setAboutMe(String a) {
     aboutMe = a;
+  }
+
+  //random methods (These aren't working currently)
+
+  void addGym(String g) {
+    gyms.add(g);
+  }
+
+  void displayGyms() {
+    for (String g in gyms) {
+      print(g);
+    }
   }
 }
