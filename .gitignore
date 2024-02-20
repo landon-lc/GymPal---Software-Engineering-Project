@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+linux/flutter/generated*
 
 # IntelliJ related
 *.iml
