@@ -1,5 +1,5 @@
 class Friend {
-  // this will late select certain attributes from the profile class
+  // this will later select certain attributes from the profile class
   String? userName;
   String? password;
   String? email;
