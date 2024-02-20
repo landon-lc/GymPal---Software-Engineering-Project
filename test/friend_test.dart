@@ -1,4 +1,4 @@
-import '../models/friend.dart';
+import '../lib/models/friend.dart';
 // File Strictly for learning how to use dart
 
 void main() {
