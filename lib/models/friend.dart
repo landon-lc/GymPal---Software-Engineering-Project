@@ -3,13 +3,13 @@ import 'gym.dart';
 
 class Friend {
   // this will later select certain attributes from the profile class
-  String? userName; // may need to make this non nullable
-  String? password;
+  String? userName; 
+  String? password; // This will be changed to reference methods in the profile class
   String? email;
   // find a way to add a profile picture
   String? aboutMe;
   // list of gyms here
-   List<String> gym = []; // this is temporarily going to be a String
+   List<Gym> gym = []; // this is temporarily going to be a String
 
   Friend({
     required this.userName,
@@ -56,12 +56,12 @@ class Friend {
 
   //random methods (These aren't working currently)
 
-  void addGym(String g) {
+  void addGym(Gym g) {
     this.gym.add(g);
   }
 
   void displayGyms() {
-    for (String g in this.gym) {
+    for (Gym g in this.gym) {
       print(g);
     }
   }
