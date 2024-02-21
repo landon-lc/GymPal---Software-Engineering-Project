@@ -2,13 +2,21 @@ import 'profile.dart'; // Use for the class variables
 
 class Friend {
   // this will later select certain attributes from the profile class
-  String? userName;
+  String userName;
   String? password;
   String? email;
   // find a way to add a profile picture
   String? aboutMe;
   // list of gyms here
   var gyms = []; // make this settable
+
+  Friend({
+    required this.userName,
+    required this.password,
+    required this.email,
+    required this.aboutMe
+    this.gyms
+  })
 
   // getters
 
