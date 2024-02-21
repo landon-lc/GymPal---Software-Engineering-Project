@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'models/Friend.dart'; // import for when I have to use friend class to display information
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'models/gym.dart';
+// import 'models/map_screen.dart';
 
 void main() {
   runApp(const MyApp());
