@@ -32,3 +32,7 @@ class User extends Profile {
   });
 
 }
+
+var userSampleData = [
+  User(friendsList: [], workoutTemplates: [sampleWorkouts[0]], workouts: [sampleRecords[0]], exercises: [sampleExercises[1]], username: 'johnDoe123', password: 'johnPass1357', email: 'john@gmail.com', bio: 'Welcome to my page!')
+];
