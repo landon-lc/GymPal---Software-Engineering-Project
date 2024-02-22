@@ -9,11 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-<<<<<<< HEAD
-  image: ^4.1.7
-=======
   google_maps_flutter: ^2.5.3
->>>>>>> main
 
 dev_dependencies:
   flutter_test:
