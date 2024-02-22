@@ -9,3 +9,17 @@ This project was created by James Burriss, Landon Casstevens, Brandon Plyler, Mi
 - Team Member: Riley Simpson
 - Team Member: Michael Gogarty
 - Team Member: Brandon Plyler
+
+# Running
+
+The running of this project should be ran in main.dart. The user should be able to download the application and create an account. Additionally, The user will have there own profile. Also, The user should be able to find a gym, add friends, and have a workout record. Created by James Burriss
+
+# Implementation
+Models:
+Should be associated mainly with the backend, basically the computational portion. These should be associated with the models folder (lib\models).
+
+Screens:
+Should be associated with the screens. If a screen is to be created it should reside in the screens folder (lib\screens).
+
+Created by James Burriss.
+
