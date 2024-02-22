@@ -1,6 +1,5 @@
 import 'profile.dart'; // Use for the class variables
 import 'gym.dart';
-import 'package:image/image.dart' as img;
 
 class Friend {
   // this will later select certain attributes from the profile class
