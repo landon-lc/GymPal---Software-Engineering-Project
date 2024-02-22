@@ -1,6 +1,5 @@
 import 'profile.dart'; // Use for the class variables
 import 'gym.dart';
-import 'dart:io';
 import 'package:image/image.dart' as img;
 
 class Friend {
