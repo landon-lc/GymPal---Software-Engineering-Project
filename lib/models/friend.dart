@@ -40,19 +40,19 @@ class Friend {
   // setters
 
   void setUserName(String name) {
-    userName = name;
+    this.userName = name;
   }
 
   void setPassword(String p) {
-    password = p;
+    this.password = p;
   }
 
   void setEmail(String e) {
-    email = e;
+    this.email = e;
   }
 
   void setAboutMe(String a) {
-    aboutMe = a;
+    this.aboutMe = a;
   }
 
   //random methods (These aren't working currently)
