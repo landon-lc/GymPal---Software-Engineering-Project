@@ -12,7 +12,7 @@ This project was created by James Burriss, Landon Casstevens, Brandon Plyler, Mi
 
 # Running
 
-The running of this project should be ran in main.dart. The user should be able to download the application and create an account. Additionally, The user will have there own profile. Also, The user should be able to find a gym, add friends, and have a workout record. Created by James Burriss
+The running of this project should be ran in main.dart. The user should be able to download the application and create an account. Additionally, The user will have there own profile. Also, The user should be able to find a gym, add friends, and have a workout record. Created by James Burriss.
 
 # Implementation
 Models:
