@@ -9,8 +9,8 @@ class Gym {
 }
 
 var gyms = [
-    Gym(name: "Gold's Gym", latitude: 34.25, longitude: -77.90),
-    Gym(name: "Planet Fitness", latitude: 34.27, longitude: -77.95)
+    Gym(name: 'Golds Gym', latitude: 34.25, longitude: -77.90),
+    Gym(name: 'Planet Fitness', latitude: 34.27, longitude: -77.95)
   ]; 
 
   // map_screen will be used for setting up the map intergration.
