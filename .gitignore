@@ -45,3 +45,6 @@ app.*.map.json
 
 # MacOS is a regarded piece of technology
 macos/
+
+# Web directory
+web/
