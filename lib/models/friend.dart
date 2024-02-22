@@ -6,10 +6,9 @@ class Friend {
   String? userName; 
   String? password; // This will be changed to reference methods in the profile class
   String? email;
-  // find a way to add a profile picture
+  // future spot for profile picture
   String? aboutMe;
-  // list of gyms here
-   List<Gym> gym = []; // this is temporarily going to be a String
+  List<Gym> gym = []; // this is temporarily going to be a String
 
   Friend({
     required this.userName,
