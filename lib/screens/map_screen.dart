@@ -5,7 +5,7 @@ import '../models/gym.dart';
 class MapScreen extends StatefulWidget {
   final List<Gym> gyms;
 
-  const MapScreen({Key? key, required this.gyms}) : super(key: key);
+  const MapScreen({super.key, required this.gyms});
 
   @override
   MapScreenState createState() => MapScreenState();
