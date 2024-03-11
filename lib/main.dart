@@ -39,9 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  // Ensure you have widgets for each page you want to navigate to
   final List<Widget> _pages = [
-    ChecklistPage(), // Example page
+    ChecklistPage(), 
     // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
 
@@ -52,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _pages[_selectedIndex], // This is the dynamic body based on the selected index
+      body: _pages[_selectedIndex], 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
