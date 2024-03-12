@@ -15,11 +15,12 @@ outputs = { self, nixpkgs, flake-utils }:
           allowUnfree = true;
         };
       };
+      androidsdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
     in
     {
       devShell =
         with pkgs; mkShell rec {
-          ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+          ANDROID_SDK_ROOT = "${androidsdk}/libexec/android-sdk";
           buildInputs = [
             flutter
             androidenv.androidPkgs_9_0.androidsdk
