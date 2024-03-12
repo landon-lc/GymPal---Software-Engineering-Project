@@ -3,7 +3,7 @@ import 'package:test_drive/models/exercise.dart';
 import '../models/workout.dart';
 
 //default workout 
-class WorkoutRecord extends ChangeNotifier{ 
+class WorkoutRecord extends ChangeNotifier { 
   List<Workout> workoutList = [
     Workout(
       name: 'Push Day', 
