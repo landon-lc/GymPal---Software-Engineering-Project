@@ -1,17 +1,15 @@
 import 'exercise.dart';
-
 class Workout {
-  List<Exercise> exercises;
-  String name;
-  int duration; // in minutes
+  final String name;
+  final List<Exercise> exercises;
 
-  Workout(
-      {required this.exercises, required this.name, required this.duration});
+  Workout({required this.name, required this.exercises});
+
 }
 
-List<Workout> sampleWorkouts = [
-    Workout(
-        exercises: sampleExercises,
-        name: 'Morning Routine',
-        duration: 30),
-  ];
+//List<Workout> sampleWorkouts = [
+//    Workout(
+//        exercises: sampleExercises,
+//        name: 'Morning Routine',
+//        duration: 30),
+//  ];
