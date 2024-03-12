@@ -20,9 +20,18 @@ class Profile {
     required this.bio,
     });
 
-    //class specific methods
+    // getters
+    List<Friend> getFriends() {
+      return friends; // may change to return each fiend in the list, but for now just returns the list of friends
+    }
+
+    // class specific methods
     void addGym(Gym g) {
       gyms.add(g);
+    }
+
+    void addFriend(Friend f) {
+      friends.add(f);
     }
 }
 

@@ -1,7 +1,7 @@
 import 'profile.dart'; // Use for the class variables
 import 'gym.dart';
 
-class Friend {
+class Friend { // maybe think about using inheritance from profile?
   // this will later select certain attributes from the profile class
   String? userName; 
   String? password; // This will be changed to reference methods in the profile class
@@ -61,7 +61,7 @@ class Friend {
 
   void displayGyms() {
     for (Gym g in this.gym) {
-      print(g.displayName());
+      print(g.displayName()); // change this in future to show location and name, not just name 
     }
   }
 }
