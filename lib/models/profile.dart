@@ -1,4 +1,5 @@
 import '../models/gym.dart';
+import 'friend.dart';
 
 class Profile {
   String username;
@@ -8,7 +9,8 @@ class Profile {
   String bio;
   // Using NULL safety through the '?' operator.
   // Ensure this is handled appropriately.
-  Gym? gym;
+  List<Gym> gyms = [];
+  List<Friend> friends = []; // list of friends that the profile has
 
   Profile({
     // The following are required parameters for a profile to exist.
@@ -16,9 +18,12 @@ class Profile {
     required this.password,
     required this.email,
     required this.bio,
-    // The user may not necessarily have a gym, so it is optional.
-    this.gym,
     });
+
+    //class specific methods
+    void addGym(Gym g) {
+      gyms.add(g);
+    }
 }
 
 // No gym objects atm, so they aren't included.

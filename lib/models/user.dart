@@ -25,10 +25,6 @@ class User extends Profile {
     required super.password,
     required super.email,
     required super.bio,
-
-    // Gym is optional.
-    super.gym,
-
   });
 
 }

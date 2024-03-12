@@ -61,7 +61,7 @@ class Friend {
 
   void displayGyms() {
     for (Gym g in this.gym) {
-      print(g);
+      print(g.displayName());
     }
   }
 }
