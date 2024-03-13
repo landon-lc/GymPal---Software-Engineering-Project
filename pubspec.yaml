@@ -10,7 +10,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   google_maps_flutter: ^2.5.3
-  provider: 
+  
 
 
   firebase_core: any
