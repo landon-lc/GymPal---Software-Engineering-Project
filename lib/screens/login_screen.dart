@@ -1,34 +1,69 @@
-class LoginScreen extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
-        return Scaffold(
-            appBar: AppBar(
-                title: Text('Login'),
-            ),
-            body: Center(
-                child: Padding(
-                    padding: EdgeInserts.symmetric(horizontal: 20),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                            TextField(
-                                decoration: InputDecoration(labelText: 'Login'),
-                            ),
-                            TextField(
-                                decoration: InputDecoration(labelText: 'Password'),
-                                obscureText: true,
-                            )
-                            SizedBox(height: 20),
-                            ElevatedButton(
-                                onPressed: () {
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-                                },
-                                child: Text('Login'),
-                            ),
-                        ]
-                    )
-                )
-            )
-        )
-    }
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreen();
 }
+
+
+class _LoginScreen extends State<LoginScreen> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+  usernameController.dispose();
+  passwordController.dispose();
+  super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: 'Login'),
+		controller: usernameController,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+		controller: passwordController,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  try {
+                    FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: usernameController.text,
+                      password: passwordController.text,
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == 'user-not-found') {
+                      print('No user found for that email.');
+                    } else if (e.code == 'wrong-password') {
+                      print('Wrong password provided for that user.');
+                    }
+                  }
+                },
+                child: Text('Login'),
+              ),
+            ]
+          )
+        )
+      )
+    );
+  }
+}
+
