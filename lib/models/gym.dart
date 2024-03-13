@@ -5,6 +5,11 @@ class Gym {
   
   // Constructor
   Gym({required this.name, required this.latitude, required this.longitude});
+
+  //class specific methods
+  String displayName() { // temp method for just displaying methods right now
+    return this.name;
+  }
   
 }
 
