@@ -15,6 +15,7 @@ class UserName extends StatelessWidget {
       child: Text(
         profileUserName,
         softWrap: true,
+        textDirection: TextDirection.ltr,
       ),
     );
   }
