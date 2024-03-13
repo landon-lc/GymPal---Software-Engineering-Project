@@ -15,6 +15,17 @@ class WorkoutRecord extends ChangeNotifier {
           sets: '3'
         ),
       ],
+    ),
+    Workout(
+      name: 'Pull Day', 
+      exercises: [
+        Exercise(
+          name: 'Pull Ups', 
+          weight: 'BW', 
+          reps: '10', 
+          sets: '3'
+        ),
+      ],
     )
   ];
 
@@ -33,6 +44,8 @@ class WorkoutRecord extends ChangeNotifier {
   //add a workout
   void addWorkout(String name) {
     workoutList.add(Workout(name: name, exercises: []));
+
+    notifyListeners();
   }
 
   //add exercises
@@ -53,6 +66,7 @@ class WorkoutRecord extends ChangeNotifier {
         sets: sets
       ),
     );
+    notifyListeners();
   }
 
   //check off exercises
@@ -62,6 +76,8 @@ class WorkoutRecord extends ChangeNotifier {
 
     //check off boolean
     relevantExercise.isCompleted = !relevantExercise.isCompleted;
+
+    notifyListeners();
   }
 
   //return relevent workout
