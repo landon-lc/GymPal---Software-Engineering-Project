@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "513091674039",
+    "firebase_url": "https://gympal-9ecf4-default-rtdb.firebaseio.com",
+    "project_id": "gympal-9ecf4",
+    "storage_bucket": "gympal-9ecf4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513091674039:android:8f9c48f9009e9bff8f9232",
+        "android_client_info": {
+          "package_name": "com.example.test_drive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV9VchZ2dOh0DsMW_tD3EocHKUOggRjt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
