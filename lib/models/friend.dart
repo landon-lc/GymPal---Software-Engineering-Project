@@ -1,4 +1,3 @@
-import 'profile.dart'; // Use for the class variables
 import 'gym.dart';
 
 class Friend { // maybe think about using inheritance from profile?
