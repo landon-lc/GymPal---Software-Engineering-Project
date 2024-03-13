@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'pages/checklist_page.dart'; 
+import 'package:provider/provider.dart';
+import 'package:test_drive/data/workout_record.dart';
+import 'pages/checklist_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +12,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GymPal',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (context) => WorkoutRecord(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'GymPal',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'GymPal Home Page'),
       ),
-      home: const MyHomePage(title: 'GymPal Home Page'),
     );
   }
 }
@@ -40,7 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final List<Widget> _pages = [
-    ChecklistPage(), 
+    const ChecklistPage(),
+    const PlaceholderWidget(color: Colors.red),
+    const PlaceholderWidget(color: Colors.green),
+    const PlaceholderWidget(color: Colors.yellow),
     // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
 
@@ -51,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _pages[_selectedIndex], 
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
@@ -63,6 +71,18 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Locations'),
         ],
       ),
+    );
+  }
+}
+
+class PlaceholderWidget extends StatelessWidget {
+  final Color color;
+  const PlaceholderWidget({super.key, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color,
     );
   }
 }
