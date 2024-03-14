@@ -1,5 +1,5 @@
 import '../models/workout.dart';
-import '../models/workout_record.dart';
+import '../data/workout_record.dart';
 import '../models/exercise.dart';
 import '../models/profile.dart';
 
@@ -25,7 +25,3 @@ class User extends Profile {
   });
 
 }
-
-var userSampleData = [
-  User(workoutTemplates: [sampleWorkouts[0]], workouts: [sampleRecords[0]], exercises: [sampleExercises[1]], username: 'johnDoe123', password: 'johnPass1357', email: 'john@gmail.com', bio: 'Welcome to my page!')
-];
