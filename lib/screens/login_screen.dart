@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -42,23 +42,23 @@ class _LoginScreen extends State<LoginScreen> {
 		            controller: passwordController,
               ),
               const SizedBox(height: 20),
-              // ElevatedButton(
-                // onPressed: () {
-                //   try {
-                //     FirebaseAuth.instance.signInWithEmailAndPassword(
-                //       email: usernameController.text,
-                //       password: passwordController.text,
-                //     );
-                //   } on FirebaseAuthException catch (e) {
-                //     if (e.code == 'user-not-found') {
-                //       print('No user found for that email.');
-                //     } else if (e.code == 'wrong-password') {
-                //       print('Wrong password provided for that user.');
-                //     }
-                //   }
-                // },
-                // child: Text('Login'),
-              // ),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: usernameController.text,
+                      password: passwordController.text,
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == 'user-not-found') {
+                      print('No user found for that email.');
+                    } else if (e.code == 'wrong-password') {
+                      print('Wrong password provided for that user.');
+                    }
+                  }
+                },
+                child: const Text('Login'),
+              ),
             ]
           )
         )
