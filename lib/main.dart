@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'screens/map_screen.dart';
-import 'models/gym.dart'; // Import the Gym class and gyms list
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'package:test_drive/data/workout_record.dart';
+import 'pages/checklist_page.dart';
 
-void main() {
+void main() async {
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(const MyApp());
 }
 
@@ -11,12 +17,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GymPal',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (context) => WorkoutRecord(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'GymPal',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'GymPal Home Page'),
       ),
-      home: const MyHomePage(title: 'GymPal Home Page'),
     );
   }
 }
@@ -30,15 +41,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
 
-  void _navigateToMapScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MapScreen(gyms: gyms), // Use the gyms list here
-      ),
-    );
+  void _navigateBottomBar(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
+
+  final List<Widget> _pages = [
+    const ChecklistPage(),
+    const PlaceholderWidget(color: Colors.red),
+    const PlaceholderWidget(color: Colors.green),
+    const PlaceholderWidget(color: Colors.yellow),
+    // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +63,30 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _navigateToMapScreen,
-          child: const Text('View Nearby Gyms'),
-        ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _navigateBottomBar,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Locations'),
+        ],
       ),
+    );
+  }
+}
+
+class PlaceholderWidget extends StatelessWidget {
+  final Color color;
+  const PlaceholderWidget({super.key, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color,
     );
   }
 }
