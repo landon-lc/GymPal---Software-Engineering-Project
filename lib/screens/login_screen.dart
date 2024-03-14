@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,25 +24,25 @@ class _LoginScreen extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextField(
-                decoration: InputDecoration(labelText: 'Login'),
+                decoration: const InputDecoration(labelText: 'Login'),
 		            controller: usernameController,
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
 		            controller: passwordController,
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
+              const SizedBox(height: 20),
+              // ElevatedButton(
                 // onPressed: () {
                 //   try {
                 //     FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -57,8 +57,8 @@ class _LoginScreen extends State<LoginScreen> {
                 //     }
                 //   }
                 // },
-                child: Text('Login'),
-              ),
+                // child: Text('Login'),
+              // ),
             ]
           )
         )
