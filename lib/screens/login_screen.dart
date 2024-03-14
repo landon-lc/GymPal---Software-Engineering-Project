@@ -15,9 +15,9 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   void dispose() {
-  usernameController.dispose();
-  passwordController.dispose();
-  super.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,29 +34,29 @@ class _LoginScreen extends State<LoginScreen> {
             children: <Widget>[
               TextField(
                 decoration: InputDecoration(labelText: 'Login'),
-		controller: usernameController,
+		            controller: usernameController,
               ),
               TextField(
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
-		controller: passwordController,
+		            controller: passwordController,
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  try {
-                    FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: usernameController.text,
-                      password: passwordController.text,
-                    );
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'user-not-found') {
-                      print('No user found for that email.');
-                    } else if (e.code == 'wrong-password') {
-                      print('Wrong password provided for that user.');
-                    }
-                  }
-                },
+                // onPressed: () {
+                //   try {
+                //     FirebaseAuth.instance.signInWithEmailAndPassword(
+                //       email: usernameController.text,
+                //       password: passwordController.text,
+                //     );
+                //   } on FirebaseAuthException catch (e) {
+                //     if (e.code == 'user-not-found') {
+                //       print('No user found for that email.');
+                //     } else if (e.code == 'wrong-password') {
+                //       print('Wrong password provided for that user.');
+                //     }
+                //   }
+                // },
                 child: Text('Login'),
               ),
             ]
