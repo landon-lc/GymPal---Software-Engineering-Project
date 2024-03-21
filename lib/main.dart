@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:test_drive/screens/profile_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
@@ -50,11 +51,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final List<Widget> _pages = [
+    // Add other screens here like Friends, Profile, Map, etc.
+    const UserProfileScreen(profileUserName: 'Billy Bob'),
     const ChecklistPage(),
-    const PlaceholderWidget(color: Colors.red),
+    // Friends/Search Button
     const PlaceholderWidget(color: Colors.green),
+    // Map Button
     const PlaceholderWidget(color: Colors.yellow),
-    // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
 
   @override
@@ -71,8 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explore'),
-          BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Locations'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Friends'),
+          BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Map'),
         ],
       ),
     );

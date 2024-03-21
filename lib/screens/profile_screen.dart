@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class UserName extends StatelessWidget {
-  const UserName({
+class UserProfileScreen extends StatelessWidget {
+  const UserProfileScreen({
     super.key,
     required this.profileUserName,
   });
