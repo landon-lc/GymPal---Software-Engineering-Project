@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
-import 'workout_page.dart'; // Make sure the import path is correct
+import 'workout_screen.dart'; // Make sure the import path is correct
 
 class ChecklistPage extends StatefulWidget {
   const ChecklistPage({super.key});
