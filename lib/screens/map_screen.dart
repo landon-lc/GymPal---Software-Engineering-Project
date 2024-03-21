@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/gym.dart';
 
+
 class MapScreen extends StatefulWidget {
   final List<Gym> gyms;
 
-  const MapScreen({Key? key, required this.gyms}) : super(key: key);
+  const MapScreen({super.key, required this.gyms});
 
   @override
   MapScreenState createState() => MapScreenState();
-  
- }
+}
 
 class MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
@@ -23,16 +23,22 @@ class MapScreenState extends State<MapScreen> {
   }
 
   void _createMarkers() {
-    _markers.clear();
-    for (final gym in widget.gyms) {
-      _markers.add(
-        Marker(
-          markerId: MarkerId(gym.name),
-          position: LatLng(gym.latitude, gym.longitude),
-          infoWindow: InfoWindow(title: gym.name),
-        ),
-      );
-    }
+    setState(() {
+      _markers.clear();
+      for (final gym in widget.gyms) {
+        _markers.add(
+          Marker(
+            markerId: MarkerId(gym.name),
+            position: LatLng(gym.latitude, gym.longitude),
+            infoWindow: InfoWindow(title: gym.name),
+            onTap: () {
+              // Optional: Add actions here when a marker is tapped.
+              print('Marker tapped: ${gym.name}');
+            },
+          ),
+        );
+      }
+    });
   }
 
   void _onMapCreated(GoogleMapController controller) {

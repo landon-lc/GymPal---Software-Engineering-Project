@@ -8,7 +8,7 @@ class WorkoutRecord {
 
 }
 
-  List<WorkoutRecord> sampleRecords = [
-    WorkoutRecord(
-        workout: sampleWorkouts.first, dateTime: DateTime.now()),
-  ];
+  // List<WorkoutRecord> sampleRecords = [
+  //   WorkoutRecord(
+  //       workout: sampleWorkouts.first, dateTime: DateTime.now()),
+  // ];
