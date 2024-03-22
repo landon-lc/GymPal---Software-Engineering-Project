@@ -5,7 +5,17 @@ class Workout {
 
   Workout({required this.name, required this.exercises});
 
+  Workout copyWith({
+    String? name,
+    List<Exercise>? exercises,
+  }) {
+    return Workout(
+      name: name ?? this.name,
+      exercises: exercises ?? this.exercises,
+    );
+  }
 }
+
 
 //List<Workout> sampleWorkouts = [
 //    Workout(
