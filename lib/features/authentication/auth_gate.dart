@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:test_drive/pages/checklist_page.dart';
 import 'package:test_drive/screens/login_screen.dart';
+import 'package:test_drive/screens/page_navigation_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -15,7 +15,7 @@ class AuthGate extends StatelessWidget {
           return const LoginScreen();
         }
 
-        return const ChecklistPage();
+        return const PageNavigation();
       },
       );
   }
