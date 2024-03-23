@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:test_drive/screens/profile_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
-import 'pages/checklist_page.dart';
+import 'screens/checklist_screen.dart';
 import 'screens/friends_screen.dart';
 
 void main() async {
@@ -27,15 +28,14 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
           useMaterial3: true,
         ),
-        home: const MyHomePage(title: 'GymPal Home Page'), // this seems to be staying at every screen
+        home: const MyHomePage(),
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -51,20 +51,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final List<Widget> _pages = [
+    // Add other screens here like Friends, Profile, Map, etc.
+    const UserProfileScreen(),
     const ChecklistPage(),
-    const PlaceholderWidget(color: Colors.red),
+    // Friends/Search Button
     const PlaceholderWidget(color: Colors.green),
+    // Map Button
     const PlaceholderWidget(color: Colors.yellow),
     const FriendsScreen(),
-    // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
