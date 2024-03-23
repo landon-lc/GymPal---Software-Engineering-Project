@@ -18,25 +18,33 @@ class Profile {
     required this.password,
     required this.email,
     required this.bio,
-    });
+  });
 
-    // getters
-    List<Friend> getFriends() {
-      return friends; // may change to return each fiend in the list, but for now just returns the list of friends
-    }
+  // getters
+  List<Friend> getFriends() {
+    return friends; // may change to return each fiend in the list, but for now just returns the list of friends
+  }
 
-    // class specific methods
-    void addGym(Gym g) {
-      gyms.add(g);
-    }
+  // class specific methods
+  void addGym(Gym g) {
+    gyms.add(g);
+  }
 
-    void addFriend(Friend f) {
-      friends.add(f);
-    }
+  void addFriend(Friend f) {
+    friends.add(f);
+  }
 }
 
 // No gym objects atm, so they aren't included.
 var testProfiles = [
-  Profile(bio: 'Hey', email: 'sudo@root.com', password: 'password', username: 'admin'),
-  Profile(bio: 'What\'s up?', email: 'ryansanchez@gmail.com', password: 'password', username: 'ryansanchez'),
+  Profile(
+      bio: 'Hey',
+      email: 'sudo@root.com',
+      password: 'password',
+      username: 'admin'),
+  Profile(
+      bio: 'What\'s up?',
+      email: 'ryansanchez@gmail.com',
+      password: 'password',
+      username: 'ryansanchez'),
 ];

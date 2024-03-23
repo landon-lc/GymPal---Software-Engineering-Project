@@ -2,38 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:test_drive/models/exercise.dart';
 import '../models/workout.dart';
 
-//default workout 
-class WorkoutRecord extends ChangeNotifier { 
+//default workout
+class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [
     Workout(
-      name: 'Push Day', 
+      name: 'Push Day',
       exercises: [
-        Exercise(
-          name: 'Bench Press', 
-          weight: '135', 
-          reps: '10', 
-          sets: '3'
-        ),
+        Exercise(name: 'Bench Press', weight: '135', reps: '10', sets: '3'),
       ],
     ),
     Workout(
-      name: 'Pull Day', 
+      name: 'Pull Day',
       exercises: [
-        Exercise(
-          name: 'Pull Ups', 
-          weight: 'BW', 
-          reps: '10', 
-          sets: '3'
-        ),
+        Exercise(name: 'Pull Ups', weight: 'BW', reps: '10', sets: '3'),
       ],
     )
   ];
 
 //list of workouts
-  List <Workout> getWorkoutList() {
-  return workoutList;
+  List<Workout> getWorkoutList() {
+    return workoutList;
   }
-  
+
   //length of exercises
   int numOfExercises(String workoutName) {
     Workout relevantWorkout = getRelevantWorkout(workoutName);
@@ -49,22 +39,13 @@ class WorkoutRecord extends ChangeNotifier {
   }
 
   //add exercises
-  void addExercises(
-    String workoutName, 
-    String exerciseName, 
-    String weight, 
-    String reps, 
-    String sets){
+  void addExercises(String workoutName, String exerciseName, String weight,
+      String reps, String sets) {
+    //relevemnt workout instantiation
+    Workout relevantWorkout = getRelevantWorkout(workoutName);
 
-      //relevemnt workout instantiation
-      Workout relevantWorkout = getRelevantWorkout(workoutName);
-
-      relevantWorkout.exercises.add(Exercise(
-        name: exerciseName, 
-        weight: weight, 
-        reps: reps, 
-        sets: sets
-      ),
+    relevantWorkout.exercises.add(
+      Exercise(name: exerciseName, weight: weight, reps: reps, sets: sets),
     );
     notifyListeners();
   }
@@ -82,8 +63,8 @@ class WorkoutRecord extends ChangeNotifier {
 
   //return relevent workout
   Workout getRelevantWorkout(String workoutName) {
-    Workout relevantWorkout = 
-      workoutList.firstWhere((workout) => workout.name == workoutName);
+    Workout relevantWorkout =
+        workoutList.firstWhere((workout) => workout.name == workoutName);
 
     return relevantWorkout;
   }
@@ -93,19 +74,11 @@ class WorkoutRecord extends ChangeNotifier {
     Workout relevantWorkout = getRelevantWorkout(workoutName);
 
     Exercise relevantExercise = relevantWorkout.exercises
-      .firstWhere((exercise) => exercise.name == exerciseName);
+        .firstWhere((exercise) => exercise.name == exerciseName);
 
     return relevantExercise;
   }
 }
-
-
-
-
-
-
-
-
 
 //  List<WorkoutRecord> sampleRecords = [
 //    WorkoutRecord(

@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
-import 'package:test_drive/pages/checklist_page.dart';
+import './profile_screen.dart';
+import './workout_screen.dart';
 
 class PageNavigation extends StatefulWidget {
   const PageNavigation({super.key});
@@ -19,8 +19,8 @@ class _PageNavigation extends State<PageNavigation> {
   }
 
   final List<Widget> _pages = [
-    const ChecklistPage(),
-    const PlaceholderWidget(color: Colors.red),
+    const UserProfileScreen(),
+    const WorkoutScreen(workoutName: 'workoutName'),
     const PlaceholderWidget(color: Colors.green),
     const PlaceholderWidget(color: Colors.yellow),
     // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
@@ -39,9 +39,10 @@ class _PageNavigation extends State<PageNavigation> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explore'),
-          BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Locations'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.fitness_center), label: 'Workouts'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Friends'),
+          BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Map'),
         ],
       ),
     );
