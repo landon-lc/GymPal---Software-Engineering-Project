@@ -1,14 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:test_drive/screens/login_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
-import 'pages/checklist_page.dart';
+import 'features/authentication/auth_gate.dart';
+
 
 void main() async {
   
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  FirebaseAuth.instance
+  .authStateChanges()
+  .listen((User? user) {
+    if (user == null) {
+      const LoginScreen();
+    } else {
+      const MyHomePage(title: 'GymPal Home Page');
+    }
+  });
   runApp(const MyApp());
 }
 
@@ -26,7 +38,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
           useMaterial3: true,
         ),
-        home: const MyHomePage(title: 'GymPal Home Page'),
+        home: const LoginScreen(),
       ),
     );
   }
