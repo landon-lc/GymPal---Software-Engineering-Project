@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:test_drive/data/workout_record.dart';
-import 'workout_page.dart'; // Ensure this path is correct
+import 'workout_page.dart'; // Make sure this path is correct
 
 class ChecklistPage extends StatefulWidget {
-  const ChecklistPage({super.key});
+  // ignore: use_super_parameters
+  const ChecklistPage({Key? key}) : super(key: key);
 
   @override
   State<ChecklistPage> createState() => _ChecklistPageState();
@@ -22,51 +24,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
           controller: newWorkoutNameController,
         ),
         actions: [
-          MaterialButton(
+          TextButton(
             onPressed: save,
             child: const Text('Save'),
           ),
-          MaterialButton(
+          TextButton(
             onPressed: cancel,
             child: const Text('Cancel'),
           ),
         ],
       ),
-    );
-  }
-
-  void editWorkoutName(int index) {
-    // Pre-fill the TextEditingController with the current workout name
-    newWorkoutNameController.text = Provider.of<WorkoutRecord>(context, listen: false).getWorkoutList()[index].name;
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Edit Workout Name'),
-          content: TextField(
-            controller: newWorkoutNameController,
-            decoration: InputDecoration(hintText: "Enter new workout name"),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Save'),
-              onPressed: () {
-                if (newWorkoutNameController.text.isNotEmpty) {
-                  updateWorkoutName(index, newWorkoutNameController.text.trim());
-                  Navigator.of(context).pop(); // Close the dialog
-                }
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -79,11 +46,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
     }
   }
 
-  void updateWorkoutName(int index, String newName) {
-    Provider.of<WorkoutRecord>(context, listen: false).updateWorkoutName(index, newName);
-    clear();
-  }
-
   void cancel() {
     Navigator.pop(context);
     clear();
@@ -91,6 +53,41 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   void clear() {
     newWorkoutNameController.clear();
+  }
+
+  void updateWorkoutName(int index, String newName) {
+    Provider.of<WorkoutRecord>(context, listen: false).updateWorkoutName(index, newName);
+    clear();
+  }
+
+  void editWorkoutName(int index) {
+    newWorkoutNameController.text = Provider.of<WorkoutRecord>(context, listen: false).getWorkoutList()[index].name;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Workout Name'),
+        content: TextField(
+          controller: newWorkoutNameController,
+          decoration: const InputDecoration(hintText: 'Enter new workout name'),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: const Text('Save'),
+            onPressed: () {
+              if (newWorkoutNameController.text.isNotEmpty) {
+                updateWorkoutName(index, newWorkoutNameController.text.trim());
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void goToWorkoutPage(String workoutName) {
@@ -103,7 +100,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<WorkoutRecord>(
-      builder: (context, value, child) => Scaffold(
+      builder: (context, workoutRecord, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Workout Tracker'),
         ),
@@ -112,23 +109,44 @@ class _ChecklistPageState extends State<ChecklistPage> {
           child: const Icon(Icons.add),
         ),
         body: ListView.builder(
-          itemCount: value.getWorkoutList().length,
+          itemCount: workoutRecord.getWorkoutList().length,
           itemBuilder: (context, index) {
-            final workout = value.getWorkoutList()[index];
-            return ListTile(
-              title: Text(workout.name),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
+            final workout = workoutRecord.getWorkoutList()[index];
+            return Slidable(
+              key: ValueKey(workout.name),
+              startActionPane: ActionPane(
+                motion: const DrawerMotion(),
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () => editWorkoutName(index),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios),
-                    onPressed: () => goToWorkoutPage(workout.name),
+                  SlidableAction(
+                    onPressed: (BuildContext context) => editWorkoutName(index),
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    icon: Icons.edit,
+                    label: 'Edit',
                   ),
                 ],
+              ),
+              endActionPane: ActionPane(
+                motion: const DrawerMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        workoutRecord.workoutList.removeAt(index);
+                      });
+                      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+                      workoutRecord.notifyListeners();
+                    },
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  ),
+                ],
+              ),
+              child: ListTile(
+                title: Text(workout.name),
+                onTap: () => goToWorkoutPage(workout.name),
               ),
             );
           },
