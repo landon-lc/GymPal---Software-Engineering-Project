@@ -1,25 +1,27 @@
-import 'exercise.dart';
+import 'package:test_drive/models/exercise.dart';
+
 class Workout {
-  final String name;
-  final List<Exercise> exercises;
+  String name;
+  List<Exercise> exercises;
+  String? key; 
 
-  Workout({required this.name, required this.exercises});
+  Workout({
+    required this.name,
+    required this.exercises,
+    this.key,
+  });
 
-  Workout copyWith({
-    String? name,
-    List<Exercise>? exercises,
-  }) {
+  factory Workout.fromMap(Map<String, dynamic> map, {String? key}) {
+    List<Exercise> exercises = [];
+    if (map['exercises'] != null) {
+      exercises = (map['exercises'] as List).map((exerciseMap) {
+        return Exercise.fromMap(Map<String, dynamic>.from(exerciseMap));
+      }).toList();
+    }
     return Workout(
-      name: name ?? this.name,
-      exercises: exercises ?? this.exercises,
+      name: map['name'] ?? '',
+      exercises: exercises,
+      key: key,
     );
   }
 }
-
-
-//List<Workout> sampleWorkouts = [
-//    Workout(
-//        exercises: sampleExercises,
-//        name: 'Morning Routine',
-//        duration: 30),
-//  ];

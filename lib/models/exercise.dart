@@ -4,6 +4,7 @@ class Exercise {
   final String reps;
   final String sets;
   bool isCompleted;
+  final String? key; 
 
   Exercise({
     required this.name,
@@ -11,11 +12,17 @@ class Exercise {
     required this.reps,
     required this.sets,
     this.isCompleted = false,
+    this.key, 
   });
+
+  factory Exercise.fromMap(Map<String, dynamic> map, {String? key}) {
+    return Exercise(
+      name: map['name'] ?? '',
+      weight: map['weight'] ?? '',
+      reps: map['reps'] ?? '',
+      sets: map['sets'] ?? '',
+      isCompleted: map['isCompleted'] ?? false,
+      key: key, 
+    );
+  }
 }
-
-
-//List<Exercise> sampleExercises = [
-//    Exercise(sets: 3, reps: 12, name: 'Push-ups', group: 'Chest'),
-//    Exercise(sets: 4, reps: 10, name: 'Squats', group: 'Legs'),
-//  ];

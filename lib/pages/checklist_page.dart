@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:test_drive/data/workout_record.dart';
-import 'workout_page.dart'; // Make sure this path is correct
+import 'package:test_drive/models/workout.dart';
+import 'workout_page.dart'; // Adjust the import path as needed
 
 class ChecklistPage extends StatefulWidget {
-  // ignore: use_super_parameters
   const ChecklistPage({Key? key}) : super(key: key);
 
   @override
@@ -20,105 +20,61 @@ class _ChecklistPageState extends State<ChecklistPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Create a new workout'),
-        content: TextField(
-          controller: newWorkoutNameController,
-        ),
+        content: TextField(controller: newWorkoutNameController),
         actions: [
           TextButton(
-            onPressed: save,
-            child: const Text('Save'),
-          ),
-          TextButton(
-            onPressed: cancel,
-            child: const Text('Cancel'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void save() {
-    String newWorkoutName = newWorkoutNameController.text;
-    if (newWorkoutName.isNotEmpty) {
-      Provider.of<WorkoutRecord>(context, listen: false).addWorkout(newWorkoutName);
-      Navigator.pop(context);
-      clear();
-    }
-  }
-
-  void cancel() {
-    Navigator.pop(context);
-    clear();
-  }
-
-  void clear() {
-    newWorkoutNameController.clear();
-  }
-
-  void updateWorkoutName(int index, String newName) {
-    Provider.of<WorkoutRecord>(context, listen: false).updateWorkoutName(index, newName);
-    clear();
-  }
-
-  void editWorkoutName(int index) {
-    newWorkoutNameController.text = Provider.of<WorkoutRecord>(context, listen: false).getWorkoutList()[index].name;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Edit Workout Name'),
-        content: TextField(
-          controller: newWorkoutNameController,
-          decoration: const InputDecoration(hintText: 'Enter new workout name'),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          TextButton(
-            child: const Text('Save'),
             onPressed: () {
-              if (newWorkoutNameController.text.isNotEmpty) {
-                updateWorkoutName(index, newWorkoutNameController.text.trim());
+              final name = newWorkoutNameController.text.trim();
+              if (name.isNotEmpty) {
+                Provider.of<WorkoutRecord>(context, listen: false).addWorkout(name);
                 Navigator.of(context).pop();
               }
             },
+            child: const Text('Save'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
           ),
         ],
       ),
-    );
-  }
-
-  void goToWorkoutPage(String workoutName) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => WorkoutPage(workoutName: workoutName)),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<WorkoutRecord>(
-      builder: (context, workoutRecord, child) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Workout Tracker'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: createNewWorkout,
-          child: const Icon(Icons.add),
-        ),
-        body: ListView.builder(
-          itemCount: workoutRecord.getWorkoutList().length,
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(title: const Text('Workout Tracker')),
+    floatingActionButton: FloatingActionButton(
+      onPressed: createNewWorkout,
+      child: const Icon(Icons.add),
+    ),
+    body: StreamBuilder<List<Workout>>(
+      stream: Provider.of<WorkoutRecord>(context, listen: false).workoutsStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No workouts found'));
+        }
+
+        final workouts = snapshot.data!;
+
+        return ListView.builder(
+          itemCount: workouts.length,
           itemBuilder: (context, index) {
-            final workout = workoutRecord.getWorkoutList()[index];
+            final workout = workouts[index];
             return Slidable(
               key: ValueKey(workout.name),
               startActionPane: ActionPane(
                 motion: const DrawerMotion(),
                 children: [
                   SlidableAction(
-                    onPressed: (BuildContext context) => editWorkoutName(index),
+                    onPressed: (BuildContext context) {
+                      // handle edit workout action
+                    },
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
                     icon: Icons.edit,
@@ -131,11 +87,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 children: [
                   SlidableAction(
                     onPressed: (BuildContext context) {
-                      setState(() {
-                        workoutRecord.workoutList.removeAt(index);
-                      });
-                      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-                      workoutRecord.notifyListeners();
+                      // handle delete workout action
                     },
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
@@ -146,12 +98,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
               ),
               child: ListTile(
                 title: Text(workout.name),
-                onTap: () => goToWorkoutPage(workout.name),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WorkoutPage(workoutName: workout.name, workoutId: '',),
+                  ),
+                ),
               ),
             );
           },
-        ),
-      ),
-    );
-  }
+        );
+      },
+    ),
+  );
+}
 }

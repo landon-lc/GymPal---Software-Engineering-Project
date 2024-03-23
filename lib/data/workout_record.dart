@@ -1,79 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/models/exercise.dart';
-import '../models/workout.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:test_drive/models/exercise.dart'; 
+import 'package:test_drive/models/workout.dart'; 
 
 class WorkoutRecord extends ChangeNotifier {
-  List<Workout> workoutList = [
-    Workout(
-      name: 'Push Day',
-      exercises: [
-        Exercise(
-          name: 'Bench Press',
-          weight: '135',
-          reps: '10',
-          sets: '3',
-        ),
-      ],
-    ),
-    Workout(
-      name: 'Pull Day',
-      exercises: [
-        Exercise(
-          name: 'Pull Ups',
-          weight: 'BW',
-          reps: '10',
-          sets: '3',
-        ),
-      ],
-    ),
-  ];
+  final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
-  List<Workout> getWorkoutList() {
-    return workoutList;
-  }
-
-  int numOfExercises(String workoutName) {
-    Workout relevantWorkout = getRelevantWorkout(workoutName);
-    return relevantWorkout.exercises.length;
-  }
+  Stream<List<Workout>> get workoutsStream => dbRef.child('workouts').onValue.map((event) {
+    final data = event.snapshot.value as Map<dynamic, dynamic>?;
+    return data != null
+        ? data.entries.map((entry) => Workout.fromMap(Map<String, dynamic>.from(entry.value), key: entry.key)).toList()
+        : [];
+  });
 
   void addWorkout(String name) {
-    workoutList.add(Workout(name: name, exercises: []));
-    notifyListeners();
+    dbRef.child('workouts').push().set({'name': name, 'exercises': []});
   }
 
-  void addExercises(String workoutName, String exerciseName, String weight, String reps, String sets) {
-    Workout relevantWorkout = getRelevantWorkout(workoutName);
-    relevantWorkout.exercises.add(Exercise(
-      name: exerciseName,
-      weight: weight,
-      reps: reps,
-      sets: sets,
-    ));
-    notifyListeners();
+  void addExercises(String workoutId, String exerciseName, String weight, String reps, String sets) {
+    dbRef.child('workouts/$workoutId/exercises').push().set({
+      'name': exerciseName,
+      'weight': weight,
+      'reps': reps,
+      'sets': sets,
+      'isCompleted': false,
+    });
   }
 
-  void checkOffExercises(String workoutName, String exerciseName) {
-    Exercise relevantExercise = getRelevantExercise(workoutName, exerciseName);
-    relevantExercise.isCompleted = !relevantExercise.isCompleted;
-    notifyListeners();
+  void updateWorkoutName(String workoutId, String newName) {
+    dbRef.child('workouts/$workoutId').update({'name': newName});
   }
 
-  Workout getRelevantWorkout(String workoutName) {
-    return workoutList.firstWhere((workout) => workout.name == workoutName);
+  void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
+    dbRef.child('workouts/$workoutId/exercises/$exerciseId').update({'isCompleted': isCompleted});
   }
 
-  Exercise getRelevantExercise(String workoutName, String exerciseName) {
-    Workout relevantWorkout = getRelevantWorkout(workoutName);
-    return relevantWorkout.exercises.firstWhere((exercise) => exercise.name == exerciseName);
+  Stream<List<Exercise>> getExercisesStream(String workoutId) {
+    return dbRef.child('workouts/$workoutId/exercises').onValue.map((event) {
+      final data = event.snapshot.value as Map<dynamic, dynamic>?;
+      return data != null
+          ? data.entries.map((entry) => Exercise.fromMap(Map<String, dynamic>.from(entry.value), key: entry.key)).toList()
+          : [];
+    });
   }
-
-  void updateWorkoutName(int index, String newName) {
-    var updatedWorkout = workoutList[index].copyWith(name: newName);
-    workoutList[index] = updatedWorkout;
-    notifyListeners();
-  }
-
-  // Future method to update the workout name in Firebase Firestore could be added here
 }
