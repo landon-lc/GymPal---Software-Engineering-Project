@@ -4,6 +4,7 @@ import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
 import 'pages/checklist_page.dart';
+import 'screens/friends_screen.dart';
 
 void main() async {
   
@@ -54,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const PlaceholderWidget(color: Colors.red),
     const PlaceholderWidget(color: Colors.green),
     const PlaceholderWidget(color: Colors.yellow),
+    const FriendsScreen(),
     // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
 
@@ -73,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explore'),
           BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Locations'),
+          BottomNavigationBarItem(icon: Icon(Icons.co_present), label: 'Friends'),
         ],
       ),
     );
