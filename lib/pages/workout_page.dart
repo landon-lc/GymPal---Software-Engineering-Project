@@ -8,7 +8,7 @@ class WorkoutPage extends StatefulWidget {
   final String workoutName;
   final String workoutId; // This needs to be passed when navigating to this page
 
-  const WorkoutPage({Key? key, required this.workoutName, required this.workoutId}) : super(key: key);
+  const WorkoutPage({super.key, required this.workoutName, required this.workoutId});
 
   @override
   State<WorkoutPage> createState() => _WorkoutPageState();

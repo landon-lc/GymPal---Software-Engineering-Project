@@ -6,7 +6,7 @@ import 'package:test_drive/models/workout.dart';
 import 'workout_page.dart'; // Adjust the import path as needed
 
 class ChecklistPage extends StatefulWidget {
-  const ChecklistPage({Key? key}) : super(key: key);
+  const ChecklistPage({Key? key}) : super(key: key); // Updated for null safety
 
   @override
   State<ChecklistPage> createState() => _ChecklistPageState();
@@ -42,74 +42,71 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(title: const Text('Workout Tracker')),
-    floatingActionButton: FloatingActionButton(
-      onPressed: createNewWorkout,
-      child: const Icon(Icons.add),
-    ),
-    body: StreamBuilder<List<Workout>>(
-      stream: Provider.of<WorkoutRecord>(context, listen: false).workoutsStream,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No workouts found'));
-        }
-
-        final workouts = snapshot.data!;
-
-        return ListView.builder(
-          itemCount: workouts.length,
-          itemBuilder: (context, index) {
-            final workout = workouts[index];
-            return Slidable(
-              key: ValueKey(workout.name),
-              startActionPane: ActionPane(
-                motion: const DrawerMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (BuildContext context) {
-                      // handle edit workout action
-                    },
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    icon: Icons.edit,
-                    label: 'Edit',
-                  ),
-                ],
-              ),
-              endActionPane: ActionPane(
-                motion: const DrawerMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (BuildContext context) {
-                      // handle delete workout action
-                    },
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    icon: Icons.delete,
-                    label: 'Delete',
-                  ),
-                ],
-              ),
-              child: ListTile(
-                title: Text(workout.name),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WorkoutPage(workoutName: workout.name, workoutId: '',),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Workout Tracker')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createNewWorkout,
+        child: const Icon(Icons.add),
+      ),
+      body: StreamBuilder<List<Workout>>(
+        stream: Provider.of<WorkoutRecord>(context).workoutsStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No workouts found'));
+          }
+          final workouts = snapshot.data!;
+          return ListView.builder(
+            itemCount: workouts.length,
+            itemBuilder: (context, index) {
+              final workout = workouts[index];
+              return Slidable(
+                key: ValueKey(workout.key), // Use the workout's Firebase key as the ValueKey
+                startActionPane: ActionPane(
+                  motion: const DrawerMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (BuildContext context) {
+                        // Handle edit workout action
+                      },
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      icon: Icons.edit,
+                      label: 'Edit',
+                    ),
+                  ],
+                ),
+                endActionPane: ActionPane(
+                  motion: const DrawerMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (BuildContext context) {
+                        // Handle delete workout action
+                      },
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  title: Text(workout.name),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WorkoutPage(workoutName: workout.name, workoutId: workout.key ?? ''), // Pass the workoutId here
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        );
-      },
-    ),
-  );
-}
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
 }
