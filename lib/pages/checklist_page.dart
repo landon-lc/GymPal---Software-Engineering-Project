@@ -1,40 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:test_drive/data/workout_record.dart';
 import 'package:test_drive/models/workout.dart';
-import 'workout_page.dart'; // Adjust the import path as needed
+import 'workout_page.dart'; 
 
 class ChecklistPage extends StatefulWidget {
-  const ChecklistPage({Key? key}) : super(key: key); // Updated for null safety
+  const ChecklistPage({Key? key}) : super(key: key);
 
   @override
-  State<ChecklistPage> createState() => _ChecklistPageState();
+  _ChecklistPageState createState() => _ChecklistPageState();
 }
 
 class _ChecklistPageState extends State<ChecklistPage> {
-  final TextEditingController newWorkoutNameController = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
-  void createNewWorkout() {
+  void _createNewWorkout() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Create a new workout'),
-        content: TextField(controller: newWorkoutNameController),
+        title: Text('Create a new workout'),
+        content: TextField(controller: _controller),
         actions: [
           TextButton(
             onPressed: () {
-              final name = newWorkoutNameController.text.trim();
+              final name = _controller.text.trim();
               if (name.isNotEmpty) {
                 Provider.of<WorkoutRecord>(context, listen: false).addWorkout(name);
-                Navigator.of(context).pop();
+                Navigator.pop(context);
+                _controller.clear();
               }
             },
-            child: const Text('Save'),
+            child: Text('Save'),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text('Cancel'),
           ),
         ],
       ),
@@ -44,63 +44,30 @@ class _ChecklistPageState extends State<ChecklistPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Workout Tracker')),
+      appBar: AppBar(title: Text('Workout Tracker')),
       floatingActionButton: FloatingActionButton(
-        onPressed: createNewWorkout,
-        child: const Icon(Icons.add),
+        onPressed: _createNewWorkout,
+        child: Icon(Icons.add),
       ),
       body: StreamBuilder<List<Workout>>(
         stream: Provider.of<WorkoutRecord>(context).workoutsStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No workouts found'));
+            return Center(child: Text('No workouts found'));
           }
           final workouts = snapshot.data!;
           return ListView.builder(
             itemCount: workouts.length,
             itemBuilder: (context, index) {
               final workout = workouts[index];
-              return Slidable(
-                key: ValueKey(workout.key), // Use the workout's Firebase key as the ValueKey
-                startActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (BuildContext context) {
-                        // Handle edit workout action
-                      },
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      icon: Icons.edit,
-                      label: 'Edit',
-                    ),
-                  ],
-                ),
-                endActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (BuildContext context) {
-                        // Handle delete workout action
-                      },
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  title: Text(workout.name),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WorkoutPage(workoutName: workout.name, workoutId: workout.key ?? ''), // Pass the workoutId here
-                    ),
-                  ),
+              return ListTile(
+                title: Text(workout.name),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WorkoutPage(workoutId: workout.key ?? '', workoutName: workout.name)),
                 ),
               );
             },

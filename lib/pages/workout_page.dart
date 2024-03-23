@@ -6,21 +6,21 @@ import 'package:test_drive/models/exercise.dart';
 
 class WorkoutPage extends StatefulWidget {
   final String workoutName;
-  final String workoutId; // This needs to be passed when navigating to this page
+  final String workoutId;
 
-  const WorkoutPage({super.key, required this.workoutName, required this.workoutId});
+  const WorkoutPage({Key? key, required this.workoutName, required this.workoutId}) : super(key: key);
 
   @override
-  State<WorkoutPage> createState() => _WorkoutPageState();
+  _WorkoutPageState createState() => _WorkoutPageState();
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
-  final exerciseNameController = TextEditingController();
-  final weightController = TextEditingController();
-  final setsController = TextEditingController();
-  final repsController = TextEditingController();
+  final TextEditingController exerciseNameController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+  final TextEditingController setsController = TextEditingController();
+  final TextEditingController repsController = TextEditingController();
 
-  void createNewExercise() {
+  void _createNewExercise() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -35,56 +35,55 @@ class _WorkoutPageState extends State<WorkoutPage> {
           ],
         ),
         actions: [
-          MaterialButton(onPressed: save, child: const Text('Save')),
-          MaterialButton(onPressed: cancel, child: const Text('Cancel')),
+          MaterialButton(
+            onPressed: () {
+              _saveExercise();
+            },
+            child: const Text('Save'),
+          ),
+          MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
         ],
       ),
     );
   }
 
-  void save() {
-    String newExerciseName = exerciseNameController.text;
-    String weight = weightController.text;
-    String reps = repsController.text;
-    String sets = setsController.text;
+  void _saveExercise() {
+    final String exerciseName = exerciseNameController.text.trim();
+    final String weight = weightController.text.trim();
+    final String sets = setsController.text.trim();
+    final String reps = repsController.text.trim();
 
-    if (newExerciseName.isNotEmpty) {
+    if (exerciseName.isNotEmpty && weight.isNotEmpty && sets.isNotEmpty && reps.isNotEmpty) {
       Provider.of<WorkoutRecord>(context, listen: false).addExercises(
-        widget.workoutId, 
-        newExerciseName, 
-        weight, 
-        reps, 
-        sets
+        widget.workoutId,
+        exerciseName,
+        weight,
+        sets,
+        reps,
       );
-      Navigator.pop(context); // Close the dialog
-      clear();
+      Navigator.pop(context); // Close the dialog and clear form fields
+      _clearFormFields();
     }
   }
 
-  void cancel() {
-    Navigator.pop(context); // Close the dialog
-    clear();
-  }
-
-  void clear() {
+  void _clearFormFields() {
     exerciseNameController.clear();
     weightController.clear();
     setsController.clear();
     repsController.clear();
   }
 
-  void onCheckBoxChanged(bool? newVal, String exerciseId) {
-    if (newVal != null) {
-      Provider.of<WorkoutRecord>(context, listen: false).checkOffExercise(widget.workoutId, exerciseId, newVal);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.workoutName)),       
+      appBar: AppBar(title: Text(widget.workoutName)),
       floatingActionButton: FloatingActionButton(
-        onPressed: createNewExercise,
+        onPressed: _createNewExercise,
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<Exercise>>(
@@ -108,7 +107,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
                 reps: exercise.reps,
                 sets: exercise.sets,
                 isCompleted: exercise.isCompleted,
-                onCheckBoxChanged: (val) => onCheckBoxChanged(val, exercise.key!),
+                onCheckBoxChanged: (val) {
+                  Provider.of<WorkoutRecord>(context, listen: false).checkOffExercise(widget.workoutId, exercise.key ?? '', val ?? false);
+                },
               );
             },
           );

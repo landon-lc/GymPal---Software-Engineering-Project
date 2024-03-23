@@ -1,9 +1,9 @@
-import 'package:test_drive/models/exercise.dart';
+import 'package:test_drive/models/exercise.dart'; // Ensure this path is correct
 
 class Workout {
   String name;
   List<Exercise> exercises;
-  String? key; 
+  String? key;
 
   Workout({
     required this.name,
@@ -12,12 +12,8 @@ class Workout {
   });
 
   factory Workout.fromMap(Map<String, dynamic> map, {String? key}) {
-    List<Exercise> exercises = [];
-    if (map['exercises'] != null) {
-      exercises = (map['exercises'] as List).map((exerciseMap) {
-        return Exercise.fromMap(Map<String, dynamic>.from(exerciseMap));
-      }).toList();
-    }
+    var exercisesList = map['exercises'] as List<dynamic>? ?? [];
+    List<Exercise> exercises = exercisesList.map((e) => Exercise.fromMap(Map<String, dynamic>.from(e))).toList();
     return Workout(
       name: map['name'] ?? '',
       exercises: exercises,
