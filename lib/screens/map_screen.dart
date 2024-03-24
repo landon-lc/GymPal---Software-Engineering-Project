@@ -1,63 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/gym.dart';
 
+void main() => runApp(MapScreen());
 
-class MapScreen extends StatefulWidget {
-  final List<Gym> gyms;
-
-  const MapScreen({super.key, required this.gyms});
-
-  @override
-  MapScreenState createState() => MapScreenState();
-}
-
-class MapScreenState extends State<MapScreen> {
-  late GoogleMapController mapController;
-  final Set<Marker> _markers = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _createMarkers();
-  }
-
-  void _createMarkers() {
-    setState(() {
-      _markers.clear();
-      for (final gym in widget.gyms) {
-        _markers.add(
-          Marker(
-            markerId: MarkerId(gym.name),
-            position: LatLng(gym.latitude, gym.longitude),
-            infoWindow: InfoWindow(title: gym.name),
-            onTap: () {
-              // Optional: Add actions here when a marker is tapped.
-              print('Marker tapped: ${gym.name}');
-            },
-          ),
-        );
-      }
-    });
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
+class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nearby Gyms'),
-      ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(widget.gyms.first.latitude, widget.gyms.first.longitude),
-          zoom: 14.0,
+    return MaterialApp(
+      home: Scaffold(
+        body: GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: LatLng(37.4220, -122.0841), // Specify the initial position
+            zoom: 15,
+          ),
         ),
-        markers: _markers,
       ),
     );
   }
