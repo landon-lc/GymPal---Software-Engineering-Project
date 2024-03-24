@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
 import 'workout_screen.dart'; // Make sure the import path is correct
 
-class ChecklistPage extends StatefulWidget {
-  const ChecklistPage({super.key});
+class ChecklistScreen extends StatefulWidget {
+  const ChecklistScreen({super.key});
 
   @override
-  State<ChecklistPage> createState() => _ChecklistPageState();
+  State<ChecklistScreen> createState() => _ChecklistScreenState();
 }
 
-class _ChecklistPageState extends State<ChecklistPage> {
+class _ChecklistScreenState extends State<ChecklistScreen> {
   final TextEditingController newWorkoutNameController =
       TextEditingController();
 
