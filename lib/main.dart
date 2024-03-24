@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:test_drive/screens/map_screen.dart';
 import 'package:test_drive/screens/profile_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const ChecklistPage(),
     // Friends/Search Button
     const PlaceholderWidget(color: Colors.green),
-    // Map Button
+    const MapScreen()
     const PlaceholderWidget(color: Colors.yellow),
   ];
 
