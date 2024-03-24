@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const ChecklistPage(),
     // Friends/Search Button
     const PlaceholderWidget(color: Colors.green),
-    const MapScreen()
+    MapScreen(),
     const PlaceholderWidget(color: Colors.yellow),
   ];
 
