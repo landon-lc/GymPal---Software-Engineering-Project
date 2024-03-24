@@ -14,15 +14,14 @@ class MapSampleState extends State<MapSample> {
       Completer<GoogleMapController>();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(34.20901806593137, -77.89428829935258),
+    zoom: 12,
   );
 
-  static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
+  static const CameraPosition _kO2FitnessRacine = CameraPosition(
+      target: LatLng(34.247339250011464, -77.86304592936503),
       tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+      zoom: 18);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class MapSampleState extends State<MapSample> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
+        label: const Text('Take me to O2 Fitness'),
         icon: const Icon(Icons.directions_boat),
       ),
     );
@@ -44,6 +43,6 @@ class MapSampleState extends State<MapSample> {
 
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    await controller.animateCamera(CameraUpdate.newCameraPosition(_kO2FitnessRacine));
   }
 }
