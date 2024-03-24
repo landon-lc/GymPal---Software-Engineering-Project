@@ -8,7 +8,7 @@ class Gym {
 
   //class specific methods
   String displayName() { // temp method for just displaying methods right now
-    return this.name;
+    return name;
   }
   
 }

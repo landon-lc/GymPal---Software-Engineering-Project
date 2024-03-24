@@ -28,7 +28,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
     showDialog(
       context: context, 
       builder: (context) =>AlertDialog(
-        title: Text('Add a new exercse'),
+        title: const Text('Add a new exercse'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -102,7 +102,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         appBar: AppBar(title: Text(widget.workoutName)),       
           floatingActionButton: FloatingActionButton(
             onPressed: createNewExercise,
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
           body: ListView.builder(
           itemCount: value.numOfExercises(widget.workoutName),

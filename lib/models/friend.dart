@@ -19,47 +19,47 @@ class Friend { // maybe think about using inheritance from profile?
   // getters
 
   String getUserName() {
-    return this.userName!;
+    return userName!;
   }
 
   String getPassword() {
-    return this.password!;
+    return password!;
   }
 
   String getEmail() {
-    return this.email!;
+    return email!;
   }
 
   String getAboutMe() {
-    return this.aboutMe!;
+    return aboutMe!;
   }
 
   // setters
 
   void setUserName(String name) {
-    this.userName = name;
+    userName = name;
   }
 
   void setPassword(String p) {
-    this.password = p;
+    password = p;
   }
 
   void setEmail(String e) {
-    this.email = e;
+    email = e;
   }
 
   void setAboutMe(String a) {
-    this.aboutMe = a;
+    aboutMe = a;
   }
 
   //random methods (These aren't working currently)
 
   void addGym(Gym g) {
-    this.gym.add(g);
+    gym.add(g);
   }
 
   void displayGyms() {
-    for (Gym g in this.gym) {
+    for (Gym g in gym) {
       print(g.displayName()); // change this in future to show location and name, not just name 
     }
   }
