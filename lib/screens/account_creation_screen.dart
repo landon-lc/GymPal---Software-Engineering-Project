@@ -70,10 +70,12 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                             password: newPasswordController.text);
                           // Continues to the users' profile screen.
                           if (context.mounted) {
-                            Navigator.push(
+                            Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const PageNavigation()));
+                                builder: (context) => const PageNavigation()),
+                                // Ensures a one-way route - user cannot return to account creation or login screen (without logging out). 
+                                (Route<dynamic> route) => false);
                           }
                         },
                         child: const Text('Create Account'),

@@ -33,7 +33,7 @@ class _LoginScreen extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       TextField(
-                        decoration: const InputDecoration(labelText: 'Login'),
+                        decoration: const InputDecoration(labelText: 'Email'),
                         controller: usernameController,
                       ),
                       TextField(
