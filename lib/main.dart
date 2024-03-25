@@ -7,7 +7,7 @@ import 'screens/checklist_screen.dart';
 import 'screens/friends_screen.dart';
 import './firebase_options.dart';
 import './features/authentication/auth_gate.dart';
-import './data/workout_record.dart';
+
 
 
 void main() async {
