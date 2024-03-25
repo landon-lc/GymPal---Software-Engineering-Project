@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './profile_screen.dart';
+import './friends_screen.dart';
 import './checklist_screen.dart';
 
 class PageNavigation extends StatefulWidget {
@@ -21,7 +22,7 @@ class _PageNavigation extends State<PageNavigation> {
   final List<Widget> _pages = [
     const UserProfileScreen(),
     const ChecklistScreen(),
-    const PlaceholderWidget(color: Colors.green),
+    const FriendsScreen(),
     const PlaceholderWidget(color: Colors.yellow),
     // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
