@@ -24,7 +24,7 @@ jobs:
       # - uses: dart-lang/setup-dart@v1
       - uses: dart-lang/setup-dart@v1.3
         with:
-          sdk: master
+          channel: master
 
       - name: Install dependencies
         run: dart pub get
