@@ -1,5 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'profile_editor_screen.dart';
+
+// Getting the authenticator instance.  
+final FirebaseAuth auth = FirebaseAuth.instance;
+// The currentUser variable is the current instance of user, if they are signed in (hence the ?).
+final User? gympalUser = auth.currentUser;
+
 
 // Code that handles all widgets used and displayed in the profile screen. Add additional sections here.
 class UserProfileScreen extends StatelessWidget {
