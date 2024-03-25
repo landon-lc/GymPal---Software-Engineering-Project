@@ -3,18 +3,19 @@ import 'package:provider/provider.dart';
 import 'package:test_drive/components/exercise_tile.dart';
 import 'package:test_drive/data/workout_record.dart';
 
-class WorkoutPage extends StatefulWidget {
+class WorkoutScreen extends StatefulWidget {
   final String workoutName;
-  const WorkoutPage({super.key, required this.workoutName});
+  const WorkoutScreen({super.key, required this.workoutName});
 
   @override
-  State<WorkoutPage> createState() => _WorkoutPageState();
+  State<WorkoutScreen> createState() => _WorkoutScreenState();
 }
 
-class _WorkoutPageState extends State<WorkoutPage> {
+class _WorkoutScreenState extends State<WorkoutScreen> {
   //checks box on checklist
   void onCheckBoxChanged(String workoutName, String exerciseName) {
-    Provider.of<WorkoutRecord>(context, listen: false).checkOffExercises(workoutName, exerciseName); 
+    Provider.of<WorkoutRecord>(context, listen: false)
+        .checkOffExercises(workoutName, exerciseName);
   }
 
   //text controllers
@@ -26,8 +27,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
   //create new workout
   void createNewExercise() {
     showDialog(
-      context: context, 
-      builder: (context) =>AlertDialog(
+      context: context,
+      builder: (context) => AlertDialog(
         title: const Text('Add a new exercse'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -64,6 +65,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
       ),
     );
   }
+
   void save() {
     String newExerciseName = exerciseNameController.text;
     String weight = weightController.text;
@@ -72,12 +74,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
     if (newExerciseName.isNotEmpty) {
       Provider.of<WorkoutRecord>(context, listen: false).addExercises(
-        widget.workoutName, 
-        newExerciseName, 
-        weight, 
-        reps, 
-        sets
-      );
+          widget.workoutName, newExerciseName, weight, reps, sets);
       Navigator.pop(context); // Close the dialog
       clear();
     }
@@ -97,46 +94,46 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer <WorkoutRecord>(
+    return Consumer<WorkoutRecord>(
       builder: (context, value, child) => Scaffold(
-        appBar: AppBar(title: Text(widget.workoutName)),       
-          floatingActionButton: FloatingActionButton(
-            onPressed: createNewExercise,
-            child: const Icon(Icons.add),
-          ),
-          body: ListView.builder(
+        appBar: AppBar(title: Text(widget.workoutName)),
+        floatingActionButton: FloatingActionButton(
+          onPressed: createNewExercise,
+          child: const Icon(Icons.add),
+        ),
+        body: ListView.builder(
           itemCount: value.numOfExercises(widget.workoutName),
           itemBuilder: (context, index) => ExerciseTile(
             exerciseName: value
                 .getRelevantWorkout(widget.workoutName)
                 .exercises[index]
-                .name, 
+                .name,
             weight: value
                 .getRelevantWorkout(widget.workoutName)
                 .exercises[index]
-                .weight, 
+                .weight,
             reps: value
                 .getRelevantWorkout(widget.workoutName)
                 .exercises[index]
-                .reps, 
+                .reps,
             sets: value
                 .getRelevantWorkout(widget.workoutName)
                 .exercises[index]
-                .sets, 
+                .sets,
             isCompleted: value
                 .getRelevantWorkout(widget.workoutName)
                 .exercises[index]
-                .isCompleted, 
+                .isCompleted,
             onCheckBoxChanged: (val) => onCheckBoxChanged(
-                widget.workoutName, 
-                value
-                    .getRelevantWorkout(widget.workoutName)
-                    .exercises[index]
-                    .name, 
+              widget.workoutName,
+              value
+                  .getRelevantWorkout(widget.workoutName)
+                  .exercises[index]
+                  .name,
             ),
           ),
         ),
-      ),    
+      ),
     );
   }
 }

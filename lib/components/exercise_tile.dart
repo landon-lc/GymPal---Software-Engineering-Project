@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 // ignore: must_be_immutable
 class ExerciseTile extends StatelessWidget {
   final String exerciseName;
@@ -25,23 +24,24 @@ class ExerciseTile extends StatelessWidget {
     return Container(
       color: Colors.grey,
       child: ListTile(
-        title: Text(exerciseName),
-        subtitle: Row(
-          children: [
-            Chip(
-              label: Text('$weight lbs'),
-            ),
-            Chip(
-              label: Text('$reps reps'),
-            ),
-            Chip(
-              label: Text('$sets sets'),
-            ),
-          ],
-        ),trailing: Checkbox(
-          value: isCompleted,
-          onChanged: (value) => onCheckBoxChanged!(value),)
-      ),
+          title: Text(exerciseName),
+          subtitle: Row(
+            children: [
+              Chip(
+                label: Text('$weight lbs'),
+              ),
+              Chip(
+                label: Text('$reps reps'),
+              ),
+              Chip(
+                label: Text('$sets sets'),
+              ),
+            ],
+          ),
+          trailing: Checkbox(
+            value: isCompleted,
+            onChanged: (value) => onCheckBoxChanged!(value),
+          )),
     );
   }
 }

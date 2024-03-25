@@ -1,20 +1,21 @@
 import 'gym.dart';
 
-class Friend { // maybe think about using inheritance from profile?
+class Friend {
+  // maybe think about using inheritance from profile?
   // this will later select certain attributes from the profile class
-  String? userName; 
-  String? password; // This will be changed to reference methods in the profile class
+  String? userName;
+  String?
+      password; // This will be changed to reference methods in the profile class
   String? email;
   // future spot for profile picture
   String? aboutMe;
   List<Gym> gym = []; // this is temporarily going to be a String
 
-  Friend({
-    required this.userName,
-    required this.password,
-    required this.email,
-    required this.aboutMe
-  });
+  Friend(
+      {required this.userName,
+      required this.password,
+      required this.email,
+      required this.aboutMe});
 
   // getters
 
