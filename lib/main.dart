@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const PlaceholderWidget(color: Colors.green),
     // Map Button
     const PlaceholderWidget(color: Colors.yellow),
-    const FriendsScreen(),
+    const FriendsScreen()
   ];
 
   @override
