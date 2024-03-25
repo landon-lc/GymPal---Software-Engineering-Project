@@ -1,5 +1,7 @@
+import 'page_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // The user is creating an account for the first time. 
 class AccountCreationScreen extends StatefulWidget {
@@ -11,11 +13,19 @@ class AccountCreationScreen extends StatefulWidget {
 }
 
 class _AccountCreationScreen extends State<AccountCreationScreen> {
-final newUsernameController = TextEditingController();
-final newPasswordController = TextEditingController();
-final newEmailController = TextEditingController();
+  final newUsernameController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final newEmailController = TextEditingController();
 
-@override
+  @override
+  void dispose() {
+    newUsernameController.dispose();
+    newPasswordController.dispose();
+    newEmailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -43,15 +53,28 @@ final newEmailController = TextEditingController();
                         controller: newEmailController,
                       ),
                       // CREATING THE USERS ACCOUNT
-                      // NOTE - No protections against a current account being overwritten. Will need to be accounted for later. 
                       ElevatedButton(
                         onPressed: () async {
+                          await Future.delayed(const Duration(seconds: 3));
+                          // NOTE - No protections against a current account being overwritten. Will need to be accounted for later. 
+                          // Creates the user within the Realtime Database. 
                           DatabaseReference ref = FirebaseDatabase.instance.ref('users/${newUsernameController.text}');
                           await ref.set({
                             'username': newUsernameController.text,
                             'password': newPasswordController.text,
                             'email': newEmailController.text,
                           });
+                          // Registers the user within Firebase Authentication. 
+                          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                            email: newEmailController.text, 
+                            password: newPasswordController.text);
+                          // Continues to the users' profile screen.
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PageNavigation()));
+                          }
                         },
                         child: const Text('Create Account'),
                       ),
