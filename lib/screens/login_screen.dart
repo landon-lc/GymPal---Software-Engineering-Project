@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'account_creation_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -59,6 +60,15 @@ class _LoginScreen extends State<LoginScreen> {
                           }
                         },
                         child: const Text('Login'),
+                      ),
+                      ElevatedButton(
+                        onPressed:() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AccountCreationScreen()));
+                        },
+                        child: const Text('Create Account'),
                       ),
                     ]))));
   }
