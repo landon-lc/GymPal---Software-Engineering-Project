@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/gym.dart';
 
-
 class MapScreen extends StatefulWidget {
   final List<Gym> gyms;
 
@@ -54,7 +53,8 @@ class MapScreenState extends State<MapScreen> {
       body: GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
-          target: LatLng(widget.gyms.first.latitude, widget.gyms.first.longitude),
+          target:
+              LatLng(widget.gyms.first.latitude, widget.gyms.first.longitude),
           zoom: 14.0,
         ),
         markers: _markers,

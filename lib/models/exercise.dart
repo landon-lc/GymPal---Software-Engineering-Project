@@ -14,7 +14,6 @@ class Exercise {
   });
 }
 
-
 //List<Exercise> sampleExercises = [
 //    Exercise(sets: 3, reps: 12, name: 'Push-ups', group: 'Chest'),
 //    Exercise(sets: 4, reps: 10, name: 'Squats', group: 'Legs'),
