@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'profile_editor_screen.dart';
 
 // Code that handles all widgets used and displayed in the profile screen. Add additional sections here.
-// Testing comment. 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
 
