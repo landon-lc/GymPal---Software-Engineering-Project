@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 // The user is creating an account for the first time. 
 class AccountCreationScreen extends StatefulWidget {
@@ -40,6 +41,19 @@ final newEmailController = TextEditingController();
                       TextField(
                         decoration: const InputDecoration(labelText: 'Enter your Email'),
                         controller: newEmailController,
+                      ),
+                      // CREATING THE USERS ACCOUNT
+                      // NOTE - No protections against a current account being overwritten. Will need to be accounted for later. 
+                      ElevatedButton(
+                        onPressed: () async {
+                          DatabaseReference ref = FirebaseDatabase.instance.ref('users/${newUsernameController.text}');
+                          await ref.set({
+                            'username': newUsernameController.text,
+                            'password': newPasswordController.text,
+                            'email': newEmailController.text,
+                          });
+                        },
+                        child: const Text('Create Account'),
                       ),
                     ]))));
   }
