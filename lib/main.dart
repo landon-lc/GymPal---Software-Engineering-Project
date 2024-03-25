@@ -59,10 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
     const UserProfileScreen(),
     const ChecklistScreen(),
     // Friends/Search Button
-    const PlaceholderWidget(color: Colors.green),
+    const FriendsScreen(),
     // Map Button
-    const PlaceholderWidget(color: Colors.yellow),
-    const FriendsScreen()
+    const PlaceholderWidget(color: Colors.yellow)
   ];
 
   @override
@@ -76,9 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Friends'),
           BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Locations'),
-          BottomNavigationBarItem(icon: Icon(Icons.co_present), label: 'Friends'),
         ],
       ),
     );
