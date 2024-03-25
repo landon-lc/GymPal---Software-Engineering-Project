@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
-import 'workout_page.dart'; // Make sure the import path is correct
+import 'workout_screen.dart'; // Make sure the import path is correct
 
-class ChecklistPage extends StatefulWidget {
-  const ChecklistPage({super.key});
+class ChecklistScreen extends StatefulWidget {
+  const ChecklistScreen({super.key});
 
   @override
-  State<ChecklistPage> createState() => _ChecklistPageState();
+  State<ChecklistScreen> createState() => _ChecklistScreenState();
 }
 
-class _ChecklistPageState extends State<ChecklistPage> {
-  final TextEditingController newWorkoutNameController = TextEditingController();
+class _ChecklistScreenState extends State<ChecklistScreen> {
+  final TextEditingController newWorkoutNameController =
+      TextEditingController();
 
   void createNewWorkout() {
     showDialog(
@@ -39,7 +40,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => WorkoutPage(workoutName: workoutName),
+        builder: (context) => WorkoutScreen(workoutName: workoutName),
       ),
     );
   }
@@ -47,7 +48,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
   void save() {
     String newWorkoutName = newWorkoutNameController.text;
     if (newWorkoutName.isNotEmpty) {
-      Provider.of<WorkoutRecord>(context, listen: false).addWorkout(newWorkoutName);
+      Provider.of<WorkoutRecord>(context, listen: false)
+          .addWorkout(newWorkoutName);
       Navigator.pop(context); // Close the dialog
       clear();
     }
@@ -79,7 +81,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             title: Text(value.getWorkoutList()[index].name),
             trailing: IconButton(
               icon: const Icon(Icons.arrow_forward_ios),
-              onPressed: () => goToWorkoutPage(value.getWorkoutList()[index].name),
+              onPressed: () =>
+                  goToWorkoutPage(value.getWorkoutList()[index].name),
             ),
           ),
         ),
