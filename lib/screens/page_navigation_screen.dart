@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_drive/screens/map_screen.dart';
 import './profile_screen.dart';
 import './friends_screen.dart';
 import './checklist_screen.dart';
@@ -23,7 +24,7 @@ class _PageNavigation extends State<PageNavigation> {
     const UserProfileScreen(),
     const ChecklistPage(),
     const FriendsScreen(),
-    const PlaceholderWidget(color: Colors.yellow),
+    const GymMaps(),
     // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
 
