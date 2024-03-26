@@ -23,7 +23,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
         content: TextField(controller: _controller),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => 
+              Navigator.pop(context),
             child: const Text('Cancel'),
           ),
           TextButton(
@@ -31,7 +32,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
               final name = _controller.text.trim();
               if (name.isNotEmpty) {
                 Provider.of<WorkoutRecord>(context, listen: false).addWorkout(name);
-                Navigator.pop(context);
+                // Need to handle workout id. 
+                Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutPage(workoutName: _controller.text, workoutId: '1')));
                 _controller.clear();
               }
             },
