@@ -22,7 +22,7 @@ class _PageNavigation extends State<PageNavigation> {
 
   final List<Widget> _pages = [
     const UserProfileScreen(),
-    const ChecklistScreen(),
+    const ChecklistPage(),
     const FriendsScreen(),
     const GymMaps(),
     // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.

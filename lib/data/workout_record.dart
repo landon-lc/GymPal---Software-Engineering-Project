@@ -1,86 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:test_drive/models/exercise.dart';
-import '../models/workout.dart';
+import 'package:test_drive/models/workout.dart';
 
-//default workout
 class WorkoutRecord extends ChangeNotifier {
-  List<Workout> workoutList = [
-    Workout(
-      name: 'Push Day',
-      exercises: [
-        Exercise(name: 'Bench Press', weight: '135', reps: '10', sets: '3'),
-      ],
-    ),
-    Workout(
-      name: 'Pull Day',
-      exercises: [
-        Exercise(name: 'Pull Ups', weight: 'BW', reps: '10', sets: '3'),
-      ],
-    )
-  ];
+  List<Workout> workoutList = [];
+  final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
-//list of workouts
-  List<Workout> getWorkoutList() {
-    return workoutList;
-  }
+  Stream<List<Workout>> get workoutsStream => dbRef.child('workouts').onValue.map((event) {
+    final data = event.snapshot.value;
+    if (data is Map<dynamic, dynamic>) {
+      return data.entries.map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString())).toList();
+    } else {
+      return [];
+    }
+  });
 
-  //length of exercises
-  int numOfExercises(String workoutName) {
-    Workout relevantWorkout = getRelevantWorkout(workoutName);
-
-    return relevantWorkout.exercises.length;
-  }
-
-  //add a workout
   void addWorkout(String name) {
-    workoutList.add(Workout(name: name, exercises: []));
-
-    notifyListeners();
+    final newWorkoutRef = dbRef.child('workouts').push();
+    newWorkoutRef.set({
+      'name': name,
+      'exercises': [],
+    }).then((_) {
+      workoutList.add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
+      notifyListeners();
+      print('Workout added successfully with key ${newWorkoutRef.key}');
+    }).catchError((error) {
+      print('Failed to add workout: $error');
+    });
   }
 
-  //add exercises
-  void addExercises(String workoutName, String exerciseName, String weight,
-      String reps, String sets) {
-    //relevemnt workout instantiation
-    Workout relevantWorkout = getRelevantWorkout(workoutName);
-
-    relevantWorkout.exercises.add(
-      Exercise(name: exerciseName, weight: weight, reps: reps, sets: sets),
-    );
-    notifyListeners();
+  void addExercises(String workoutId, String exerciseName, String weight, String reps, String sets) {
+    dbRef.child('workouts/$workoutId/exercises').push().set({
+      'name': exerciseName,
+      'weight': weight,
+      'reps': reps,
+      'sets': sets,
+      'isCompleted': false,
+    });
   }
 
-  //check off exercises
-  void checkOffExercises(String workoutName, String exerciseName) {
-    //find relevent workout
-    Exercise relevantExercise = getRelevantExercise(workoutName, exerciseName);
-
-    //check off boolean
-    relevantExercise.isCompleted = !relevantExercise.isCompleted;
-
-    notifyListeners();
+  void updateWorkoutName(String workoutId, String newName) {
+    dbRef.child('workouts/$workoutId').update({
+      'name': newName,
+    }).then((_) {
+      int index = workoutList.indexWhere((workout) => workout.key == workoutId);
+      if(index != -1) {
+        workoutList[index].name = newName;
+        notifyListeners();
+      }
+      print('Workout name updated successfully');
+    }).catchError((error) {
+      print('Failed to update workout name: $error');
+    });
   }
 
-  //return relevent workout
-  Workout getRelevantWorkout(String workoutName) {
-    Workout relevantWorkout =
-        workoutList.firstWhere((workout) => workout.name == workoutName);
-
-    return relevantWorkout;
+  void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
+    dbRef.child('workouts/$workoutId/exercises/$exerciseId').update({
+      'isCompleted': isCompleted,
+    });
   }
-  //return relevant exercises
 
-  Exercise getRelevantExercise(String workoutName, String exerciseName) {
-    Workout relevantWorkout = getRelevantWorkout(workoutName);
+  void deleteWorkout(String workoutId) {
+    dbRef.child('workouts/$workoutId').remove().then((_) {
+      workoutList.removeWhere((workout) => workout.key == workoutId);
+      notifyListeners();
+      print('Workout deleted successfully from Firebase');
+    }).catchError((error) {
+      print('Failed to delete workout: $error');
+    });
+  }
 
-    Exercise relevantExercise = relevantWorkout.exercises
-        .firstWhere((exercise) => exercise.name == exerciseName);
+  void editWorkout(String workoutId, String newName) {
+    dbRef.child('workouts/$workoutId').update({'name': newName});
+    int index = workoutList.indexWhere((workout) => workout.key == workoutId);
+    if(index != -1) {
+      workoutList[index].name = newName;
+      notifyListeners();
+    }
+  }
 
-    return relevantExercise;
+  Stream<List<Exercise>> getExercisesStream(String workoutId) {
+    return dbRef.child('workouts/$workoutId/exercises').onValue.map((event) {
+      final data = event.snapshot.value;
+      if (data is Map<dynamic, dynamic>) {
+        return data.entries.map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString())).toList();
+      } else {
+        return [];
+      }
+    });
   }
 }
-
-//  List<WorkoutRecord> sampleRecords = [
-//    WorkoutRecord(
-//        workout: sampleWorkouts.first, dateTime: DateTime.now()),
-//  ];
