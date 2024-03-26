@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:test_drive/data/workout_record.dart';
-import 'pages/checklist_page.dart';
+import 'screens/checklist_screen.dart';
 
 void main() async {
   

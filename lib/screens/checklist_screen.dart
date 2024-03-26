@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:test_drive/data/workout_record.dart';
 import 'package:test_drive/models/workout.dart';
-import 'workout_page.dart';
+import 'workout_screen.dart';
 
 class ChecklistPage extends StatefulWidget {
   const ChecklistPage({Key? key}) : super(key: key);
