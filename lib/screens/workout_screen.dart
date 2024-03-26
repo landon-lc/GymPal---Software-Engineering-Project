@@ -5,13 +5,18 @@ import 'package:test_drive/data/workout_record.dart';
 import 'package:test_drive/models/exercise.dart';
 
 class WorkoutPage extends StatefulWidget {
-  final String workoutName;
-  final String workoutId;
+  const WorkoutPage({
+    super.key,
+    required this.workoutName,
+    required this.workoutId,
+    });
 
-  const WorkoutPage({Key? key, required this.workoutName, required this.workoutId}) : super(key: key);
+    final String workoutName;
+    final String workoutId;
+
 
   @override
-  _WorkoutPageState createState() => _WorkoutPageState();
+  State<WorkoutPage> createState() => _WorkoutPageState();
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
