@@ -10,6 +10,7 @@ class GymMaps extends StatefulWidget {
 
 class _GymMapsState extends State<GymMaps> {
   static const LatLng _pGooglePlex = LatLng(34.20901806593137, -77.89428829935258);
+  // Need another location possibly calling Google Places
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,10 @@ class _GymMapsState extends State<GymMaps> {
           target: _pGooglePlex,
           zoom: 11,
         ),
+        markers: {
+          Marker(markerId: MarkerId("_currentlocation"), icon: BitmapDescriptor.defaultMarker,
+          position: _pGooglePlex)
+        }
       ),
     );
   }
