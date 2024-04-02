@@ -55,8 +55,14 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                       // CREATING THE USERS ACCOUNT
                       ElevatedButton(
                         onPressed: () async {
+                          // Future delay used to make navigator button work, allows time for database integrations to go through. 
                           await Future.delayed(const Duration(seconds: 3));
-                          // NOTE - No protections against a current account being overwritten. Will need to be accounted for later. 
+                          // First, a check will be done to ensure an account using this email has not already been created. 
+                          // INSERT ACCOUNT CHECK
+                          // Second, the user is registered within Firebase Authentication. 
+                          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                            email: newEmailController.text, 
+                            password: newPasswordController.text);
                           // Creates the user within the Realtime Database. 
                           DatabaseReference ref = FirebaseDatabase.instance.ref('users/${newUsernameController.text}');
                           await ref.set({
@@ -64,10 +70,7 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                             'password': newPasswordController.text,
                             'email': newEmailController.text,
                           });
-                          // Registers the user within Firebase Authentication. 
-                          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: newEmailController.text, 
-                            password: newPasswordController.text);
+                          // INSERT AUTH LOGIN
                           // Continues to the users' profile screen.
                           if (context.mounted) {
                             Navigator.pushAndRemoveUntil(
