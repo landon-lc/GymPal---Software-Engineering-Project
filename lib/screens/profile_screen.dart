@@ -9,30 +9,28 @@ class UserProfileScreen extends StatefulWidget {
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreen();
-
 }
 
-// User Profile Screen Handler. Controls all classes that create the screen. 
+// User Profile Screen Handler. Controls all classes that create the screen.
 class _UserProfileScreen extends State<UserProfileScreen> {
-
   @override
-    Widget build(BuildContext context) {
-      return const MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-              body: SingleChildScrollView(
-                  child: Column(children: [
-                    // Database Implementation
-                    // Currently all using placeholder values. will need databse implementation later on.
-                    ProfileImage(profileImage: 'images/Background 2.jpg'),
-                    ProfileUsername(),
-                    ProfileEditorButton(),
-                    ProfileAboutMe(
-                        profileAboutMeText:
-                            'This is a bunch of placeholder text that the user would insert with their life story or personal information or warnings about run-on sentences and the like. Anyways, please feel free to poke around the app here.'),
-                    ProfileFavoriteGym(favoriteGym: 'Planet Fitness - Market Street')
-          ]))));
-    }
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+            body: SingleChildScrollView(
+                child: Column(children: [
+          // Database Implementation
+          // Currently all using placeholder values. will need databse implementation later on.
+          ProfileImage(profileImage: 'images/Background 2.jpg'),
+          ProfileUsername(),
+          ProfileEditorButton(),
+          ProfileAboutMe(
+              profileAboutMeText:
+                  'This is a bunch of placeholder text that the user would insert with their life story or personal information or warnings about run-on sentences and the like. Anyways, please feel free to poke around the app here.'),
+          ProfileFavoriteGym(favoriteGym: 'Planet Fitness - Market Street')
+        ]))));
+  }
 }
 
 // Code for displaying the users profile picture.
@@ -92,35 +90,33 @@ class ProfileUsername extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
-      future: fetchUsername(),
-      builder: (BuildContext context, AsyncSnapshot<String> text) {
-        return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text( text.data ?? 'USERNAME_NOT_FOUND',
-          softWrap: true,
-          textDirection: TextDirection.ltr,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-            color: Colors.blue,
-          )),
-        );
-      }
-    );
+        future: fetchUsername(),
+        builder: (BuildContext context, AsyncSnapshot<String> text) {
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(text.data ?? 'USERNAME_NOT_FOUND',
+                softWrap: true,
+                textDirection: TextDirection.ltr,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.blue,
+                )),
+          );
+        });
   }
 }
 
-  // This method fetches the username for displaying on the profile screen.
+// This method fetches the username for displaying on the profile screen.
 Future<String> fetchUsername() async {
-  // Getting the current user. 
+  // Getting the current user.
   User? currentUser = FirebaseAuth.instance.currentUser;
   String theUsername = '';
   // Ensuring user exists.
   if (currentUser != null) {
     String currentUID = currentUser.uid;
-    // With the users UID, we can now access that user within the database. 
+    // With the users UID, we can now access that user within the database.
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child('users/$currentUID/username').get();
     if (snapshot.exists) {

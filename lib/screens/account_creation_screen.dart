@@ -58,27 +58,29 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           // The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)
-                          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: newEmailController.text, 
-                            password: newPasswordController.text);
+                          await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: newEmailController.text,
+                                  password: newPasswordController.text);
                           // The user will now be logged in.
                           await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                              email: newEmailController.text,
-                              password: newPasswordController.text,
-                            );
-                          // The current users unique identifier (UID) will now be fetched. 
+                              .signInWithEmailAndPassword(
+                            email: newEmailController.text,
+                            password: newPasswordController.text,
+                          );
+                          // The current users unique identifier (UID) will now be fetched.
                           User? currentUser = FirebaseAuth.instance.currentUser;
                           if (currentUser != null) {
                             String currentUID = currentUser.uid;
                             // Creates the user within the Realtime Database using their UID.
-                            DatabaseReference ref = FirebaseDatabase.instance.ref('users/$currentUID');
+                            DatabaseReference ref = FirebaseDatabase.instance
+                                .ref('users/$currentUID');
                             await ref.set({
-                              'UID' : currentUID,
+                              'UID': currentUID,
                               'username': newUsernameController.text,
                               'password': newPasswordController.text,
                               'email': newEmailController.text,
-                              });
+                            });
                           }
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
