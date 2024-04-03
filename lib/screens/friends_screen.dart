@@ -11,7 +11,9 @@ class FriendsScreen extends StatelessWidget {
         home: Scaffold(
             body: SingleChildScrollView(
                 child: Column(children: [
-                  FriendsUsernames(friendUsername: 'Brandon123')
+                  FriendsUsernames(friendUsername: 'Brandon123'), // this will all change to a call to database
+                  FriendsGyms(friendGyms: 'Gold\'s Gym'),
+                  FriendImages(friendImage: 'images/Background 2.jpg')
             ]
           )
         )
@@ -34,8 +36,46 @@ class FriendsUsernames extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Text (
-        friendUsername,
+        friendUsername, // you'll change this to something with flutter once we store friends
       ),
     );
+  }
+}
+
+class FriendsGyms extends StatelessWidget {
+  const FriendsGyms({
+    super.key,
+    required this.friendGyms,
+  });
+
+  final String friendGyms;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Text (
+        friendGyms, // you'll change this to something with flutter once we store friends
+      ),
+    );
+  }
+}
+
+class FriendImages extends StatelessWidget {
+  const FriendImages({
+    super.key,
+    required this.friendImage,
+  });
+
+  final String friendImage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(60),
+        child: CircleAvatar(
+          radius: 40,
+          backgroundImage: AssetImage(friendImage),
+        ));
   }
 }
