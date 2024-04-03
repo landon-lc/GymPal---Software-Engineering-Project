@@ -1,30 +1,40 @@
 // import 'package:firebase_auth/firebase_auth.dart'; going to be used in the future
 import 'package:flutter/material.dart';
 
-class FriendsScreen extends StatefulWidget {
+class FriendsScreen extends StatelessWidget {
   const FriendsScreen({super.key});
 
   @override
-  State<FriendsScreen> createState() => _FriendsScreen();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+            body: SingleChildScrollView(
+                child: Column(children: [
+                  FriendsUsernames(friendUsername: 'Brandon123')
+            ]
+          )
+        )
+      )
+    );
+  }
 }
 
+// Used for displaying friends usernames, don't really know how 
+class FriendsUsernames extends StatelessWidget {
+  const FriendsUsernames({
+    super.key,
+    required this.friendUsername,
+  });
 
-class _FriendsScreen extends State<FriendsScreen> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+  final String friendUsername;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Friends'),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Text (
+        friendUsername,
       ),
     );
   }
