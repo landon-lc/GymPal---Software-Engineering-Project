@@ -8,7 +8,6 @@ class FriendsScreen extends StatefulWidget {
   State<FriendsScreen> createState() => _FriendsScreen();
 }
 
-
 class _FriendsScreen extends State<FriendsScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
