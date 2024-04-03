@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'GymPal',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
         home: const AuthGate(),
@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = [
     // Add other screens here like Friends, Profile, Map, etc.
     const UserProfileScreen(),
-    const ChecklistScreen(),
+    const ChecklistPage(),
     // Friends/Search Button
     const FriendsScreen(),
     // Map Button

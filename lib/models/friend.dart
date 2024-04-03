@@ -61,8 +61,7 @@ class Friend {
 
   void displayGyms() {
     for (Gym g in gym) {
-      print(g
-          .displayName()); // change this in future to show location and name, not just name
+      print(g.displayName()); // change this in future to show location and name, not just name 
     }
   }
 }
