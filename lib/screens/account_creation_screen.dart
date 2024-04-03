@@ -53,25 +53,33 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                         controller: newEmailController,
                       ),
                       // CREATING THE USERS ACCOUNT
+                      // For a detailed explanation of this section, see Issue #65.
                       ElevatedButton(
                         onPressed: () async {
-                          // Future delay used to make navigator button work, allows time for database integrations to go through. 
-                          await Future.delayed(const Duration(seconds: 3));
-                          // First, a check will be done to ensure an account using this email has not already been created. 
-                          // INSERT ACCOUNT CHECK
-                          // Second, the user is registered within Firebase Authentication. 
+                          // The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)
                           await FirebaseAuth.instance.createUserWithEmailAndPassword(
                             email: newEmailController.text, 
                             password: newPasswordController.text);
-                          // Creates the user within the Realtime Database. 
-                          DatabaseReference ref = FirebaseDatabase.instance.ref('users/${newUsernameController.text}');
-                          await ref.set({
-                            'username': newUsernameController.text,
-                            'password': newPasswordController.text,
-                            'email': newEmailController.text,
-                          });
-                          // INSERT AUTH LOGIN
-                          // Continues to the users' profile screen.
+                          // The user will now be logged in.
+                          await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                              email: newEmailController.text,
+                              password: newPasswordController.text,
+                            );
+                          // The current users unique identifier (UID) will now be fetched. 
+                          User? currentUser = FirebaseAuth.instance.currentUser;
+                          if (currentUser != null) {
+                            String currentUID = currentUser.uid;
+                            // Creates the user within the Realtime Database using their UID.
+                            DatabaseReference ref = FirebaseDatabase.instance.ref('users/$currentUID');
+                            await ref.set({
+                              'UID' : currentUID,
+                              'username': newUsernameController.text,
+                              'password': newPasswordController.text,
+                              'email': newEmailController.text,
+                              });
+                          }
+                          // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
                             Navigator.pushAndRemoveUntil(
                               context,

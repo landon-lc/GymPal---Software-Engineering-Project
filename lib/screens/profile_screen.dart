@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 import 'profile_editor_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+// This method fetches all of the relevant user data from the Realtime Database, for displaying on the profile screen.
+Future<List> userProfileData() async {
+  // Getting the current user. 
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  // Ensuring user exists.
+  if (currentUser != null) {
+    String currentUID = currentUser.uid;
+    // With the users UID, we can now access that user within the database. 
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('users/$currentUID/username').get();
+    if (snapshot.exists) {
+
+    }
+
+  }
+
+  return [];
+}
 
 // Code that handles all widgets used and displayed in the profile screen. Add additional sections here.
 class UserProfileScreen extends StatelessWidget {
@@ -12,6 +33,7 @@ class UserProfileScreen extends StatelessWidget {
         home: Scaffold(
             body: SingleChildScrollView(
                 child: Column(children: [
+          // Database Implementation
           // Currently all using placeholder values. will need databse implementation later on.
           ProfileImage(profileImage: 'images/Background 2.jpg'),
           ProfileUsername(profileUsername: 'PickleRick1776'),
