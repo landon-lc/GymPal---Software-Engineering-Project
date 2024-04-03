@@ -43,6 +43,7 @@ class GymMapsState extends State<GymMaps> {
 
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kO2FitnessRacine));
+    await controller
+        .animateCamera(CameraUpdate.newCameraPosition(_kO2FitnessRacine));
   }
 }

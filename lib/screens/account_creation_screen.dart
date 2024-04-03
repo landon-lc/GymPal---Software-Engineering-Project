@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-// The user is creating an account for the first time. 
+// The user is creating an account for the first time.
 class AccountCreationScreen extends StatefulWidget {
   const AccountCreationScreen({super.key});
 
   @override
   State<AccountCreationScreen> createState() => _AccountCreationScreen();
-
 }
 
 class _AccountCreationScreen extends State<AccountCreationScreen> {
@@ -38,18 +37,20 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       TextField(
-                        decoration: const InputDecoration(labelText: 'Create a Username'),
+                        decoration: const InputDecoration(
+                            labelText: 'Create a Username'),
                         controller: newUsernameController,
                       ),
                       TextField(
-                        decoration:
-                            const InputDecoration(labelText: 'Create a Password'),
+                        decoration: const InputDecoration(
+                            labelText: 'Create a Password'),
                         // MAY SET TO TRUE LATER - DO NOT DELETE
                         obscureText: false,
                         controller: newPasswordController,
                       ),
                       TextField(
-                        decoration: const InputDecoration(labelText: 'Enter your Email'),
+                        decoration: const InputDecoration(
+                            labelText: 'Enter your Email'),
                         controller: newEmailController,
                       ),
                       // CREATING THE USERS ACCOUNT
@@ -82,10 +83,11 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
                             Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const PageNavigation()),
-                                // Ensures a one-way route - user cannot return to account creation or login screen (without logging out). 
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PageNavigation()),
+                                // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
                                 (Route<dynamic> route) => false);
                           }
                         },
