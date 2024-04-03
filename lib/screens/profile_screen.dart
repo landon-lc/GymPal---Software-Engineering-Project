@@ -35,7 +35,6 @@ class _UserProfileScreen extends State<UserProfileScreen> {
     }
 }
 
-
 // Code for displaying the users profile picture.
 class ProfileImage extends StatelessWidget {
   const ProfileImage({
@@ -91,7 +90,6 @@ class ProfileUsername extends StatelessWidget {
     super.key,
   });
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -131,7 +129,6 @@ Future<String> fetchUsername() async {
   }
   return theUsername;
 }
-
 
 // The AboutMe header and the text within is handled here.
 class ProfileAboutMe extends StatelessWidget {
