@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 Future<List> userProfileData() async {
   // Getting the current user. 
   User? currentUser = FirebaseAuth.instance.currentUser;
+  List userData = [];
   // Ensuring user exists.
   if (currentUser != null) {
     String currentUID = currentUser.uid;
@@ -14,17 +15,16 @@ Future<List> userProfileData() async {
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child('users/$currentUID/username').get();
     if (snapshot.exists) {
-
+      userData.add(snapshot.value);
     }
-
   }
-
-  return [];
+  return userData;
 }
 
 // Code that handles all widgets used and displayed in the profile screen. Add additional sections here.
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,7 @@ class UserProfileScreen extends StatelessWidget {
             body: SingleChildScrollView(
                 child: Column(children: [
           // Database Implementation
+
           // Currently all using placeholder values. will need databse implementation later on.
           ProfileImage(profileImage: 'images/Background 2.jpg'),
           ProfileUsername(profileUsername: 'PickleRick1776'),
