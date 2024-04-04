@@ -30,15 +30,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
             onPressed: () {
               final name = _controller.text.trim();
               if (name.isNotEmpty) {
-                Provider.of<WorkoutRecord>(context, listen: false)
-                    .addWorkout(name);
-                // Need to handle workout id.
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => WorkoutPage(
-                            workoutName: _controller.text, workoutId: '1')));
+                Provider.of<WorkoutRecord>(context, listen: false).addWorkout(name);
                 _controller.clear();
+                Navigator.pop(context);
               }
             },
             child: const Text('Save'),
@@ -51,7 +45,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
   void _editWorkout(String? workoutKey) {
     if (workoutKey == null) return;
     final TextEditingController editController = TextEditingController();
-
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -69,8 +62,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
             onPressed: () {
               final newName = editController.text.trim();
               if (newName.isNotEmpty) {
-                Provider.of<WorkoutRecord>(context, listen: false)
-                    .editWorkout(workoutKey, newName);
+                Provider.of<WorkoutRecord>(context, listen: false).editWorkout(workoutKey, newName);
                 Navigator.pop(context);
               }
             },
