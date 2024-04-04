@@ -59,15 +59,15 @@ class WorkoutRecord extends ChangeNotifier {
     dbRef.child('workouts/$workoutId').update({
       'name': newName,
     }).then((_) {
-      int index = workoutList.indexWhere((workout) => workout.key == workoutId);
-      if (index != -1) {
-        workoutList[index].name = newName;
-        notifyListeners();
-      }
       print('Workout name updated successfully');
     }).catchError((error) {
       print('Failed to update workout name: $error');
     });
+    int index = workoutList.indexWhere((workout) => workout.key == workoutId);
+    if (index != -1){
+      workoutList[index].name = newName;
+      notifyListeners();
+    }
   }
 
   void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
@@ -84,18 +84,6 @@ class WorkoutRecord extends ChangeNotifier {
     });
     workoutList.removeWhere((workout) => workout.key == workoutId);
     notifyListeners();
-  }
-
-  void editWorkout(String workoutId, String newName) {
-    dbRef.child('workouts/$workoutId').update({'name': newName}).catchError((error) {
-    print('Failed to update workout name: $error');
-  });
-    
-    final int index = workoutList.indexWhere((workout) => workout.key == workoutId);
-    if (index != -1) {
-      workoutList[index].name = newName;
-      notifyListeners();
-    }
   }
 
   Stream<List<Exercise>> getExercisesStream(String workoutId) {
