@@ -7,6 +7,10 @@ class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
+  WorkoutRecord(){
+    initWorkouts();
+  }
+
   Stream<List<Workout>> get workoutsStream =>
       dbRef.child('workouts').onValue.map((event) {
         final data = event.snapshot.value;
@@ -20,15 +24,19 @@ class WorkoutRecord extends ChangeNotifier {
         }
       });
 
+  Future<void> initWorkouts() async {
+    workoutsStream.listen((workouts){
+      workoutList = workouts;
+      notifyListeners();
+    });
+  }
+
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('workouts').push();
     newWorkoutRef.set({
       'name': name,
       'exercises': [],
     }).then((_) {
-      workoutList
-          .add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
-      notifyListeners();
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
       print('Failed to add workout: $error');
@@ -70,8 +78,6 @@ class WorkoutRecord extends ChangeNotifier {
 
   void deleteWorkout(String workoutId) {
     dbRef.child('workouts/$workoutId').remove().then((_) {
-      workoutList.removeWhere((workout) => workout.key == workoutId);
-      notifyListeners();
       print('Workout deleted successfully from Firebase');
     }).catchError((error) {
       print('Failed to delete workout: $error');
