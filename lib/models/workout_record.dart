@@ -33,15 +33,15 @@ class WorkoutRecord extends ChangeNotifier {
 
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('workouts').push();
-    newWorkoutRef.set({
-      'name': name,
-      'exercises': [],
-    }).then((_) {
+    final newWorkout = Workout(name: name, exercises: [], key: newWorkoutRef.key);
+
+    newWorkoutRef.set(newWorkout.toMap()).then((_) {
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
       print('Failed to add workout: $error');
     });
-    return;
+    workoutList.add(newWorkout);
+    notifyListeners();
   }
 
   void addExercises(String workoutId, String exerciseName, String weight,
@@ -82,11 +82,16 @@ class WorkoutRecord extends ChangeNotifier {
     }).catchError((error) {
       print('Failed to delete workout: $error');
     });
+    workoutList.removeWhere((workout) => workout.key == workoutId);
+    notifyListeners();
   }
 
   void editWorkout(String workoutId, String newName) {
-    dbRef.child('workouts/$workoutId').update({'name': newName});
-    int index = workoutList.indexWhere((workout) => workout.key == workoutId);
+    dbRef.child('workouts/$workoutId').update({'name': newName}).catchError((error) {
+    print('Failed to update workout name: $error');
+  });
+    
+    final int index = workoutList.indexWhere((workout) => workout.key == workoutId);
     if (index != -1) {
       workoutList[index].name = newName;
       notifyListeners();
