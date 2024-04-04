@@ -31,9 +31,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
               final name = _controller.text.trim();
               if (name.isNotEmpty) {
                 Provider.of<WorkoutRecord>(context, listen: false).addWorkout(name);
-                _controller.clear();
-                Navigator.pop(context);
+                _controller.clear();    
               }
+              Navigator.pop(context);
             },
             child: const Text('Save'),
           ),

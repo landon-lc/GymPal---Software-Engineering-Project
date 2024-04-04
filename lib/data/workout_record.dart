@@ -8,7 +8,9 @@ class WorkoutRecord extends ChangeNotifier {
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
   Stream<List<Workout>> get workoutsStream =>
-      dbRef.child('workouts').onValue.map((event) {
+      dbRef.child('workouts').onValue.handleError((error) {
+        print('Error fetching workouts: $error');
+      }).map((event) {
         final data = event.snapshot.value;
         if (data is Map<dynamic, dynamic>) {
           return data.entries
