@@ -30,4 +30,4 @@ jobs:
       run: dart format --set-exit-if-changed .
 
     - name: Analyze Flutter code
-      run: dart analyze
+      run: dart analyze --fatal-infos
