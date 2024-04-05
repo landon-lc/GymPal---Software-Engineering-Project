@@ -1,5 +1,7 @@
 // import 'package:firebase_auth/firebase_auth.dart'; going to be used in the future
 import 'package:flutter/material.dart';
+import '../models/profile.dart';
+import '../models/friend.dart';
 
 class FriendsScreen extends StatelessWidget {
   const FriendsScreen({super.key});
@@ -77,5 +79,28 @@ class FriendImages extends StatelessWidget {
           radius: 40,
           backgroundImage: AssetImage(friendImage),
         ));
+  }
+}
+
+class FriendsList extends StatelessWidget { // Used to display a list of people that are friends with the user
+
+  const FriendsList({
+    super.key,
+    required this.freindsList,
+  });
+
+  final List<Friend> freindsList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding( 
+      padding: const EdgeInsets.all(20),
+      child: ListView.builder(
+        itemCount: freindsList.length,
+        itemBuilder: (context, index) {
+
+        }
+      )
+    );
   }
 }
