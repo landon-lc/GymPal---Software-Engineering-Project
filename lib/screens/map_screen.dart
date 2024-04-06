@@ -1,64 +1,49 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/gym.dart';
 
-class MapScreen extends StatefulWidget {
-  final List<Gym> gyms;
-
-  const MapScreen({super.key, required this.gyms});
+class GymMaps extends StatefulWidget {
+  const GymMaps({super.key});
 
   @override
-  MapScreenState createState() => MapScreenState();
+  State<GymMaps> createState() => GymMapsState();
 }
 
-class MapScreenState extends State<MapScreen> {
-  late GoogleMapController mapController;
-  final Set<Marker> _markers = {};
+class GymMapsState extends State<GymMaps> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
 
-  @override
-  void initState() {
-    super.initState();
-    _createMarkers();
-  }
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(34.20901806593137, -77.89428829935258),
+    zoom: 12,
+  );
 
-  void _createMarkers() {
-    setState(() {
-      _markers.clear();
-      for (final gym in widget.gyms) {
-        _markers.add(
-          Marker(
-            markerId: MarkerId(gym.name),
-            position: LatLng(gym.latitude, gym.longitude),
-            infoWindow: InfoWindow(title: gym.name),
-            onTap: () {
-              // Optional: Add actions here when a marker is tapped.
-              print('Marker tapped: ${gym.name}');
-            },
-          ),
-        );
-      }
-    });
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+  static const CameraPosition _kO2FitnessRacine = CameraPosition(
+      target: LatLng(34.247339250011464, -77.86304592936503),
+      tilt: 59.440717697143555,
+      zoom: 18);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nearby Gyms'),
-      ),
       body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target:
-              LatLng(widget.gyms.first.latitude, widget.gyms.first.longitude),
-          zoom: 14.0,
-        ),
-        markers: _markers,
+        mapType: MapType.hybrid,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _goToTheLake,
+        label: const Text('Take me to O2 Fitness'),
+        icon: const Icon(Icons.directions_boat),
       ),
     );
+  }
+
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    await controller
+        .animateCamera(CameraUpdate.newCameraPosition(_kO2FitnessRacine));
   }
 }

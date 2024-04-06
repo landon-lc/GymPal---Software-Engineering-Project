@@ -17,6 +17,6 @@ class AuthGate extends StatelessWidget {
 
         return const PageNavigation();
       },
-      );
+    );
   }
 }
