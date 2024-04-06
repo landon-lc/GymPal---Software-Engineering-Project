@@ -30,8 +30,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
             onPressed: () {
               final name = _controller.text.trim();
               if (name.isNotEmpty) {
-                Provider.of<WorkoutRecord>(context, listen: false).addWorkout(name);
-                _controller.clear();    
+                Provider.of<WorkoutRecord>(context, listen: false)
+                    .addWorkout(name);
+                _controller.clear();
               }
               Navigator.pop(context);
             },
@@ -62,7 +63,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             onPressed: () {
               final newName = editController.text.trim();
               if (newName.isNotEmpty) {
-                Provider.of<WorkoutRecord>(context, listen: false).editWorkout(workoutKey, newName);
+                Provider.of<WorkoutRecord>(context, listen: false)
+                    .editWorkout(workoutKey, newName);
                 Navigator.pop(context);
               }
             },
@@ -86,6 +88,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No workouts found'));
