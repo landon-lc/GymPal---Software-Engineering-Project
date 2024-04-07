@@ -24,7 +24,7 @@ class Workout {
     }
 
     return Workout(
-      name: map['name'] as String? ?? 'Unnamed Workout',
+      name: map['name'] as String? ?? '',
       exercises: exercises,
       key: key,
     );
