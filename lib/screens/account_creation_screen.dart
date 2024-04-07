@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-// The user is creating an account for the first time. 
+// The user is creating an account for the first time.
 class AccountCreationScreen extends StatefulWidget {
   const AccountCreationScreen({super.key});
 
   @override
   State<AccountCreationScreen> createState() => _AccountCreationScreen();
-
 }
 
 class _AccountCreationScreen extends State<AccountCreationScreen> {
@@ -38,43 +37,59 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       TextField(
-                        decoration: const InputDecoration(labelText: 'Create a Username'),
+                        decoration: const InputDecoration(
+                            labelText: 'Create a Username'),
                         controller: newUsernameController,
                       ),
                       TextField(
-                        decoration:
-                            const InputDecoration(labelText: 'Create a Password'),
+                        decoration: const InputDecoration(
+                            labelText: 'Create a Password'),
                         // MAY SET TO TRUE LATER - DO NOT DELETE
                         obscureText: false,
                         controller: newPasswordController,
                       ),
                       TextField(
-                        decoration: const InputDecoration(labelText: 'Enter your Email'),
+                        decoration: const InputDecoration(
+                            labelText: 'Enter your Email'),
                         controller: newEmailController,
                       ),
                       // CREATING THE USERS ACCOUNT
+                      // For a detailed explanation of this section, see Issue #65.
                       ElevatedButton(
                         onPressed: () async {
-                          await Future.delayed(const Duration(seconds: 3));
-                          // NOTE - No protections against a current account being overwritten. Will need to be accounted for later. 
-                          // Creates the user within the Realtime Database. 
-                          DatabaseReference ref = FirebaseDatabase.instance.ref('users/${newUsernameController.text}');
-                          await ref.set({
-                            'username': newUsernameController.text,
-                            'password': newPasswordController.text,
-                            'email': newEmailController.text,
-                          });
-                          // Registers the user within Firebase Authentication. 
-                          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: newEmailController.text, 
-                            password: newPasswordController.text);
-                          // Continues to the users' profile screen.
+                          // The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)
+                          await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: newEmailController.text,
+                                  password: newPasswordController.text);
+                          // The user will now be logged in.
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                            email: newEmailController.text,
+                            password: newPasswordController.text,
+                          );
+                          // The current users unique identifier (UID) will now be fetched.
+                          User? currentUser = FirebaseAuth.instance.currentUser;
+                          if (currentUser != null) {
+                            String currentUID = currentUser.uid;
+                            // Creates the user within the Realtime Database using their UID.
+                            DatabaseReference ref = FirebaseDatabase.instance
+                                .ref('users/$currentUID');
+                            await ref.set({
+                              'UID': currentUID,
+                              'username': newUsernameController.text,
+                              'password': newPasswordController.text,
+                              'email': newEmailController.text,
+                            });
+                          }
+                          // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
                             Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const PageNavigation()),
-                                // Ensures a one-way route - user cannot return to account creation or login screen (without logging out). 
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PageNavigation()),
+                                // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
                                 (Route<dynamic> route) => false);
                           }
                         },

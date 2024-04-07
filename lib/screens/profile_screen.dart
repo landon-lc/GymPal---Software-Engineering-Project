@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'profile_editor_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// Code that handles all widgets used and displayed in the profile screen. Add additional sections here.
-class UserProfileScreen extends StatelessWidget {
+// Stateful Widget for the Profile Screen.
+class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
 
+  @override
+  State<UserProfileScreen> createState() => _UserProfileScreen();
+}
+
+// User Profile Screen Handler. Controls all classes that create the screen.
+class _UserProfileScreen extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -12,9 +20,10 @@ class UserProfileScreen extends StatelessWidget {
         home: Scaffold(
             body: SingleChildScrollView(
                 child: Column(children: [
+          // Database Implementation
           // Currently all using placeholder values. will need databse implementation later on.
           ProfileImage(profileImage: 'images/Background 2.jpg'),
-          ProfileUsername(profileUsername: 'PickleRick1776'),
+          ProfileUsername(),
           ProfileEditorButton(),
           ProfileAboutMe(
               profileAboutMeText:
@@ -77,25 +86,44 @@ class ProfileEditorButton extends StatelessWidget {
 class ProfileUsername extends StatelessWidget {
   const ProfileUsername({
     super.key,
-    required this.profileUsername,
   });
-
-  final String profileUsername;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Text(profileUsername,
-          softWrap: true,
-          textDirection: TextDirection.ltr,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-            color: Colors.blue,
-          )),
-    );
+    return FutureBuilder(
+        future: fetchUsername(),
+        builder: (BuildContext context, AsyncSnapshot<String> text) {
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(text.data ?? 'USERNAME_NOT_FOUND',
+                softWrap: true,
+                textDirection: TextDirection.ltr,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.blue,
+                )),
+          );
+        });
   }
+}
+
+// This method fetches the username for displaying on the profile screen.
+Future<String> fetchUsername() async {
+  // Getting the current user.
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  String theUsername = '';
+  // Ensuring user exists.
+  if (currentUser != null) {
+    String currentUID = currentUser.uid;
+    // With the users UID, we can now access that user within the database.
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('users/$currentUID/username').get();
+    if (snapshot.exists) {
+      theUsername = snapshot.value.toString();
+    }
+  }
+  return theUsername;
 }
 
 // The AboutMe header and the text within is handled here.

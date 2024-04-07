@@ -7,14 +7,18 @@ class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
-  Stream<List<Workout>> get workoutsStream => dbRef.child('workouts').onValue.map((event) {
-    final data = event.snapshot.value;
-    if (data is Map<dynamic, dynamic>) {
-      return data.entries.map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString())).toList();
-    } else {
-      return [];
-    }
-  });
+  Stream<List<Workout>> get workoutsStream =>
+      dbRef.child('workouts').onValue.map((event) {
+        final data = event.snapshot.value;
+        if (data is Map<dynamic, dynamic>) {
+          return data.entries
+              .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value),
+                  key: e.key.toString()))
+              .toList();
+        } else {
+          return [];
+        }
+      });
 
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('workouts').push();
@@ -22,7 +26,8 @@ class WorkoutRecord extends ChangeNotifier {
       'name': name,
       'exercises': [],
     }).then((_) {
-      workoutList.add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
+      workoutList
+          .add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
       notifyListeners();
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
@@ -30,7 +35,8 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  void addExercises(String workoutId, String exerciseName, String weight, String reps, String sets) {
+  void addExercises(String workoutId, String exerciseName, String weight,
+      String reps, String sets) {
     dbRef.child('workouts/$workoutId/exercises').push().set({
       'name': exerciseName,
       'weight': weight,
@@ -45,7 +51,7 @@ class WorkoutRecord extends ChangeNotifier {
       'name': newName,
     }).then((_) {
       int index = workoutList.indexWhere((workout) => workout.key == workoutId);
-      if(index != -1) {
+      if (index != -1) {
         workoutList[index].name = newName;
         notifyListeners();
       }
@@ -74,7 +80,7 @@ class WorkoutRecord extends ChangeNotifier {
   void editWorkout(String workoutId, String newName) {
     dbRef.child('workouts/$workoutId').update({'name': newName});
     int index = workoutList.indexWhere((workout) => workout.key == workoutId);
-    if(index != -1) {
+    if (index != -1) {
       workoutList[index].name = newName;
       notifyListeners();
     }
@@ -84,7 +90,10 @@ class WorkoutRecord extends ChangeNotifier {
     return dbRef.child('workouts/$workoutId/exercises').onValue.map((event) {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
-        return data.entries.map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString())).toList();
+        return data.entries
+            .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value),
+                key: e.key.toString()))
+            .toList();
       } else {
         return [];
       }

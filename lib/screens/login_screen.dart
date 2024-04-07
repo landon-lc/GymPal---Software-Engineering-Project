@@ -62,11 +62,12 @@ class _LoginScreen extends State<LoginScreen> {
                         child: const Text('Login'),
                       ),
                       ElevatedButton(
-                        onPressed:() {
+                        onPressed: () {
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AccountCreationScreen()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AccountCreationScreen()));
                         },
                         child: const Text('Create Account'),
                       ),

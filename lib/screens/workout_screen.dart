@@ -9,11 +9,10 @@ class WorkoutPage extends StatefulWidget {
     super.key,
     required this.workoutName,
     required this.workoutId,
-    });
+  });
 
-    final String workoutName;
-    final String workoutId;
-
+  final String workoutName;
+  final String workoutId;
 
   @override
   State<WorkoutPage> createState() => _WorkoutPageState();
@@ -33,10 +32,18 @@ class _WorkoutPageState extends State<WorkoutPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: exerciseNameController, decoration: const InputDecoration(labelText: 'Exercise Name')),
-            TextField(controller: weightController, decoration: const InputDecoration(labelText: 'Weight')),
-            TextField(controller: setsController, decoration: const InputDecoration(labelText: 'Sets')),
-            TextField(controller: repsController, decoration: const InputDecoration(labelText: 'Reps')),
+            TextField(
+                controller: exerciseNameController,
+                decoration: const InputDecoration(labelText: 'Exercise Name')),
+            TextField(
+                controller: weightController,
+                decoration: const InputDecoration(labelText: 'Weight')),
+            TextField(
+                controller: setsController,
+                decoration: const InputDecoration(labelText: 'Sets')),
+            TextField(
+                controller: repsController,
+                decoration: const InputDecoration(labelText: 'Reps')),
           ],
         ),
         actions: [
@@ -63,7 +70,10 @@ class _WorkoutPageState extends State<WorkoutPage> {
     final String sets = setsController.text.trim();
     final String reps = repsController.text.trim();
 
-    if (exerciseName.isNotEmpty && weight.isNotEmpty && sets.isNotEmpty && reps.isNotEmpty) {
+    if (exerciseName.isNotEmpty &&
+        weight.isNotEmpty &&
+        sets.isNotEmpty &&
+        reps.isNotEmpty) {
       Provider.of<WorkoutRecord>(context, listen: false).addExercises(
         widget.workoutId,
         exerciseName,
@@ -92,7 +102,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<Exercise>>(
-        stream: Provider.of<WorkoutRecord>(context).getExercisesStream(widget.workoutId),
+        stream: Provider.of<WorkoutRecord>(context)
+            .getExercisesStream(widget.workoutId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -113,7 +124,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
                 sets: exercise.sets,
                 isCompleted: exercise.isCompleted,
                 onCheckBoxChanged: (val) {
-                  Provider.of<WorkoutRecord>(context, listen: false).checkOffExercise(widget.workoutId, exercise.key ?? '', val ?? false);
+                  Provider.of<WorkoutRecord>(context, listen: false)
+                      .checkOffExercise(
+                          widget.workoutId, exercise.key ?? '', val ?? false);
                 },
               );
             },
@@ -124,8 +137,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   }
 }
 
-
-// NOTE - Original code in main, leaving in case it is needed. 
+// NOTE - Original code in main, leaving in case it is needed.
 
 // import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
