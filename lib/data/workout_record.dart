@@ -6,7 +6,7 @@ import 'package:test_drive/models/workout.dart';
 class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-  bool useStaticData = true;
+  bool useStaticData = false;
 
   Stream<List<Workout>> get workoutsStream {
     if (useStaticData) {
