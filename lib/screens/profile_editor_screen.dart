@@ -2,46 +2,24 @@ import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 enum ImageSourceType { gallery, camera }
 
 class ProfileEditorScreen extends StatefulWidget {
-  const ProfileEditorScreen ({super.key});
+  const ProfileEditorScreen({super.key});
 
   @override 
   State<ProfileEditorScreen> createState() => _ProfileEditorScreen();
 }
 
 class _ProfileEditorScreen extends State<ProfileEditorScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(children: [
-              // Implement sub-screens.
-              ImageUploader(),
-              ProfileEditorBackButton(),
-            ])
-          )
-        )
-    );
-  }
-}
+  final userBioController = TextEditingController();
 
-class ImageUploader extends StatefulWidget {
-  const ImageUploader({super.key});
-
-  @override
-  State<ImageUploader> createState() => _ImageUploader();
-}
-
-class _ImageUploader extends State<ImageUploader> {
+  // IMAGE HANDLING - Opens users' native mobile device gallery. 
   File? userImage;
-
   final _picker = ImagePicker();
-  // Handling image picking/filepath. 
   Future<void> _openImagePicker() async {
     final XFile? pickedImage =
         await _picker.pickImage(source: ImageSource.gallery);
@@ -52,81 +30,70 @@ class _ImageUploader extends State<ImageUploader> {
     }
   }
 
-  @override
+  @override 
+  void dispose() {
+    userBioController.dispose();
+    super.dispose();
+  }
+
+  @override 
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(1),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-            // Opens image picker. 
-              child: ElevatedButton(
+            // Opens image picker so user can select an image.  
+            ElevatedButton(
                 onPressed: () {
                   _openImagePicker();
                 },
                 child: const Text('Upload Image'),
-              ),
             ),
-          ]),
-      ),
-    );
-  }
-}
-
-// class ImageUpload extends StatelessWidget {
-//   const ImageUpload({
-//     super.key,
-//   });
-
-//   @override 
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(20),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           ElevatedButton(
-//             onPressed: () async {
-//               ImagePicker();
-//             }, 
-//             child: const Text('Upload Image')
-//             )
-//         ],
-//         )
-//     );
-//   }
-// }
-
-
-// Code for the profile editor back button. WILL BECOME SAVE BUTTON
-class ProfileEditorBackButton extends StatelessWidget {
-  const ProfileEditorBackButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.bottomCenter,
-        child: TextButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const UserProfileScreen()));
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.red,
-          ),
-          child: const Text('TAKE ME BACK RIGHT THIS INSTANT',
+            // Bio text editing field. 
+            TextField(
+              maxLines: 5,
+              expands: false,
+              decoration: const InputDecoration(
+                labelText: 'Type a new about me...'
+              ),
+              controller: userBioController,
+            ),
+            // Save button, takes user back to profile. 
+            TextButton(
+              onPressed: () async {
+                User? currentUser = FirebaseAuth.instance.currentUser;
+                if (currentUser != null) {
+                  String currentUID = currentUser.uid;
+                  final ref = FirebaseDatabase.instance.ref('users/$currentUID');
+                  await ref.update({
+                    'bio': userBioController.text,
+                  }
+                );
+                if (context.mounted) {
+                  Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                      const UserProfileScreen()),
+                        // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
+                        (Route<dynamic> route) => false); 
+                        }}
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.blue,
+              ),
+              child: const Text('Save About Me',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               )),
-        ));
+            )
+          ],
+        )
+      )
+    );
   }
 }
