@@ -1,83 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:location/location.dart' as loc;
+
+void main() {
+  runApp(const GymMapApp());
+}
+
+class GymMapApp extends StatelessWidget {
+  const GymMapApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Gym Finder',
+      home: GymMaps(),
+    );
+  }
+}
 
 class GymMaps extends StatefulWidget {
-  const GymMaps({super.key});
+  const GymMaps({Key? key}) : super(key: key);
 
   @override
   State<GymMaps> createState() => _GymMapsState();
 }
 
 class _GymMapsState extends State<GymMaps> {
-  static const LatLng _center = LatLng(34.20901806593137, -77.89428829935258);
-  final Set<Marker> _markers = {};
   GoogleMapController? _mapController;
-  final places = GoogleMapsPlaces(apiKey: 'AIzaSyCTIZuY972s7eTxV1S0TcMz82mgi-Wa2J0');
+  final Set<Marker> _markers = {};
   final TextEditingController _searchController = TextEditingController();
+  final loc.Location _locationService = loc.Location();
+  loc.LocationData? _currentLocation;
+  final _places = GoogleMapsPlaces(apiKey: 'AIzaSyCTIZuY972s7eTxV1S0TcMz82mgi-Wa2J0');
 
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(_onSearchChanged);
+    _requestLocationPermission();
   }
 
-  @override
-  void dispose() {
-    _searchController.removeListener(_onSearchChanged);
-    _searchController.dispose();
-    super.dispose();
-  }
+  Future<void> _requestLocationPermission() async {
+    final _serviceEnabled = await _locationService.serviceEnabled();
+    if (!_serviceEnabled) {
+      await _locationService.requestService();
+    }
 
-  void _onSearchChanged() {
-    if (_searchController.text.isNotEmpty) {
-      _searchGyms(_searchController.text);
+    var _permissionGranted = await _locationService.hasPermission();
+    if (_permissionGranted == loc.PermissionStatus.denied) {
+      _permissionGranted = await _locationService.requestPermission();
+    }
+
+    if (_permissionGranted == loc.PermissionStatus.granted) {
+      _getCurrentLocation();
     }
   }
 
-  Future<void> _searchGyms(String query) async {
-    final result = await places.searchByText(query);
+  Future<void> _getCurrentLocation() async {
+    final locationData = await _locationService.getLocation();
     setState(() {
-      _markers.clear();
-      if (result.status == "OK") {
-        for (var place in result.results) {
-          final marker = Marker(
-            markerId: MarkerId(place.placeId),
-            position: LatLng(
-              place.geometry?.location?.lat ?? 0.0, 
-              place.geometry?.location?.lng ?? 0.0,
-            ),
-            infoWindow: InfoWindow(title: place.name),
-            onTap: () {
-              _mapController?.animateCamera(
-                CameraUpdate.newLatLngZoom(
-                  LatLng(place.geometry?.location?.lat ?? 0.0, place.geometry?.location?.lng ?? 0.0),
-                  11.0, // Zoom level.
-                ),
-              );
-            },
-          );
-          _markers.add(marker);
-        }
-        if (result.results.isNotEmpty) {
-          _mapController?.animateCamera(
-            CameraUpdate.newLatLngZoom(
-              LatLng(
-                result.results.first.geometry?.location?.lat ?? 0.0,
-                result.results.first.geometry?.location?.lng ?? 0.0,
-              ),
-              11.0, // Zoom level
-            ),
-          );
-        }
-      } else {
-        print('Search did not yield any results: ${result.errorMessage}');
-      }
+      _currentLocation = locationData;
     });
   }
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    if (_currentLocation != null) {
+      _mapController!.moveCamera(
+        CameraUpdate.newLatLng(
+          LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
+        ),
+      );
+    }
+  }
+
+  Future<void> _searchGyms(String query) async {
+    if (_currentLocation == null) {
+      print("Current location is not available.");
+      return;
+    }
+
+    final response = await _places.searchNearbyWithRadius(
+      Location(lat: _currentLocation!.latitude!, lng: _currentLocation!.longitude!),
+      10000,
+      keyword: query,
+      type: 'gym',
+    );
+
+    if (response.status == "OK") {
+      setState(() {
+        _markers.clear();
+        for (final result in response.results) {
+          _markers.add(
+            Marker(
+              markerId: MarkerId(result.placeId),
+              position: LatLng(result.geometry?.location?.lat ?? 0.0, result.geometry?.location?.lng ?? 0.0),
+              infoWindow: InfoWindow(title: result.name),
+            ),
+          );
+        }
+      });
+    } else {
+      print('Failed to find gyms: ${response.errorMessage}');
+    }
   }
 
   @override
@@ -89,21 +114,23 @@ class _GymMapsState extends State<GymMaps> {
           decoration: InputDecoration(
             hintText: 'Search Gyms',
             suffixIcon: IconButton(
-              onPressed: _searchController.clear,
-              icon: Icon(Icons.clear),
+              icon: Icon(Icons.search),
+              onPressed: () => _searchGyms(_searchController.text),
             ),
           ),
           onSubmitted: (value) => _searchGyms(value),
         ),
       ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 11,
-        ),
-        markers: _markers,
-      ),
+      body: _currentLocation == null
+          ? Center(child: CircularProgressIndicator())
+          : GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
+                zoom: 11,
+              ),
+              markers: _markers,
+            ),
     );
   }
 }

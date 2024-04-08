@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_maps_flutter: ^2.5.3
   google_maps_webservice: ^0.0.19
+  location: ^5.0.0
   image: ^4.1.7
   firebase_core: ^2.25.4
   firebase_auth: 4.17.8
