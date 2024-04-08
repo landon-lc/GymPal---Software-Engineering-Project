@@ -13,7 +13,9 @@ class Workout {
 
   factory Workout.fromMap(Map<String, dynamic> map, {String? key}) {
     var exercisesList = map['exercises'] as List<dynamic>? ?? [];
-    List<Exercise> exercises = exercisesList.map((e) => Exercise.fromMap(Map<String, dynamic>.from(e))).toList();
+    List<Exercise> exercises = exercisesList
+        .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e)))
+        .toList();
     return Workout(
       name: map['name'] ?? '',
       exercises: exercises,

@@ -8,8 +8,6 @@ import 'screens/friends_screen.dart';
 import './firebase_options.dart';
 import './features/authentication/auth_gate.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -74,7 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.fitness_center), label: 'Workouts'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.fitness_center), label: 'Workouts'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Friends'),
           BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Locations'),
         ],
