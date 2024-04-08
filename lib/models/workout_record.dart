@@ -7,7 +7,7 @@ class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
-  WorkoutRecord(){
+  WorkoutRecord() {
     initWorkouts();
   }
 
@@ -25,7 +25,7 @@ class WorkoutRecord extends ChangeNotifier {
       });
 
   Future<void> initWorkouts() async {
-    workoutsStream.listen((workouts){
+    workoutsStream.listen((workouts) {
       workoutList = workouts;
       notifyListeners();
     });
@@ -33,7 +33,8 @@ class WorkoutRecord extends ChangeNotifier {
 
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('workouts').push();
-    final newWorkout = Workout(name: name, exercises: [], key: newWorkoutRef.key);
+    final newWorkout =
+        Workout(name: name, exercises: [], key: newWorkoutRef.key);
 
     newWorkoutRef.set(newWorkout.toMap()).then((_) {
       print('Workout added successfully with key ${newWorkoutRef.key}');
@@ -64,7 +65,7 @@ class WorkoutRecord extends ChangeNotifier {
       print('Failed to update workout name: $error');
     });
     int index = workoutList.indexWhere((workout) => workout.key == workoutId);
-    if (index != -1){
+    if (index != -1) {
       workoutList[index].name = newName;
       notifyListeners();
     }

@@ -26,7 +26,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<Workout>>(
-        stream: Provider.of<WorkoutRecord>(context, listen: false).workoutsStream,
+        stream:
+            Provider.of<WorkoutRecord>(context, listen: false).workoutsStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -55,8 +56,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     ),
                     SlidableAction(
                       onPressed: (context) {
-                        if (workout.key != null) { // Ensure workout.key is not null
-                          Provider.of<WorkoutRecord>(context, listen: false).deleteWorkout(workout.key!);
+                        if (workout.key != null) {
+                          // Ensure workout.key is not null
+                          Provider.of<WorkoutRecord>(context, listen: false)
+                              .deleteWorkout(workout.key!);
                         }
                       },
                       backgroundColor: Colors.red,
@@ -99,7 +102,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             onPressed: () {
               final name = _controller.text.trim();
               if (name.isNotEmpty) {
-                Provider.of<WorkoutRecord>(context, listen: false).addWorkout(name);
+                Provider.of<WorkoutRecord>(context, listen: false)
+                    .addWorkout(name);
                 _controller.clear();
                 Navigator.pop(context);
               }
@@ -131,7 +135,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             onPressed: () {
               final newName = editController.text.trim();
               if (newName.isNotEmpty) {
-                Provider.of<WorkoutRecord>(context, listen: false).editWorkout(workoutKey, newName);
+                Provider.of<WorkoutRecord>(context, listen: false)
+                    .editWorkout(workoutKey, newName);
                 Navigator.pop(context);
               }
             },

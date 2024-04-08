@@ -18,7 +18,9 @@ class Workout {
     var exercisesData = map['exercises'];
     List<Exercise> exercises;
     if (exercisesData is List<dynamic>) {
-      exercises = exercisesData.map((e) => Exercise.fromMap(e as Map<String, dynamic>)).toList();
+      exercises = exercisesData
+          .map((e) => Exercise.fromMap(e as Map<String, dynamic>))
+          .toList();
     } else {
       exercises = [];
     }

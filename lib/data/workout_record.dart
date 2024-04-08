@@ -21,7 +21,8 @@ class WorkoutRecord extends ChangeNotifier {
         final data = event.snapshot.value;
         if (data is Map<dynamic, dynamic>) {
           return data.entries
-              .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString()))
+              .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value),
+                  key: e.key.toString()))
               .toList();
         } else {
           return [];
@@ -37,7 +38,8 @@ class WorkoutRecord extends ChangeNotifier {
       'exercises': [],
     }).then((_) {
       if (!useStaticData) {
-        workoutList.add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
+        workoutList
+            .add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
       }
       notifyListeners();
       print('Workout added successfully with key ${newWorkoutRef.key}');
@@ -46,7 +48,8 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  void addExercises(String workoutId, String exerciseName, String weight, String reps, String sets) {
+  void addExercises(String workoutId, String exerciseName, String weight,
+      String reps, String sets) {
     dbRef.child('workouts/$workoutId/exercises').push().set({
       'name': exerciseName,
       'weight': weight,
@@ -101,7 +104,8 @@ class WorkoutRecord extends ChangeNotifier {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
         return data.entries
-            .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString()))
+            .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value),
+                key: e.key.toString()))
             .toList();
       } else {
         return [];
