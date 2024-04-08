@@ -3,6 +3,8 @@ import 'profile_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+enum ImageSourceType { gallery, camera }
+
 class ProfileEditorScreen extends StatefulWidget {
   const ProfileEditorScreen ({super.key});
 
@@ -28,63 +30,77 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
   }
 }
 
-// Getting the users profile picture. Not database integreated yet. 
-// Using code from https://flutterone.com/how-to-implement-an-image-picker-and-uploader-in-flutter/
 class ImageUploader extends StatefulWidget {
   const ImageUploader({super.key});
 
-  @override 
+  @override
   State<ImageUploader> createState() => _ImageUploader();
 }
 
 class _ImageUploader extends State<ImageUploader> {
   File? userImage;
 
-  Future<void> _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: source);
-
-    setState(() {
-      if (pickedImage != null) {
+  final _picker = ImagePicker();
+  // Handling image picking/filepath. 
+  Future<void> _openImagePicker() async {
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
         userImage = File(pickedImage.path);
-      }
-    });
+      });
+    }
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile Editor'),
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+            // Opens image picker. 
+              child: ElevatedButton(
+                onPressed: () {
+                  _openImagePicker();
+                },
+                child: const Text('Upload Image'),
+              ),
+            ),
+          ]),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-          child: Column( 
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              if (userImage != null)
-                Image.file(
-                  userImage!,
-                ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _pickImage(ImageSource.gallery), 
-                child: const Text('Upload Image from Gallery'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _pickImage(ImageSource.camera), 
-                child: const Text('Use Camera')
-              ),
-            ]
-          )
-          )
-      )
     );
   }
 }
+
+// class ImageUpload extends StatelessWidget {
+//   const ImageUpload({
+//     super.key,
+//   });
+
+//   @override 
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.all(20),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           ElevatedButton(
+//             onPressed: () async {
+//               ImagePicker();
+//             }, 
+//             child: const Text('Upload Image')
+//             )
+//         ],
+//         )
+//     );
+//   }
+// }
+
 
 // Code for the profile editor back button. WILL BECOME SAVE BUTTON
 class ProfileEditorBackButton extends StatelessWidget {
