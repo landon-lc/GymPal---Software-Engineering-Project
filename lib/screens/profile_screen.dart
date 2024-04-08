@@ -20,17 +20,16 @@ class _UserProfileScreen extends State<UserProfileScreen> {
         home: Scaffold(
             appBar: null,
             body: Center(
-                child: 
-                  Column(
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Calls to each screen. 
-                      ProfileImage(profileImage: 'images/Background 2.jpg'),
-                      ProfileUsername(),
-                      ProfileEditorButton(),
-                      ProfileAboutMe(),
-                      ProfileFavoriteGym()
-        ]))));
+                  // Calls to each screen.
+                  ProfileImage(profileImage: 'images/Background 2.jpg'),
+                  ProfileUsername(),
+                  ProfileEditorButton(),
+                  ProfileAboutMe(),
+                  ProfileFavoriteGym()
+                ]))));
   }
 }
 
@@ -131,33 +130,30 @@ Future<String> fetchUsername() async {
 class ProfileAboutMe extends StatelessWidget {
   const ProfileAboutMe({
     super.key,
-    });
-
+  });
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
-      future: fetchBio(),
-      builder: (BuildContext context, AsyncSnapshot<String> bioText) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('About Me',
-                  style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                )),
-                Text(
-                  bioText.data ?? 'BIO_FETCH_FAIL',
-                  textDirection: TextDirection.ltr,
-                  softWrap: true,
-            )
-          ],
-        ));
-      }
-    );
+        future: fetchBio(),
+        builder: (BuildContext context, AsyncSnapshot<String> bioText) {
+          return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('About Me',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Text(
+                    bioText.data ?? 'BIO_FETCH_FAIL',
+                    textDirection: TextDirection.ltr,
+                    softWrap: true,
+                  )
+                ],
+              ));
+        });
   }
 }
 
@@ -181,32 +177,32 @@ Future<String> fetchBio() async {
 
 // The My Gym header and the users favorite(d) gym is handled here.
 class ProfileFavoriteGym extends StatelessWidget {
-  const ProfileFavoriteGym({super.key,});
-
+  const ProfileFavoriteGym({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: fetchGym(),
-      builder: (BuildContext context, AsyncSnapshot<String> gymText) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('My Gym',
-                  style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                )),
-                Text(
-                  gymText.data ?? 'GYM_FETCH_FAIL',
-                  textDirection: TextDirection.ltr,
-                  softWrap: true,
-            )
-          ],
-        ));
-      }
-    );
+        future: fetchGym(),
+        builder: (BuildContext context, AsyncSnapshot<String> gymText) {
+          return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('My Gym',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Text(
+                    gymText.data ?? 'GYM_FETCH_FAIL',
+                    textDirection: TextDirection.ltr,
+                    softWrap: true,
+                  )
+                ],
+              ));
+        });
   }
 }
 

@@ -10,14 +10,14 @@ enum ImageSourceType { gallery, camera }
 class ProfileEditorScreen extends StatefulWidget {
   const ProfileEditorScreen({super.key});
 
-  @override 
+  @override
   State<ProfileEditorScreen> createState() => _ProfileEditorScreen();
 }
 
 class _ProfileEditorScreen extends State<ProfileEditorScreen> {
   final userBioController = TextEditingController();
 
-  // IMAGE HANDLING - Opens users' native mobile device gallery. 
+  // IMAGE HANDLING - Opens users' native mobile device gallery.
   File? userImage;
   final _picker = ImagePicker();
   Future<void> _openImagePicker() async {
@@ -30,70 +30,68 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
     }
   }
 
-  @override 
+  @override
   void dispose() {
     userBioController.dispose();
     super.dispose();
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(1),
-        child: Column(
-          children: [
-            // Opens image picker so user can select an image.  
-            ElevatedButton(
-                onPressed: () {
-                  _openImagePicker();
-                },
-                child: const Text('Upload Image'),
-            ),
-            // Bio text editing field. 
-            TextField(
-              maxLines: 5,
-              expands: false,
-              decoration: const InputDecoration(
-                labelText: 'Type a new about me...'
-              ),
-              controller: userBioController,
-            ),
-            // Save button, takes user back to profile. 
-            TextButton(
-              onPressed: () async {
-                User? currentUser = FirebaseAuth.instance.currentUser;
-                if (currentUser != null) {
-                  String currentUID = currentUser.uid;
-                  final ref = FirebaseDatabase.instance.ref('users/$currentUID');
-                  await ref.update({
-                    'bio': userBioController.text,
-                  }
-                );
-                if (context.mounted) {
-                  Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                      const UserProfileScreen()),
-                        // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
-                        (Route<dynamic> route) => false); 
-                        }}
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.blue,
-              ),
-              child: const Text('Save About Me',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              )),
-            )
-          ],
-        )
-      )
-    );
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+            padding: const EdgeInsets.all(1),
+            child: Column(
+              children: [
+                // Opens image picker so user can select an image.
+                ElevatedButton(
+                  onPressed: () {
+                    _openImagePicker();
+                  },
+                  child: const Text('Upload Image'),
+                ),
+                // Bio text editing field.
+                TextField(
+                  maxLines: 5,
+                  expands: false,
+                  decoration: const InputDecoration(
+                      labelText: 'Type a new about me...'),
+                  controller: userBioController,
+                ),
+                // Save button, takes user back to profile.
+                TextButton(
+                  onPressed: () async {
+                    User? currentUser = FirebaseAuth.instance.currentUser;
+                    if (currentUser != null) {
+                      String currentUID = currentUser.uid;
+                      final ref =
+                          FirebaseDatabase.instance.ref('users/$currentUID');
+                      await ref.update({
+                        'bio': userBioController.text,
+                      });
+                      if (context.mounted) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const UserProfileScreen()),
+                            // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
+                            (Route<dynamic> route) => false);
+                      }
+                    }
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: const Text('Save About Me',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )));
   }
 }
