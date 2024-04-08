@@ -1,73 +1,97 @@
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// Handler for the profile editing screen.
-class ProfileEditorScreen extends StatelessWidget {
-  const ProfileEditorScreen({
-    super.key,
-  });
+enum ImageSourceType { gallery, camera }
+
+class ProfileEditorScreen extends StatefulWidget {
+  const ProfileEditorScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Padding(
-        padding: EdgeInsets.only(top: 40),
-        child: Column(children: [
-          ProfileEditorScreenFeatures(),
-          ProfileEditorBackButton()
-        ]));
-  }
+  State<ProfileEditorScreen> createState() => _ProfileEditorScreen();
 }
 
-// Placeholder for future profile editor screen features.
-class ProfileEditorScreenFeatures extends StatelessWidget {
-  const ProfileEditorScreenFeatures({
-    super.key,
-  });
+class _ProfileEditorScreen extends State<ProfileEditorScreen> {
+  final userBioController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return const Align(
-        alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "This page ain't done yet.",
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ));
+  // IMAGE HANDLING - Opens users' native mobile device gallery.
+  File? userImage;
+  final _picker = ImagePicker();
+  Future<void> _openImagePicker() async {
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        userImage = File(pickedImage.path);
+      });
+    }
   }
-}
 
-// Code for the profile editor back button.
-class ProfileEditorBackButton extends StatelessWidget {
-  const ProfileEditorBackButton({
-    super.key,
-  });
+  @override
+  void dispose() {
+    userBioController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.bottomCenter,
-        child: TextButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const UserProfileScreen()));
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.red,
-          ),
-          child: const Text('TAKE ME BACK RIGHT THIS INSTANT',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              )),
-        ));
+    return SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+            padding: const EdgeInsets.all(1),
+            child: Column(
+              children: [
+                // Opens image picker so user can select an image.
+                ElevatedButton(
+                  onPressed: () {
+                    _openImagePicker();
+                  },
+                  child: const Text('Upload Image'),
+                ),
+                // Bio text editing field.
+                TextField(
+                  maxLines: 5,
+                  expands: false,
+                  decoration: const InputDecoration(
+                      labelText: 'Type a new about me...'),
+                  controller: userBioController,
+                ),
+                // Save button, takes user back to profile.
+                TextButton(
+                  onPressed: () async {
+                    User? currentUser = FirebaseAuth.instance.currentUser;
+                    if (currentUser != null) {
+                      String currentUID = currentUser.uid;
+                      final ref =
+                          FirebaseDatabase.instance.ref('users/$currentUID');
+                      await ref.update({
+                        'bio': userBioController.text,
+                      });
+                      if (context.mounted) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const UserProfileScreen()),
+                            // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
+                            (Route<dynamic> route) => false);
+                      }
+                    }
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: const Text('Save About Me',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            )));
   }
 }
