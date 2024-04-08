@@ -1,10 +1,4 @@
-// import 'package:firebase_auth/firebase_auth.dart'; going to be used in the future
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-// import 'package:firebase_database/firebase_database.dart'; will be used for calling friends info from database
-// import 'package:firebase_auth/firebase_auth.dart';
-// import '../models/profile.dart'; Both of these import statements will be used to call the users friends list
-// import '../models/friend.dart';
 
 class FriendsScreen extends StatelessWidget {
   const FriendsScreen({super.key});
@@ -17,7 +11,7 @@ class FriendsScreen extends StatelessWidget {
           itemCount: 3,
           itemBuilder: (context, index) {
             // item count will change to the length of the list that is storing the friends of the user
-            return MySquare();
+            return const MySquare();
           }),
     );
   }
@@ -98,17 +92,18 @@ class FriendsList extends StatelessWidget {
   Widget build(BuildContext context) {
     // used to display the actual list
     return Scaffold(
-        body: Container(
-            child: ListView.builder(
-                itemCount: friendsList
-                    .length, // Change this to a call to the length of the list of the users friends list friendsList.length
-                itemBuilder: (context, index) {
-                  return Card();
-                })));
+        body: ListView.builder(
+            itemCount: friendsList
+                .length, // Change this to a call to the length of the list of the users friends list friendsList.length
+            itemBuilder: (context, index) {
+              return const Card();
+            }));
   }
 }
 
 class MySquare extends StatelessWidget {
+  const MySquare({super.key});
+
   // This is used to define the square for each section of the list
   @override
   Widget build(BuildContext context) {
