@@ -18,17 +18,18 @@ class _UserProfileScreen extends State<UserProfileScreen> {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-            body: SingleChildScrollView(
-                child: Column(children: [
-          // Database Implementation
-          // Currently all using placeholder values. will need databse implementation later on.
-          ProfileImage(profileImage: 'images/Background 2.jpg'),
-          ProfileUsername(),
-          ProfileEditorButton(),
-          ProfileAboutMe(
-              profileAboutMeText:
-                  'This is a bunch of placeholder text that the user would insert with their life story or personal information or warnings about run-on sentences and the like. Anyways, please feel free to poke around the app here.'),
-          ProfileFavoriteGym(favoriteGym: 'Planet Fitness - Market Street')
+            appBar: null,
+            body: Center(
+                child: 
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Calls to each screen. 
+                      ProfileImage(profileImage: 'images/Background 2.jpg'),
+                      ProfileUsername(),
+                      ProfileEditorButton(),
+                      ProfileAboutMe(),
+                      ProfileFavoriteGym()
         ]))));
   }
 }
@@ -45,7 +46,7 @@ class ProfileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.only(top: 10),
         child: CircleAvatar(
           radius: 80,
           backgroundImage: AssetImage(profileImage),
@@ -95,7 +96,7 @@ class ProfileUsername extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<String> text) {
           return Padding(
             padding: const EdgeInsets.all(20),
-            child: Text(text.data ?? 'USERNAME_NOT_FOUND',
+            child: Text(text.data ?? 'USERNAME_FETCH_FAIL',
                 softWrap: true,
                 textDirection: TextDirection.ltr,
                 style: const TextStyle(
@@ -128,54 +129,101 @@ Future<String> fetchUsername() async {
 
 // The AboutMe header and the text within is handled here.
 class ProfileAboutMe extends StatelessWidget {
-  const ProfileAboutMe({super.key, required this.profileAboutMeText});
+  const ProfileAboutMe({
+    super.key,
+    });
 
-  final String profileAboutMeText;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text('About Me',
-                style: TextStyle(
+
+    return FutureBuilder(
+      future: fetchBio(),
+      builder: (BuildContext context, AsyncSnapshot<String> bioText) {
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text('About Me',
+                  style: TextStyle(
                   fontWeight: FontWeight.bold,
                 )),
-            Text(
-              profileAboutMeText,
-              textDirection: TextDirection.ltr,
-              softWrap: true,
+                Text(
+                  bioText.data ?? 'BIO_FETCH_FAIL',
+                  textDirection: TextDirection.ltr,
+                  softWrap: true,
             )
           ],
         ));
+      }
+    );
   }
+}
+
+// This method fetches the About Me (or bio) for displaying on the profile screen.
+Future<String> fetchBio() async {
+  // Getting the current user.
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  String theBio = '';
+  // Ensuring user exists.
+  if (currentUser != null) {
+    String currentUID = currentUser.uid;
+    // With the users UID, we can now access that user within the database.
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('users/$currentUID/bio').get();
+    if (snapshot.exists) {
+      theBio = snapshot.value.toString();
+    }
+  }
+  return theBio;
 }
 
 // The My Gym header and the users favorite(d) gym is handled here.
 class ProfileFavoriteGym extends StatelessWidget {
-  const ProfileFavoriteGym({super.key, required this.favoriteGym});
+  const ProfileFavoriteGym({super.key,});
 
-  final String favoriteGym;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text('My Gym',
-                style: TextStyle(
+    return FutureBuilder(
+      future: fetchGym(),
+      builder: (BuildContext context, AsyncSnapshot<String> gymText) {
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text('My Gym',
+                  style: TextStyle(
                   fontWeight: FontWeight.bold,
                 )),
-            Text(
-              favoriteGym,
-              textDirection: TextDirection.ltr,
-              softWrap: true,
+                Text(
+                  gymText.data ?? 'GYM_FETCH_FAIL',
+                  textDirection: TextDirection.ltr,
+                  softWrap: true,
             )
           ],
         ));
+      }
+    );
   }
+}
+
+// This method fetches the users favorite gym for displaying on the profile screen.
+Future<String> fetchGym() async {
+  // Getting the current user.
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  String theGym = '';
+  // Ensuring user exists.
+  if (currentUser != null) {
+    String currentUID = currentUser.uid;
+    // With the users UID, we can now access that user within the database.
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('users/$currentUID/favGym').get();
+    if (snapshot.exists) {
+      theGym = snapshot.value.toString();
+    }
+  }
+  return theGym;
 }

@@ -80,6 +80,9 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                               'username': newUsernameController.text,
                               'password': newPasswordController.text,
                               'email': newEmailController.text,
+                              'bio': 'No bio yet!',
+                              'image': 'No link.',
+                              'favGym': 'No gym yet!',
                             });
                           }
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
