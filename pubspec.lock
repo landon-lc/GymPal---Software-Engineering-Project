@@ -296,6 +296,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.6+2"
+  google_maps_webservice:
+    dependency: "direct main"
+    description:
+      name: google_maps_webservice
+      sha256: d0ae4e4508afd74a3f051565261a3cdbae59db29448f9b6e6beb5674545e1eb7
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.20-nullsafety.5"
   html:
     dependency: transitive
     description:
@@ -308,10 +316,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "0.13.6"
   http_parser:
     dependency: transitive
     description:
@@ -408,6 +416,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.4"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      sha256: b10a7b2ff83d83c777edba3c6a0f97045ddadd56c944e1a23a3fdf43a1bf4467
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.8.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -440,6 +456,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  location:
+    dependency: "direct main"
+    description:
+      name: location
+      sha256: "06be54f682c9073cbfec3899eb9bc8ed90faa0e17735c9d9fa7fe426f5be1dd1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.3"
+  location_platform_interface:
+    dependency: transitive
+    description:
+      name: location_platform_interface
+      sha256: "8aa1d34eeecc979d7c9fe372931d84f6d2ebbd52226a54fe1620de6fdc0753b1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
+  location_web:
+    dependency: transitive
+    description:
+      name: location_web
+      sha256: ec484c66e8a4ff1ee5d044c203f4b6b71e3a0556a97b739a5bc9616de672412b
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0"
   matcher:
     dependency: transitive
     description:
@@ -508,10 +548,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: "43ac87de6e10afabc85c445745a7b799e04de84cebaa4fd7bf55a5e1e9604d29"
+      sha256: "70fe966348fe08c34bf929582f1d8247d9d9408130723206472b4687227e4333"
       url: "https://pub.dev"
     source: hosted
-    version: "3.7.4"
+    version: "3.8.0"
   provider:
     dependency: "direct main"
     description:
@@ -609,10 +649,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: a2662fb1f114f4296cf3f5a50786a2d888268d7776cf681aa17d660ffa23b246
+      sha256: e7d5ecd604e499358c5fe35ee828c0298a320d54455e791e9dcf73486bc8d9f0
       url: "https://pub.dev"
     source: hosted
-    version: "14.0.0"
+    version: "14.1.0"
   web:
     dependency: transitive
     description:
