@@ -1,6 +1,6 @@
 // File made by Brandon Plyler, just for testing classes and their functions
-import 'package:test_drive/models/friend.dart';
-import 'package:test_drive/models/gym.dart';
+import 'package:test_drive/src/models/friend.dart';
+import 'package:test_drive/src/models/gym.dart';
 // import '../lib/models/user.dart';
 // import '../lib/models/exercise.dart';
 // import '../lib/models/workout.dart';

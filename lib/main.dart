@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:test_drive/data/workout_record.dart';
-import 'package:test_drive/screens/profile_screen.dart';
-import 'screens/checklist_screen.dart';
-import 'screens/friends_screen.dart';
+import 'package:test_drive/src/models/workout_record.dart';
+import 'package:test_drive/src/screens/profile_screen.dart';
+import 'src/screens/checklist_screen.dart';
+import 'src/screens/friends_screen.dart';
 import './firebase_options.dart';
-import './features/authentication/auth_gate.dart';
+import 'src/features/authentication/auth_gate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
