@@ -8,11 +8,11 @@ void main() {
 }
 
 class GymMapApp extends StatelessWidget {
-  const GymMapApp({Key? key}) : super(key: key);
+  const GymMapApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Gym Finder',
       home: GymMaps(),
     );
@@ -20,7 +20,7 @@ class GymMapApp extends StatelessWidget {
 }
 
 class GymMaps extends StatefulWidget {
-  const GymMaps({Key? key}) : super(key: key);
+  const GymMaps({super.key});
 
   @override
   State<GymMaps> createState() => _GymMapsState();
@@ -32,7 +32,8 @@ class _GymMapsState extends State<GymMaps> {
   final TextEditingController _searchController = TextEditingController();
   final loc.Location _locationService = loc.Location();
   loc.LocationData? _currentLocation;
-  final _places = GoogleMapsPlaces(apiKey: 'AIzaSyCTIZuY972s7eTxV1S0TcMz82mgi-Wa2J0');
+  final _places =
+      GoogleMapsPlaces(apiKey: 'AIzaSyCTIZuY972s7eTxV1S0TcMz82mgi-Wa2J0');
 
   @override
   void initState() {
@@ -41,17 +42,17 @@ class _GymMapsState extends State<GymMaps> {
   }
 
   Future<void> _requestLocationPermission() async {
-    final _serviceEnabled = await _locationService.serviceEnabled();
-    if (!_serviceEnabled) {
+    final serviceEnabled = await _locationService.serviceEnabled();
+    if (!serviceEnabled) {
       await _locationService.requestService();
     }
 
-    var _permissionGranted = await _locationService.hasPermission();
-    if (_permissionGranted == loc.PermissionStatus.denied) {
-      _permissionGranted = await _locationService.requestPermission();
+    var permissionGranted = await _locationService.hasPermission();
+    if (permissionGranted == loc.PermissionStatus.denied) {
+      permissionGranted = await _locationService.requestPermission();
     }
 
-    if (_permissionGranted == loc.PermissionStatus.granted) {
+    if (permissionGranted == loc.PermissionStatus.granted) {
       _getCurrentLocation();
     }
   }
@@ -76,25 +77,27 @@ class _GymMapsState extends State<GymMaps> {
 
   Future<void> _searchGyms(String query) async {
     if (_currentLocation == null) {
-      print("Current location is not available.");
+      print('Current location is not available.');
       return;
     }
 
     final response = await _places.searchNearbyWithRadius(
-      Location(lat: _currentLocation!.latitude!, lng: _currentLocation!.longitude!),
+      Location(
+          lat: _currentLocation!.latitude!, lng: _currentLocation!.longitude!),
       10000,
       keyword: query,
       type: 'gym',
     );
 
-    if (response.status == "OK") {
+    if (response.status == 'OK') {
       setState(() {
         _markers.clear();
         for (final result in response.results) {
           _markers.add(
             Marker(
               markerId: MarkerId(result.placeId),
-              position: LatLng(result.geometry?.location?.lat ?? 0.0, result.geometry?.location?.lng ?? 0.0),
+              position: LatLng(result.geometry?.location.lat ?? 0.0,
+                  result.geometry?.location.lng ?? 0.0),
               infoWindow: InfoWindow(title: result.name),
             ),
           );
@@ -114,7 +117,7 @@ class _GymMapsState extends State<GymMaps> {
           decoration: InputDecoration(
             hintText: 'Search Gyms',
             suffixIcon: IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: () => _searchGyms(_searchController.text),
             ),
           ),
@@ -122,11 +125,12 @@ class _GymMapsState extends State<GymMaps> {
         ),
       ),
       body: _currentLocation == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
+                target: LatLng(
+                    _currentLocation!.latitude!, _currentLocation!.longitude!),
                 zoom: 11,
               ),
               markers: _markers,
