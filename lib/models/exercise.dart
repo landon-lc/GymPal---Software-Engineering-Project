@@ -25,4 +25,14 @@ class Exercise {
       key: key,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'weight': weight,
+      'reps': reps,
+      'sets': sets,
+      'isCompleted': isCompleted,
+    };
+  }
 }

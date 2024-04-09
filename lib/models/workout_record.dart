@@ -7,6 +7,10 @@ class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
+  WorkoutRecord() {
+    initWorkouts();
+  }
+
   Stream<List<Workout>> get workoutsStream =>
       dbRef.child('workouts').onValue.map((event) {
         final data = event.snapshot.value;
@@ -20,20 +24,25 @@ class WorkoutRecord extends ChangeNotifier {
         }
       });
 
+  Future<void> initWorkouts() async {
+    workoutsStream.listen((workouts) {
+      workoutList = workouts;
+      notifyListeners();
+    });
+  }
+
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('workouts').push();
-    newWorkoutRef.set({
-      'name': name,
-      'exercises': [],
-    }).then((_) {
-      workoutList
-          .add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
-      notifyListeners();
+    final newWorkout =
+        Workout(name: name, exercises: [], key: newWorkoutRef.key);
+
+    newWorkoutRef.set(newWorkout.toMap()).then((_) {
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
       print('Failed to add workout: $error');
     });
-    return;
+    workoutList.add(newWorkout);
+    notifyListeners();
   }
 
   void addExercises(String workoutId, String exerciseName, String weight,
@@ -51,15 +60,15 @@ class WorkoutRecord extends ChangeNotifier {
     dbRef.child('workouts/$workoutId').update({
       'name': newName,
     }).then((_) {
-      int index = workoutList.indexWhere((workout) => workout.key == workoutId);
-      if (index != -1) {
-        workoutList[index].name = newName;
-        notifyListeners();
-      }
       print('Workout name updated successfully');
     }).catchError((error) {
       print('Failed to update workout name: $error');
     });
+    int index = workoutList.indexWhere((workout) => workout.key == workoutId);
+    if (index != -1) {
+      workoutList[index].name = newName;
+      notifyListeners();
+    }
   }
 
   void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
@@ -70,21 +79,12 @@ class WorkoutRecord extends ChangeNotifier {
 
   void deleteWorkout(String workoutId) {
     dbRef.child('workouts/$workoutId').remove().then((_) {
-      workoutList.removeWhere((workout) => workout.key == workoutId);
-      notifyListeners();
       print('Workout deleted successfully from Firebase');
     }).catchError((error) {
       print('Failed to delete workout: $error');
     });
-  }
-
-  void editWorkout(String workoutId, String newName) {
-    dbRef.child('workouts/$workoutId').update({'name': newName});
-    int index = workoutList.indexWhere((workout) => workout.key == workoutId);
-    if (index != -1) {
-      workoutList[index].name = newName;
-      notifyListeners();
-    }
+    workoutList.removeWhere((workout) => workout.key == workoutId);
+    notifyListeners();
   }
 
   Stream<List<Exercise>> getExercisesStream(String workoutId) {

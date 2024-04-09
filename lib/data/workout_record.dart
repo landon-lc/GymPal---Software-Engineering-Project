@@ -6,9 +6,18 @@ import 'package:test_drive/models/workout.dart';
 class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+  bool useStaticData = false;
 
-  Stream<List<Workout>> get workoutsStream =>
-      dbRef.child('workouts').onValue.map((event) {
+  Stream<List<Workout>> get workoutsStream {
+    if (useStaticData) {
+      return Stream.value([
+        Workout(name: 'Push day', exercises: [], key: 'static-1'),
+        Workout(name: 'Pull day', exercises: [], key: 'static-2'),
+      ]);
+    } else {
+      return dbRef.child('workouts').onValue.handleError((error) {
+        print('Error fetching workouts: $error');
+      }).map((event) {
         final data = event.snapshot.value;
         if (data is Map<dynamic, dynamic>) {
           return data.entries
@@ -19,6 +28,8 @@ class WorkoutRecord extends ChangeNotifier {
           return [];
         }
       });
+    }
+  }
 
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('workouts').push();
@@ -26,8 +37,10 @@ class WorkoutRecord extends ChangeNotifier {
       'name': name,
       'exercises': [],
     }).then((_) {
-      workoutList
-          .add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
+      if (!useStaticData) {
+        workoutList
+            .add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
+      }
       notifyListeners();
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
