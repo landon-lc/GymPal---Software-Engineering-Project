@@ -5,14 +5,41 @@ class FriendsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This does not look like a lot, but this took me a long time to figure out (For Dr. Layman)
-    return Scaffold(
-      body: ListView.builder(
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            // item count will change to the length of the list that is storing the friends of the user
-            return const MySquare();
-          }),
+    double containerWidth = 400; // Change this when changing the containers height and width
+    double containerHeight = 375;
+    
+    return Stack(
+      fit: StackFit.expand,
+      clipBehavior: Clip.hardEdge,
+      alignment: Alignment.bottomCenter,
+      children: <Widget>[
+        Positioned(
+          bottom: 0,
+          child: Container(
+            width: containerWidth,
+            height: containerHeight,
+            child: ListView.builder(
+              itemCount: 50,
+              itemBuilder: (context, index) {
+                // item count will change to the length of the list that is storing the friends of the user
+                return const friendsMySquare();
+            }),
+          )
+        ),
+        Positioned(
+          top: 0,
+          child: Container(
+            width: containerWidth,
+            height: containerHeight,
+            child: ListView.builder(
+              itemCount: 50,
+              itemBuilder: (context, index) {
+                return const searchMySquare();
+              }
+            )
+          )
+        ),
+      ]
     );
   }
 }
@@ -101,8 +128,8 @@ class FriendsList extends StatelessWidget {
   }
 }
 
-class MySquare extends StatelessWidget {
-  const MySquare({super.key});
+class friendsMySquare extends StatelessWidget {
+  const friendsMySquare({super.key});
 
   // This is used to define the square for each section of the list
   @override
@@ -113,6 +140,21 @@ class MySquare extends StatelessWidget {
           height: 20,
           color: Colors
               .deepPurple, // color can change, just a random color I chose
+        ));
+  }
+}
+
+class searchMySquare extends StatelessWidget {
+  const searchMySquare({super.key});
+
+  // This is used to define the square for each section of the list
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        child: Container(
+          height: 20,
+          color: Colors.green, // color can change, just a random color I chose
         ));
   }
 }
