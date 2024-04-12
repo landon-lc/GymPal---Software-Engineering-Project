@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class Exercise {
   String name;
   String weight;
@@ -5,6 +7,8 @@ class Exercise {
   String sets;
   bool isCompleted;
   String? key;
+  int? createdAt;
+  int? lastModified;
 
   Exercise({
     required this.name,
@@ -13,6 +17,8 @@ class Exercise {
     required this.sets,
     this.isCompleted = false,
     this.key,
+    this.createdAt, 
+    this.lastModified,
   });
 
   factory Exercise.fromMap(Map<String, dynamic> map, {String? key}) {
@@ -23,6 +29,8 @@ class Exercise {
       sets: map['sets'] ?? '',
       isCompleted: map['isCompleted'] ?? false,
       key: key,
+      createdAt: map['createdAt'],
+      lastModified: map['lastModified'],
     );
   }
 
@@ -33,6 +41,8 @@ class Exercise {
       'reps': reps,
       'sets': sets,
       'isCompleted': isCompleted,
+      'createdAt': createdAt ?? ServerValue.timestamp,
+      'lastModified': ServerValue.timestamp,
     };
   }
 }

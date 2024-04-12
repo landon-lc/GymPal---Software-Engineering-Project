@@ -1,5 +1,5 @@
 import '../models/workout.dart';
-import '../data/workout_record.dart';
+import '../models/workout_record.dart';
 import '../models/exercise.dart';
 import '../models/profile.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:test_drive/data/workout_record.dart';
+import 'package:test_drive/models/workout_record.dart';
 import 'package:test_drive/screens/profile_screen.dart';
 import 'screens/checklist_screen.dart';
 import 'screens/friends_screen.dart';
