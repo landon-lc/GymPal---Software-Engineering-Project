@@ -74,7 +74,7 @@ class WorkoutRecord extends ChangeNotifier {
   }
 
   void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
-    dbRef.child('user/$userId/workouts/$workoutId/exercises/$exerciseId').update({
+    dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').update({
       'isCompleted': isCompleted,
       }).then((_) {
     print('Exercise status updated successfully.');
