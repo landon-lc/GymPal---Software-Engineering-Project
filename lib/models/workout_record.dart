@@ -76,6 +76,10 @@ class WorkoutRecord extends ChangeNotifier {
   void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
     dbRef.child('user/$userId/workouts/$workoutId/exercises/$exerciseId').update({
       'isCompleted': isCompleted,
+      }).then((_) {
+    print('Exercise status updated successfully.');
+  }).catchError((error) {
+    print('Failed to update exercise status: $error');
     });
   }
 
@@ -97,6 +101,31 @@ class WorkoutRecord extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void deleteExercise(String workoutId, String exerciseId) {
+  dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').remove().then((_) {
+    print('Exercise deleted successfully from Firebase');
+    notifyListeners();  
+  }).catchError((error) {
+    print('Failed to delete exercise: $error');
+  });
+}
+
+  void editExercise(String workoutId, String exerciseId, String newName, String newWeight, String newReps, String newSets, bool newIsCompleted) {
+  dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').update({
+    'name': newName,
+    'weight': newWeight,
+    'reps': newReps,
+    'sets': newSets,
+    'isCompleted': newIsCompleted
+  }).then((_) {
+    print('Exercise updated successfully');
+    notifyListeners();  // Depending on your setup, you may want to update local state here
+  }).catchError((error) {
+    print('Failed to update exercise: $error');
+  });
+}
+
 
   Stream<List<Exercise>> getExercisesStream(String workoutId) {
     return dbRef.child('users/$userId/workouts/$workoutId/exercises').onValue.map((event) {

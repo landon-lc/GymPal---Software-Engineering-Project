@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:test_drive/components/exercise_tile.dart';
 import 'package:test_drive/models/workout_record.dart';
 import 'package:test_drive/models/exercise.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({
@@ -117,17 +118,42 @@ class _WorkoutPageState extends State<WorkoutPage> {
             itemCount: exercises.length,
             itemBuilder: (context, index) {
               final exercise = exercises[index];
-              return ExerciseTile(
-                exerciseName: exercise.name,
-                weight: exercise.weight,
-                reps: exercise.reps,
-                sets: exercise.sets,
-                isCompleted: exercise.isCompleted,
-                onCheckBoxChanged: (val) {
-                  Provider.of<WorkoutRecord>(context, listen: false)
-                      .checkOffExercise(
-                          widget.workoutId, exercise.key ?? '', val ?? false);
-                },
+              return Slidable(
+                key: ValueKey(exercise.key),
+                startActionPane: ActionPane(
+                  motion: const DrawerMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        // Add edit exercise functionality here
+                      },
+                      backgroundColor: Colors.green,
+                      icon: Icons.edit,
+                      label: 'Edit',
+                    ),
+                    SlidableAction(
+                      onPressed: (context) {
+                        Provider.of<WorkoutRecord>(context, listen: false)
+                            .deleteExercise(widget.workoutId, exercise.key ?? '');
+                      },
+                      backgroundColor: Colors.red,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    ),
+                  ],
+                ),
+                child: ExerciseTile(
+                  exerciseName: exercise.name,
+                  weight: exercise.weight,
+                  reps: exercise.reps,
+                  sets: exercise.sets,
+                  isCompleted: exercise.isCompleted,
+                  onCheckBoxChanged: (val) {
+                    Provider.of<WorkoutRecord>(context, listen: false)
+                        .checkOffExercise(
+                            widget.workoutId, exercise.key ?? '', val ?? false);
+                  },
+                ),
               );
             },
           );
