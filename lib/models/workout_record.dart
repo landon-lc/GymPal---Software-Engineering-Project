@@ -120,7 +120,7 @@ class WorkoutRecord extends ChangeNotifier {
     'isCompleted': newIsCompleted
   }).then((_) {
     print('Exercise updated successfully');
-    notifyListeners();  // Depending on your setup, you may want to update local state here
+    notifyListeners();  
   }).catchError((error) {
     print('Failed to update exercise: $error');
   });

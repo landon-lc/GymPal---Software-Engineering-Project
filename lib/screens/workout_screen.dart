@@ -65,6 +65,70 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
+  void _editExercise(BuildContext context, Exercise exercise) {
+  TextEditingController nameController = TextEditingController(text: exercise.name);
+  TextEditingController weightController = TextEditingController(text: exercise.weight);
+  TextEditingController repsController = TextEditingController(text: exercise.reps);
+  TextEditingController setsController = TextEditingController(text: exercise.sets);
+  
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Edit Exercise'),
+        content: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Exercise Name'),
+              ),
+              TextField(
+                controller: weightController,
+                decoration: const InputDecoration(labelText: 'Weight'),
+              ),
+              TextField(
+                controller: repsController,
+                decoration: const InputDecoration(labelText: 'Reps'),
+              ),
+              TextField(
+                controller: setsController,
+                decoration: const InputDecoration(labelText: 'Sets'),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Save'),
+            onPressed: () {
+              if (exercise.key != null) {
+                Provider.of<WorkoutRecord>(context, listen: false).editExercise(
+                  widget.workoutId,
+                  exercise.key!,
+                  nameController.text.trim(),
+                  weightController.text.trim(),
+                  repsController.text.trim(),
+                  setsController.text.trim(),
+                  exercise.isCompleted,
+                );
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
   void _saveExercise() {
     final String exerciseName = exerciseNameController.text.trim();
     final String weight = weightController.text.trim();
@@ -124,10 +188,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   motion: const DrawerMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: (context) {
-                        // Add edit exercise functionality here
-                      },
-                      backgroundColor: Colors.green,
+                      onPressed: (context) => _editExercise(context, exercise),
+                      backgroundColor: Colors.blue,
                       icon: Icons.edit,
                       label: 'Edit',
                     ),
