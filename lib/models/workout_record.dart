@@ -35,11 +35,13 @@ class WorkoutRecord extends ChangeNotifier {
 
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('users/$userId/workouts').push();
+    final now = DateTime.now();
     newWorkoutRef.set({
       'name': name,
       'exercises': [],
+      'timestamp': now.toIso8601String(),
     }).then((_) {
-      workoutList.add(Workout(name: name, exercises: [], key: newWorkoutRef.key));
+      workoutList.add(Workout(name: name, exercises: [], key: newWorkoutRef.key, timestamp: now));
       notifyListeners();
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
@@ -85,6 +87,15 @@ class WorkoutRecord extends ChangeNotifier {
     }).catchError((error) {
       print('Failed to delete workout: $error');
     });
+  }
+
+  void editWorkout(String workoutId, String newName) {
+    dbRef.child('users/$userId/workouts/$workoutId').update({'name': newName});
+    int index = workoutList.indexWhere((workout) => workout.key == workoutId);
+    if (index != -1) {
+      workoutList[index].name = newName;
+      notifyListeners();
+    }
   }
 
   Stream<List<Exercise>> getExercisesStream(String workoutId) {
