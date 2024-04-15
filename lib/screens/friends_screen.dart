@@ -6,16 +6,35 @@ class FriendsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double containerWidth = 400; // Change this when changing the containers height and width
-    double containerHeight = 375;
+    double containerHeight = 300;
+    final userSearchController = TextEditingController(); // Used for search bar
     
     return Stack(
       fit: StackFit.expand,
       clipBehavior: Clip.hardEdge,
       alignment: Alignment.bottomCenter,
       children: <Widget>[
+        TextField(
+          decoration: 
+          const InputDecoration(
+            labelText: 'Search for Friends!',
+            border: OutlineInputBorder()),
+          controller: userSearchController,
+        ),
+        Positioned(
+          top: 385,
+          height: 60,
+          child: const FriendRequestsButton(),
+        ),
         Positioned(
           bottom: 0,
           child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: Colors.black,
+              )
+            ),
             width: containerWidth,
             height: containerHeight,
             child: ListView.builder(
@@ -27,8 +46,14 @@ class FriendsScreen extends StatelessWidget {
           )
         ),
         Positioned(
-          top: 0,
+          top: 75,
           child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: Colors.black,
+              )
+            ),
             width: containerWidth,
             height: containerHeight,
             child: ListView.builder(
@@ -155,6 +180,34 @@ class searchMySquare extends StatelessWidget {
         child: Container(
           height: 20,
           color: Colors.green, // color can change, just a random color I chose
+        ));
+  }
+}
+
+class FriendRequestsButton extends StatelessWidget {
+  const FriendRequestsButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const FriendsScreen())); // this will go to the friends requests screen
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.blue,
+          ),
+          child: const Text('Friend Requests',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              )),
         ));
   }
 }
