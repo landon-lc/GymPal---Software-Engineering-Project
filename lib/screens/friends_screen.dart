@@ -56,8 +56,8 @@ class FriendsScreen extends StatelessWidget {
             ),
             width: containerWidth,
             height: containerHeight,
-            child: ListView.builder(
-              itemCount: 50,
+            child: ListView.builder( // This is the search results, may need to make this smaller because you wont have multiple results more than likely
+              itemCount: 15,
               itemBuilder: (context, index) {
                 return const searchMySquare();
               }
@@ -169,7 +169,7 @@ class friendsMySquare extends StatelessWidget {
   }
 }
 
-class searchMySquare extends StatelessWidget {
+class searchMySquare extends StatelessWidget { // May have to use a stack for the name, picture, and username 
   const searchMySquare({super.key});
 
   // This is used to define the square for each section of the list
