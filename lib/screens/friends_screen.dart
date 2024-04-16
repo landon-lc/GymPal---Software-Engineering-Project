@@ -8,6 +8,7 @@ class FriendsScreen extends StatelessWidget {
     double containerWidth = 400; // Change this when changing the containers height and width
     double containerHeight = 300;
     final userSearchController = TextEditingController(); // Used for search bar
+    List<String> f = ["Random", "Person", "idk"]; // Temporary, this will be a call to data base
     
     return Stack(
       fit: StackFit.expand,
@@ -37,10 +38,9 @@ class FriendsScreen extends StatelessWidget {
             ),
             width: containerWidth,
             height: containerHeight,
-            child: ListView.builder(
-              itemCount: 50,
+            child: ListView.builder( // This is going to be the list of friends
+              itemCount: f.length,
               itemBuilder: (context, index) {
-                // item count will change to the length of the list that is storing the friends of the user
                 return const friendsMySquare();
             }),
           )
