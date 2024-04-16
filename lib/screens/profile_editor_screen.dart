@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 enum ImageSourceType { gallery, camera }
 
@@ -18,7 +19,7 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
   final userBioController = TextEditingController();
 
   // IMAGE HANDLING - Opens users' native mobile device gallery.
-  File? userImage;
+  File userImage = File('images/ProfilePlaceholder.jpeg');
   final _picker = ImagePicker();
   Future<void> _openImagePicker() async {
     final XFile? pickedImage =
@@ -47,8 +48,19 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
               children: [
                 // Opens image picker so user can select an image.
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    // Getting Image
                     _openImagePicker();
+                    // Storing image to Firebase Storage. 
+                    final Reference storageRef = FirebaseStorage.instance.ref();
+                    Reference userImages = storageRef.child('UserImages');
+                    User? currentUser = FirebaseAuth.instance.currentUser;
+                    if (currentUser != null) {
+                      String currentUID = currentUser.uid;
+                      Reference userIDRef = userImages.child(currentUID);
+                      Reference usersImage = userIDRef.child('userProfilePhoto.jpg');
+                      await usersImage.putFile(userImage);
+                    } 
                   },
                   child: const Text('Upload Image'),
                 ),

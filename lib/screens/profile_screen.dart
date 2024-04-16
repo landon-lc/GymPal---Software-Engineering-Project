@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'profile_editor_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // Stateful Widget for the Profile Screen.
 class UserProfileScreen extends StatefulWidget {
@@ -24,7 +26,7 @@ class _UserProfileScreen extends State<UserProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                   // Calls to each screen.
-                  ProfileImage(profileImage: 'images/Background 2.jpg'),
+                  ProfileImage(),
                   ProfileUsername(),
                   ProfileEditorButton(),
                   ProfileAboutMe(),
@@ -37,20 +39,54 @@ class _UserProfileScreen extends State<UserProfileScreen> {
 class ProfileImage extends StatelessWidget {
   const ProfileImage({
     super.key,
-    required this.profileImage,
   });
 
-  final String profileImage;
+  // final Image usersImage = fetchImage();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: CircleAvatar(
-          radius: 80,
-          backgroundImage: AssetImage(profileImage),
+    return FutureBuilder(
+      future: fetchImage(),
+        builder: (BuildContext context, AsyncSnapshot<Image> usersImageData) {
+          if (usersImageData.hasData) {
+            final finalUserImage = usersImageData.data;
+            if (finalUserImage != null) {
+              final ImageProvider imageAccess = finalUserImage.image;
+                Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: CircleAvatar(
+                  radius: 80,
+                  backgroundImage: imageAccess,
         ));
+            }
+          }
+          return const Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: CircleAvatar(
+                  radius: 80,
+                  backgroundImage: AssetImage('images/ProfilePlaceholder.jpeg'),
+              ));
+            
+          });
   }
+}
+
+// Image Fetcher
+// This method fetches the About Me (or bio) for displaying on the profile screen.
+Future<Image> fetchImage() async {
+  // Getting the current user.
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  // Ensuring user exists.
+  if (currentUser != null) {
+    String currentUID = currentUser.uid;
+    // With the users UID, we can now access that user within the database.
+    final storageRef = FirebaseStorage.instance.ref();
+    final imageRef = await storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg').getDownloadURL();
+    final userProfilePhoto = Image.network(imageRef);
+    return userProfilePhoto; 
+  }
+  final Image placeholderImage = Image.file(File('images/Background 2.jpg'));
+  return placeholderImage;
 }
 
 // Code for the profile editor button.

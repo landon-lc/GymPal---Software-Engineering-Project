@@ -1,7 +1,9 @@
 import 'page_navigation_screen.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // The user is creating an account for the first time.
 class AccountCreationScreen extends StatefulWidget {
@@ -84,6 +86,11 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                               'image': 'No link.',
                               'favGym': 'No gym yet!',
                             });
+                            final Reference storageRef = FirebaseStorage.instance.ref();
+                            Reference userImages = storageRef.child('UserImages');
+                            Reference userIDRef = userImages.child(currentUID);
+                            Reference usersImage = userIDRef.child('userProfilePhoto.jpg');
+                            await usersImage.putFile(File('images/ProfilePlaceholder.jpeg'));
                           }
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
