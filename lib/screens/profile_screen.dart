@@ -64,7 +64,7 @@ class ProfileImage extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10),
                 child: CircleAvatar(
                   radius: 80,
-                  backgroundImage: AssetImage('images/ProfilePlaceholder.jpeg'),
+                  backgroundImage: null,
               ));
             
           });
