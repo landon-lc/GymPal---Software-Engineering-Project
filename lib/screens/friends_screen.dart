@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'friend_requests_screen.dart';
 
 class FriendsScreen extends StatelessWidget {
   const FriendsScreen({super.key});
@@ -9,7 +8,7 @@ class FriendsScreen extends StatelessWidget {
     double containerWidth = 400; // Change this when changing the containers height and width
     double containerHeight = 250;
     final userSearchController = TextEditingController(); // Used for search bar
-    List<String> _names = ['Brandon', 'Landon', 'Michael', 'Riley', 'James'];
+    List<String> _names = ['Brandon', 'Landon', 'Michael', 'Riley', 'James']; // This will be a call to data base to retrieve friends and / or all people in database
 
     return Stack(
       fit: StackFit.expand,
@@ -202,30 +201,3 @@ class searchMySquare extends StatelessWidget { // May have to use a stack for th
   }
 }
 
-class FriendRequestsButton extends StatelessWidget { // Unused currently
-  const FriendRequestsButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: TextButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const FriendRequestsScreen()));
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
-          ),
-          child: const Text('Friend Requests',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              )),
-        ));
-  }
-}
