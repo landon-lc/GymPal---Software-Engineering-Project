@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'friend_requests_screen.dart';
 
 class FriendsScreen extends StatelessWidget {
   const FriendsScreen({super.key});
@@ -6,10 +7,10 @@ class FriendsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double containerWidth = 400; // Change this when changing the containers height and width
-    double containerHeight = 300;
+    double containerHeight = 250;
     final userSearchController = TextEditingController(); // Used for search bar
-    List<String> f = ["Random", "Person", "idk"]; // Temporary, this will be a call to data base
-    
+    List<String> _names = ['Brandon', 'Landon', 'Michael', 'Riley', 'James'];
+
     return Stack(
       fit: StackFit.expand,
       clipBehavior: Clip.hardEdge,
@@ -22,13 +23,8 @@ class FriendsScreen extends StatelessWidget {
             border: OutlineInputBorder()),
           controller: userSearchController,
         ),
-        Positioned(
-          top: 385,
-          height: 60,
-          child: const FriendRequestsButton(),
-        ),
-        Positioned(
-          bottom: 0,
+        Positioned( // This is going to be a users friends list
+          bottom: 300,
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
@@ -39,13 +35,13 @@ class FriendsScreen extends StatelessWidget {
             width: containerWidth,
             height: containerHeight,
             child: ListView.builder( // This is going to be the list of friends
-              itemCount: f.length,
+              itemCount: _names.length,
               itemBuilder: (context, index) {
-                return const friendsMySquare();
+                return friendsMySquare(child: _names[index]);
             }),
           )
         ),
-        Positioned(
+        Positioned( // Search results (might be replaced)
           top: 75,
           child: Container(
             decoration: BoxDecoration(
@@ -55,11 +51,32 @@ class FriendsScreen extends StatelessWidget {
               )
             ),
             width: containerWidth,
-            height: containerHeight,
-            child: ListView.builder( // This is the search results, may need to make this smaller because you wont have multiple results more than likely
+            height: 100,
+            child: ListView.builder( 
               itemCount: 15,
               itemBuilder: (context, index) {
-                return const searchMySquare();
+                return searchMySquare(); // Make a different box if you want a new color 
+              }
+            )
+          )
+        ),
+        Positioned(top: 180,child: Text("All Your Current Friends!")),
+        Positioned(bottom: 270, child: Text("All Incoming Friend Requests")),
+        Positioned( // This is going to be Received Friend Requests
+          bottom: 20,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: Colors.black,
+              )
+            ),
+            width: containerWidth,
+            height: containerHeight,
+            child: ListView.builder(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return const friendsMySquare(child: 'Random');
               }
             )
           )
@@ -127,7 +144,6 @@ class FriendImages extends StatelessWidget {
   }
 }
 
-// Getting an exception saying the render box was not layed out?
 class FriendsList extends StatelessWidget {
   // Used to display a list of people that are friends with the user
 
@@ -154,7 +170,8 @@ class FriendsList extends StatelessWidget {
 }
 
 class friendsMySquare extends StatelessWidget {
-  const friendsMySquare({super.key});
+  final String child;
+  const friendsMySquare({super.key, required this.child});
 
   // This is used to define the square for each section of the list
   @override
@@ -164,7 +181,8 @@ class friendsMySquare extends StatelessWidget {
         child: Container(
           height: 20,
           color: Colors
-              .deepPurple, // color can change, just a random color I chose
+              .grey, // color can change, just a random color I chose
+          child: Text(child),
         ));
   }
 }
@@ -184,7 +202,7 @@ class searchMySquare extends StatelessWidget { // May have to use a stack for th
   }
 }
 
-class FriendRequestsButton extends StatelessWidget {
+class FriendRequestsButton extends StatelessWidget { // Unused currently
   const FriendRequestsButton({
     super.key,
   });
@@ -198,7 +216,7 @@ class FriendRequestsButton extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const FriendsScreen())); // this will go to the friends requests screen
+                    builder: (context) => const FriendRequestsScreen()));
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.blue,
