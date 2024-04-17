@@ -87,9 +87,7 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                               'favGym': 'No gym yet!',
                             });
                             final Reference storageRef = FirebaseStorage.instance.ref();
-                            Reference userImages = storageRef.child('UserImages');
-                            Reference userIDRef = userImages.child(currentUID);
-                            Reference usersImage = userIDRef.child('userProfilePhoto.jpg');
+                            Reference usersImage = storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg');
                             await usersImage.putFile(File('images/ProfilePlaceholder.jpeg'));
                           }
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.

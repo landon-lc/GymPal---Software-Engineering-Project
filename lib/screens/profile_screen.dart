@@ -85,7 +85,7 @@ Future<Image> fetchImage() async {
     final userProfilePhoto = Image.network(imageRef);
     return userProfilePhoto; 
   }
-  final Image placeholderImage = Image.file(File('images/Background 2.jpg'));
+  final Image placeholderImage = Image.file(File('images/ProfilePlaceholder.jpeg'));
   return placeholderImage;
 }
 

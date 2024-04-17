@@ -53,12 +53,10 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                     _openImagePicker();
                     // Storing image to Firebase Storage. 
                     final Reference storageRef = FirebaseStorage.instance.ref();
-                    Reference userImages = storageRef.child('UserImages');
                     User? currentUser = FirebaseAuth.instance.currentUser;
                     if (currentUser != null) {
                       String currentUID = currentUser.uid;
-                      Reference userIDRef = userImages.child(currentUID);
-                      Reference usersImage = userIDRef.child('userProfilePhoto.jpg');
+                      Reference usersImage = storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg');
                       await usersImage.putFile(userImage);
                     } 
                   },
