@@ -83,6 +83,7 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                               'bio': 'No bio yet!',
                               'image': 'No link.',
                               'favGym': 'No gym yet!',
+                              'workouts': [], // initializes workouts
                             });
                           }
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
