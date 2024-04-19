@@ -1,6 +1,5 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class FriendsScreen extends StatelessWidget {
@@ -8,97 +7,98 @@ class FriendsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double containerWidth = 400; // Change this when changing the containers height and width
+    double containerWidth =
+        400; // Change this when changing the containers height and width
     double containerHeight = 250;
     final userSearchController = TextEditingController(); // Used for search bar
-    List<String> _names = ['Brandon']; // This will be a call to data base to retrieve friends and / or all people in database
+    List<String> names = [
+      'Brandon'
+    ]; // This will be a call to data base to retrieve friends and / or all people in database
     DatabaseReference db = FirebaseDatabase.instance.ref();
-    Map<String, List<dynamic>> allData = HashMap(); // This will hold all users in the data base to search through
+    Map<String, List<dynamic>> allData =
+        HashMap(); // This will hold all users in the data base to search through
     List<String> keys = [];
     List<String> searchResults = [];
 
     db.get().then((DataSnapshot snapshot) {
       for (var user in snapshot.children) {
         keys.add(user.child('UID').value.toString());
-        allData[user.child('UID').value.toString()] = [ // have not added image in yet
+        allData[user.child('UID').value.toString()] = [
+          // have not added image in yet
           user.child('username').value.toString(),
-          user.child('email').value.toString() // can take out email, just for testing
+          user
+              .child('email')
+              .value
+              .toString() // can take out email, just for testing
         ];
       }
     });
 
     return Stack(
-      fit: StackFit.expand,
-      clipBehavior: Clip.hardEdge,
-      alignment: Alignment.bottomCenter,
-      children: <Widget>[
-        TextField(
-          decoration: 
-          const InputDecoration(
-            labelText: 'Search for Friends!',
-            border: OutlineInputBorder()),
-          controller: userSearchController,
-        ),
-        Positioned( // This is going to be a users friends list
-          bottom: 300,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.black,
-              )
-            ),
-            width: containerWidth,
-            height: containerHeight,
-            child: ListView.builder( 
-              itemCount: _names.length,
-              itemBuilder: (context, index) {
-                return friendsMySquare(child: _names[index]);
-            }),
-          )
-        ),
-        Positioned( // Search results (might be replaced)
-          top: 75,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.black,
-              )
-            ),
-            width: containerWidth,
-            height: 100,
-            child: ListView.builder( 
-              itemCount: searchResults.length,
-              itemBuilder: (context, index) {
-                return friendsMySquare(child: searchResults[index]); // Make a different box if you want a new color 
-              }
-            )
-          )
-        ),
-        Positioned(top: 180,child: Text('All Your Current Friends!')),
-        Positioned(bottom: 270, child: Text('All Incoming Friend Requests')),
-        Positioned( // This is going to be Received Friend Requests
-          bottom: 20,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.black,
-              )
-            ),
-            width: containerWidth,
-            height: containerHeight,
-            child: ListView.builder(
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return const friendsMySquare(child: 'Random');
-              }
-            )
-          )
-        ),
-      ]
-    );
+        fit: StackFit.expand,
+        clipBehavior: Clip.hardEdge,
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          TextField(
+            decoration: const InputDecoration(
+                labelText: 'Search for Friends!', border: OutlineInputBorder()),
+            controller: userSearchController,
+          ),
+          Positioned(
+              // This is going to be a users friends list
+              bottom: 300,
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(
+                  width: 1,
+                  color: Colors.black,
+                )),
+                width: containerWidth,
+                height: containerHeight,
+                child: ListView.builder(
+                    itemCount: names.length,
+                    itemBuilder: (context, index) {
+                      return FriendsMySquare(child: names[index]);
+                    }),
+              )),
+          Positioned(
+              // Search results (might be replaced)
+              top: 75,
+              child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                    width: 1,
+                    color: Colors.black,
+                  )),
+                  width: containerWidth,
+                  height: 100,
+                  child: ListView.builder(
+                      itemCount: searchResults.length,
+                      itemBuilder: (context, index) {
+                        return FriendsMySquare(
+                            child: searchResults[
+                                index]); // Make a different box if you want a new color
+                      }))),
+          const Positioned(top: 180, child: Text('All Your Current Friends!')),
+          const Positioned(
+              bottom: 270, child: Text('All Incoming Friend Requests')),
+          Positioned(
+              // This is going to be Received Friend Requests
+              bottom: 20,
+              child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                    width: 1,
+                    color: Colors.black,
+                  )),
+                  width: containerWidth,
+                  height: containerHeight,
+                  child: ListView.builder(
+                      itemCount: 2,
+                      itemBuilder: (context, index) {
+                        return const FriendsMySquare(child: 'Random');
+                      }))),
+        ]);
   }
 }
 
@@ -185,9 +185,9 @@ class FriendsList extends StatelessWidget {
   }
 }
 
-class friendsMySquare extends StatelessWidget {
+class FriendsMySquare extends StatelessWidget {
   final String child;
-  const friendsMySquare({super.key, required this.child});
+  const FriendsMySquare({super.key, required this.child});
 
   // This is used to define the square for each section of the list
   @override
@@ -196,25 +196,25 @@ class friendsMySquare extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
         child: Container(
           height: 20,
-          color: Colors
-              .grey, // color can change, just a random color I chose
+          color: Colors.grey, // color can change, just a random color I chose
           child: Text(child),
         ));
   }
 }
 
-class searchMySquare extends StatelessWidget { // May have to use a stack for the name, picture, and username 
-  const searchMySquare({super.key});
+// Uncomment if needed; not currently referenced for use.
 
-  // This is used to define the square for each section of the list
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-        child: Container(
-          height: 20,
-          color: Colors.green, // color can change, just a random color I chose
-        ));
-  }
-}
+// class SearchMySquare extends StatelessWidget { // May have to use a stack for the name, picture, and username
+//   const SearchMySquare({super.key});
 
+//   // This is used to define the square for each section of the list
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+//         child: Container(
+//           height: 20,
+//           color: Colors.green, // color can change, just a random color I chose
+//         ));
+//   }
+// }
