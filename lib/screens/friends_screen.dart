@@ -1,4 +1,7 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class FriendsScreen extends StatelessWidget {
   const FriendsScreen({super.key});
@@ -8,7 +11,21 @@ class FriendsScreen extends StatelessWidget {
     double containerWidth = 400; // Change this when changing the containers height and width
     double containerHeight = 250;
     final userSearchController = TextEditingController(); // Used for search bar
-    List<String> _names = ['Brandon', 'Landon', 'Michael', 'Riley', 'James']; // This will be a call to data base to retrieve friends and / or all people in database
+    List<String> _names = ['Brandon']; // This will be a call to data base to retrieve friends and / or all people in database
+    DatabaseReference db = FirebaseDatabase.instance.ref();
+    Map<String, List<dynamic>> allData = HashMap(); // This will hold all users in the data base to search through
+    List<String> keys = [];
+    List<String> searchResults = [];
+
+    db.get().then((DataSnapshot snapshot) {
+      for (var user in snapshot.children) {
+        keys.add(user.child('UID').value.toString());
+        allData[user.child('UID').value.toString()] = [ // have not added image in yet
+          user.child('username').value.toString(),
+          user.child('email').value.toString() // can take out email, just for testing
+        ];
+      }
+    });
 
     return Stack(
       fit: StackFit.expand,
@@ -33,7 +50,7 @@ class FriendsScreen extends StatelessWidget {
             ),
             width: containerWidth,
             height: containerHeight,
-            child: ListView.builder( // This is going to be the list of friends
+            child: ListView.builder( 
               itemCount: _names.length,
               itemBuilder: (context, index) {
                 return friendsMySquare(child: _names[index]);
@@ -52,15 +69,15 @@ class FriendsScreen extends StatelessWidget {
             width: containerWidth,
             height: 100,
             child: ListView.builder( 
-              itemCount: 15,
+              itemCount: searchResults.length,
               itemBuilder: (context, index) {
-                return searchMySquare(); // Make a different box if you want a new color 
+                return friendsMySquare(child: searchResults[index]); // Make a different box if you want a new color 
               }
             )
           )
         ),
-        Positioned(top: 180,child: Text("All Your Current Friends!")),
-        Positioned(bottom: 270, child: Text("All Incoming Friend Requests")),
+        Positioned(top: 180,child: Text('All Your Current Friends!')),
+        Positioned(bottom: 270, child: Text('All Incoming Friend Requests')),
         Positioned( // This is going to be Received Friend Requests
           bottom: 20,
           child: Container(
