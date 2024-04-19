@@ -53,12 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final List<Widget> _pages = [
-    // Add other screens here like Friends, Profile, Map, etc.
     const UserProfileScreen(),
     const ChecklistPage(),
-    // Friends/Search Button
-    const FriendsScreen(),
-    // Map Button
+    const FriendsListScreen(),
     const PlaceholderWidget(color: Colors.yellow)
   ];
 
