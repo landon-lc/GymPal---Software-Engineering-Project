@@ -6,12 +6,10 @@ import 'package:test_drive/models/workout.dart';
 import 'package:test_drive/screens/workout_screen.dart'; 
 import 'package:intl/intl.dart';
 
-
 class ChecklistPage extends StatefulWidget {
   const ChecklistPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ChecklistPageState createState() => _ChecklistPageState();
 }
 
@@ -64,7 +62,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<Workout>>(
-        stream: Provider.of<WorkoutRecord>(context).workoutsStream(start: startDate, end: endDate),
+        stream: Provider.of<WorkoutRecord>(context).paginatedWorkoutsStream(start: startDate, end: endDate),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -76,54 +74,62 @@ class _ChecklistPageState extends State<ChecklistPage> {
             return const Center(child: Text('No workouts found'));
           }
           final workouts = snapshot.data!;
-
-          Text(
-            startDate != null && endDate != null
-                ? 'Showing workouts from ${DateFormat('MM/dd/yyyy').format(startDate!)} to ${DateFormat('MM/dd/yyyy').format(endDate!)}'
-                : 'Showing All Workouts',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-          );
-
-          return ListView.builder(
-            itemCount: workouts.length,
-            itemBuilder: (context, index) {
-              final workout = workouts[index];
-              return Slidable(
-                key: ValueKey(workout.key),
-                startActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (context) => _editWorkout(workout.key),
-                      backgroundColor: Colors.blue,
-                      icon: Icons.edit,
-                      label: 'Edit',
-                    ),
-                    SlidableAction(
-                      onPressed: (context) {
-                        if (workout.key != null) {
-                          Provider.of<WorkoutRecord>(context, listen: false).deleteWorkout(workout.key!);
-                        }
-                      },
-                      backgroundColor: Colors.red,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                    ),
-                  ],
+          
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  startDate != null && endDate != null
+                      ? 'Showing workouts from ${DateFormat('MM/dd/yyyy').format(startDate!)} to ${DateFormat('MM/dd/yyyy').format(endDate!)}'
+                      : 'Showing All Workouts',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
                 ),
-                child: ListTile(
-                  title: Text(workout.name),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => WorkoutPage(
-                        workoutId: workout.key ?? '',
-                        workoutName: workout.name,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: workouts.length,
+                  itemBuilder: (context, index) {
+                    final workout = workouts[index];
+                    return Slidable(
+                      key: ValueKey(workout.key),
+                      startActionPane: ActionPane(
+                        motion: const DrawerMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) => _editWorkout(workout.key),
+                            backgroundColor: Colors.blue,
+                            icon: Icons.edit,
+                            label: 'Edit',
+                          ),
+                          SlidableAction(
+                            onPressed: (context) {
+                              if (workout.key != null) {
+                                Provider.of<WorkoutRecord>(context, listen: false).deleteWorkout(workout.key!);
+                              }
+                            },
+                            backgroundColor: Colors.red,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
+                      child: ListTile(
+                        title: Text(workout.name),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => WorkoutPage(
+                              workoutId: workout.key ?? '',
+                              workoutName: workout.name,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           );
         },
       ),

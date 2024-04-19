@@ -8,34 +8,45 @@ class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+  int _currentPage = 0;
+  final int _pageSize = 10;  // Number of workouts per page
 
   WorkoutRecord() {
     initWorkouts();
- }
+  }
 
-  Stream<List<Workout>> workoutsStream({DateTime? start, DateTime? end}) {
-    Query query = dbRef.child('users/$userId/workouts').orderByChild('timestamp');
-    if (start != null) {
-      query = query.startAt(start.toIso8601String());
+  // Adding pagination to the workout stream
+  Stream<List<Workout>> paginatedWorkoutsStream({DateTime? start, DateTime? end}) {
+    Query query = dbRef.child('users/$userId/workouts').orderByChild('timestamp').limitToFirst((_currentPage + 1) * _pageSize);
+
+    if (start != null && end == null) {
+      // Assuming end date is today if not provided
+      end = DateTime.now();
     }
-    if (end != null) {
-      query = query.endAt(end.toIso8601String());
+    if (start == null && end != null) {
+      // Assuming start date is a reasonable past limit if not provided
+      start = DateTime.now().subtract(const Duration(days: 365));
     }
+    if (start != null) query = query.startAt(start.toUtc().toIso8601String());
+    if (end != null) query = query.endAt(end.toUtc().toIso8601String());
 
     return query.onValue.map((event) {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
-        return data.entries
-            .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString()))
-            .toList();
+        return data.entries.map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString())).toList();
       } else {
         return [];
       }
     });
   }
 
+  void nextPage() {
+    _currentPage++;
+    notifyListeners();
+  }
+
   Future<void> initWorkouts() async {
-    workoutsStream().listen((workouts) {
+    paginatedWorkoutsStream().listen((workouts) {
       workoutList = workouts;
       notifyListeners();
     });
@@ -43,7 +54,7 @@ class WorkoutRecord extends ChangeNotifier {
 
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('users/$userId/workouts').push();
-    final now = DateTime.now();
+    final now = DateTime.now().toUtc();  // Convert to UTC
     newWorkoutRef.set({
       'name': name,
       'exercises': [],
@@ -140,8 +151,7 @@ class WorkoutRecord extends ChangeNotifier {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
         return data.entries
-            .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value),
-                key: e.key.toString()))
+            .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString()))
             .toList();
       } else {
         return [];
