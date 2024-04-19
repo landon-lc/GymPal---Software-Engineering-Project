@@ -13,21 +13,29 @@ class WorkoutRecord extends ChangeNotifier {
     initWorkouts();
  }
 
-  Stream<List<Workout>> get workoutsStream =>
-      dbRef.child('users/$userId/workouts').onValue.map((event) {
-        final data = event.snapshot.value;
-        if (data is Map<dynamic, dynamic>) {
-          return data.entries
-              .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value),
-                  key: e.key.toString()))
-              .toList();
-        } else {
-          return [];
-        }
-      });
+  Stream<List<Workout>> workoutsStream({DateTime? start, DateTime? end}) {
+    Query query = dbRef.child('users/$userId/workouts').orderByChild('timestamp');
+    if (start != null) {
+      query = query.startAt(start.toIso8601String());
+    }
+    if (end != null) {
+      query = query.endAt(end.toIso8601String());
+    }
+
+    return query.onValue.map((event) {
+      final data = event.snapshot.value;
+      if (data is Map<dynamic, dynamic>) {
+        return data.entries
+            .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString()))
+            .toList();
+      } else {
+        return [];
+      }
+    });
+  }
 
   Future<void> initWorkouts() async {
-    workoutsStream.listen((workouts) {
+    workoutsStream().listen((workouts) {
       workoutList = workouts;
       notifyListeners();
     });
