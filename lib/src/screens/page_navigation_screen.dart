@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/screens/map_screen.dart';
-import './profile_screen.dart';
-import './friends_screen.dart';
-import './checklist_screen.dart';
+import 'package:test_drive/src/screens/map_screen.dart';
+import 'profile_screen.dart';
+import 'friends_screen.dart';
+import 'checklist_screen.dart';
 
 class PageNavigation extends StatefulWidget {
   const PageNavigation({super.key});
