@@ -26,18 +26,20 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   @override
   void dispose() {
-    _friendsSubscription?.cancel(); // Removes database handle when screen not in use.
+    _friendsSubscription
+        ?.cancel(); // Removes database handle when screen not in use.
     super.dispose();
   }
 
   void loadFriends() {
     _friendsSubscription = _dbRef
-      .child(FirebaseAuth.instance.currentUser!.uid)
-      .child('friends')
-      .onValue
-      .listen((event) {
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child('friends')
+        .onValue
+        .listen((event) {
       final List<String> loadFriends = [];
-      final data = event.snapshot.value as Map<dynamic, dynamic>? ?? {}; // Allows for NULL, instead providing empty map.
+      final data = event.snapshot.value as Map<dynamic, dynamic>? ??
+          {}; // Allows for NULL, instead providing empty map.
       data.forEach((key, value) {
         loadFriends.add(value.toString());
       });
