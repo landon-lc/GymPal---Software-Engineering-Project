@@ -79,7 +79,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                 child: ListView.builder(
                     itemCount: friends.length,
                     itemBuilder: (context, index) {
-                      return FriendsMySquare(child: friends[index]);
+                      return FriendsMySquare(child: fetchUsername(friends[index]).toString());
                     }),
               )),
           // Not yet implemented
@@ -119,7 +119,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                   child: ListView.builder(
                       itemCount: 2,
                       itemBuilder: (context, index) {
-                        return const FriendsMySquare(child: 'Random');
+                        return const SearchMySquare(); // temporary
                       }))),
         ]);
   }
@@ -140,6 +140,16 @@ class FriendsMySquare extends StatelessWidget {
           child: Text(child),
         ));
   }
+}
+
+Future<String> fetchUsername(String userID) async {
+  // Getting the current user.
+  String theUsername = '';
+  // Ensuring user exists.
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
+  final snapshot = await _dbRef.child('$userID/username').get();
+  theUsername = snapshot.value.toString();
+  return theUsername;
 }
 
 // Uncomment if needed; not currently referenced for use.
@@ -207,37 +217,36 @@ class FriendsMySquare extends StatelessWidget {
 //   }
 // }
 
-// Used for displaying friends usernames, don't really know how
-// class FriendsUsernames extends StatelessWidget {
-//   const FriendsUsernames({
-//     super.key,
-//     required this.friendUsername,
-//   });
+class FriendsUsernames extends StatelessWidget {
+  const FriendsUsernames({
+    super.key,
+    required this.friendUsername,
+  });
 
-//   final String friendUsername;
+  final String friendUsername;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(20),
-//       child: Text(
-//         friendUsername, // you'll change this to something with flutter once we store friends
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Text(
+        friendUsername, // you'll change this to something with flutter once we store friends
+      ),
+    );
+  }
+}
 
-// class SearchMySquare extends StatelessWidget { // May have to use a stack for the name, picture, and username
-//   const SearchMySquare({super.key});
+class SearchMySquare extends StatelessWidget { // May have to use a stack for the name, picture, and username
+  const SearchMySquare({super.key});
 
-//   // This is used to define the square for each section of the list
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-//         child: Container(
-//           height: 20,
-//           color: Colors.green, // color can change, just a random color I chose
-//         ));
-//   }
-// }
+  // This is used to define the square for each section of the list
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        child: Container(
+          height: 20,
+          color: Colors.green, // color can change, just a random color I chose
+        ));
+  }
+}
