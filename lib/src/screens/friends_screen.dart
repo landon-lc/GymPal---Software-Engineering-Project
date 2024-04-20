@@ -79,7 +79,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                 child: ListView.builder(
                     itemCount: friends.length,
                     itemBuilder: (context, index) {
-                      return FriendsMySquare(child: fetchUsername(friends[index]));
+                      return FriendsMySquare(child: fetchUsername(friends[index]).toString());
                     }),
               )),
           // Not yet implemented
@@ -126,7 +126,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 }
 
 class FriendsMySquare extends StatelessWidget {
-  final FutureOr<String> child;
+  final String child;
   const FriendsMySquare({super.key, required this.child});
 
   // This is used to define the square for each section of the list
@@ -137,7 +137,7 @@ class FriendsMySquare extends StatelessWidget {
         child: Container(
           height: 20,
           color: Colors.grey, // color can change, just a random color I chose
-          child: Text(child.toString()),
+          child: Text(child),
         ));
   }
 }
