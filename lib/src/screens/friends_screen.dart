@@ -79,7 +79,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                 child: ListView.builder(
                     itemCount: friends.length,
                     itemBuilder: (context, index) {
-                      return FriendsMySquare(child: fetchUsername(friends[index]).toString());
+                      return FriendsMySquare(child: fetchUsername(friends[index]));
                     }),
               )),
           // Not yet implemented
@@ -126,7 +126,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 }
 
 class FriendsMySquare extends StatelessWidget {
-  final String child;
+  final FutureOr<String> child;
   const FriendsMySquare({super.key, required this.child});
 
   // This is used to define the square for each section of the list
@@ -137,19 +137,16 @@ class FriendsMySquare extends StatelessWidget {
         child: Container(
           height: 20,
           color: Colors.grey, // color can change, just a random color I chose
-          child: Text(child),
+          child: Text(child.toString()),
         ));
   }
 }
 
-Future<String> fetchUsername(String userID) async {
-  // Getting the current user.
-  String theUsername = '';
-  // Ensuring user exists.
-  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
-  final snapshot = await _dbRef.child('$userID/username').get();
-  theUsername = snapshot.value.toString();
-  return theUsername;
+FutureOr<String> fetchUsername(String userID) async {
+  DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+  final snapshot = await dbRef.child('users/$userID/username').get();
+  FutureOr<String> userName = snapshot.value.toString();
+  return userName;
 }
 
 // Uncomment if needed; not currently referenced for use.
