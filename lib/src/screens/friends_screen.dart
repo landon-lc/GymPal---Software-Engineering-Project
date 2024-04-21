@@ -16,6 +16,8 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   List<String> friends = [];
 
+  List<String> friendIDs = [];
+
   StreamSubscription? _friendsSubscription;
 
   @override
@@ -38,13 +40,16 @@ class FriendsListScreenState extends State<FriendsListScreen> {
         .onValue
         .listen((event) {
       final List<String> loadFriends = [];
+      final List<String> loadFriendIDs = [];
       final data = event.snapshot.value as Map<dynamic, dynamic>? ??
           {}; // Allows for NULL, instead providing empty map.
       data.forEach((key, value) {
         loadFriends.add(value.toString());
+        loadFriendIDs.add(key.toString());
       });
       setState(() {
         friends = loadFriends;
+        friendIDs = loadFriendIDs;
       });
     });
   }
@@ -79,7 +84,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                 child: ListView.builder(
                     itemCount: friends.length,
                     itemBuilder: (context, index) {
-                      return FriendsMySquare(child: fetchUsername(friends[index]).toString());
+                      return FriendsMySquare(userID: friendIDs[index]);
                     }),
               )),
           // Not yet implemented
@@ -126,8 +131,9 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 }
 
 class FriendsMySquare extends StatelessWidget {
-  final String child;
-  const FriendsMySquare({super.key, required this.child});
+  final String userID;
+  const FriendsMySquare({super.key, required this.userID});
+
 
   // This is used to define the square for each section of the list
   @override
@@ -137,7 +143,7 @@ class FriendsMySquare extends StatelessWidget {
         child: Container(
           height: 20,
           color: Colors.grey, // color can change, just a random color I chose
-          child: Text(child),
+          child: Text(fetchUsername(userID).toString()),
         ));
   }
 }
