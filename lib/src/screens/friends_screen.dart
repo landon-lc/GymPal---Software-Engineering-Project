@@ -134,7 +134,6 @@ class FriendsMySquare extends StatelessWidget {
   final String userID;
   const FriendsMySquare({super.key, required this.userID});
 
-
   // This is used to define the square for each section of the list
   @override
   Widget build(BuildContext context) {
@@ -233,13 +232,14 @@ class FriendsUsernames extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Text(
-        friendUsername, // you'll change this to something with flutter once we store friends
+        friendUsername,
       ),
     );
   }
 }
 
-class SearchMySquare extends StatelessWidget { // May have to use a stack for the name, picture, and username
+class SearchMySquare extends StatelessWidget {
+  // May have to use a stack for the name, picture, and username
   const SearchMySquare({super.key});
 
   // This is used to define the square for each section of the list

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/src/screens/map_screen.dart';
-import 'profile_screen.dart';
-import 'friends_screen.dart';
-import 'checklist_screen.dart';
+import './map_screen.dart';
+import './profile_screen.dart';
+import './friends_screen.dart';
+import './checklist_screen.dart';
 
 class PageNavigation extends StatefulWidget {
   const PageNavigation({super.key});
@@ -25,7 +25,6 @@ class _PageNavigation extends State<PageNavigation> {
     const ChecklistPage(),
     const FriendsListScreen(),
     const GymMaps(),
-    // Add other pages here like FriendsPage(), ProfilePage(), GymMapPage(), etc.
   ];
 
   @override
@@ -47,18 +46,6 @@ class _PageNavigation extends State<PageNavigation> {
           BottomNavigationBarItem(icon: Icon(Icons.place), label: 'Map'),
         ],
       ),
-    );
-  }
-}
-
-class PlaceholderWidget extends StatelessWidget {
-  final Color color;
-  const PlaceholderWidget({super.key, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: color,
     );
   }
 }
