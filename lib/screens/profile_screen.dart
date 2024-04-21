@@ -56,7 +56,7 @@ class ProfileImage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10),
                 child: CircleAvatar(
                   radius: 80,
-                  backgroundImage: imageAccess,
+                  foregroundImage: imageAccess,
         ));
             }
           }
@@ -64,7 +64,7 @@ class ProfileImage extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10),
                 child: CircleAvatar(
                   radius: 80,
-                  backgroundImage: null,
+                  foregroundImage: null,
               ));
             
           });
@@ -85,7 +85,7 @@ Future<Image> fetchImage() async {
     final userProfilePhoto = Image.network(imageRef);
     return userProfilePhoto; 
   }
-  final Image placeholderImage = Image.file(File('images/ProfilePlaceholder.jpeg'));
+  final Image placeholderImage = Image.file(File('images/ProfilePlaceholder.jpg'));
   return placeholderImage;
 }
 

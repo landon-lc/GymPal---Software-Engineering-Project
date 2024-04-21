@@ -83,12 +83,15 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                               'password': newPasswordController.text,
                               'email': newEmailController.text,
                               'bio': 'No bio yet!',
-                              'image': 'No link.',
                               'favGym': 'No gym yet!',
                             });
+                            FirebaseStorage.instance;
                             final Reference storageRef = FirebaseStorage.instance.ref();
-                            Reference usersImage = storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg');
-                            await usersImage.putFile(File('images/ProfilePlaceholder.jpeg'));
+                            Reference layerOne = storageRef.child('UserImages');
+                            Reference layerTwo = layerOne.child('UserImages/$currentUID');
+                            Reference layerThree = layerTwo.child('UserImages/$currentUID/userProfilePhoto.jpg');
+                          // File theImageActual = File('images/ProfilePlaceholder.jpg');
+                           // await usersImage.putFile(theImageActual);
                           }
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
