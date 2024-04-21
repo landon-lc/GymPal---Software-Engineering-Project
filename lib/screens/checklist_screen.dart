@@ -10,6 +10,7 @@ class ChecklistPage extends StatefulWidget {
   const ChecklistPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ChecklistPageState createState() => _ChecklistPageState();
 }
 

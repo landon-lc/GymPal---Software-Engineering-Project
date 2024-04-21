@@ -17,12 +17,12 @@ void main() {
       await tester.pumpAndSettle();
 
       // Input the workout details
-      await tester.enterText(find.byType(TextField), 'Morning Yoga');
+      await tester.enterText(find.byType(TextField), 'Push Day');
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
       // Verify that the workout has been added to the list
-      expect(find.text('Morning Yoga'), findsOneWidget);
+      expect(find.text('Push Day'), findsOneWidget);
 
       // This test verifies that a user can add a workout and see it on their main screen,
       // which corresponds to the ability to track workouts for the day.
@@ -54,7 +54,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assuming there's a way to view detailed information about a workout
-      await tester.tap(find.text('Morning Yoga'));
+      await tester.tap(find.text('Push Day'));
       await tester.pumpAndSettle();
 
       // Assuming the workout details page shows sets and reps
@@ -71,7 +71,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Navigate to the workout detail page
-      await tester.tap(find.text('Morning Yoga'));
+      await tester.tap(find.text('Push Day'));
       await tester.pumpAndSettle();
 
       // Tap on the edit button
@@ -79,12 +79,12 @@ void main() {
       await tester.pumpAndSettle();
 
       // Change the workout name and save
-      await tester.enterText(find.byType(TextField), 'Evening Yoga');
+      await tester.enterText(find.byType(TextField), 'Pull Day');
       await tester.tap(find.text('Save Changes'));
       await tester.pumpAndSettle();
 
       // Verify the changes
-      expect(find.text('Evening Yoga'), findsOneWidget);
+      expect(find.text('Pull Day'), findsOneWidget);
 
       // This test checks the functionality that allows users to edit their workouts after saving them,
       // ensuring that the app supports modifications post-creation.
@@ -98,7 +98,7 @@ void main() {
       // Add a new workout
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField), 'Evening Run');
+      await tester.enterText(find.byType(TextField), 'Bench Press');
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
@@ -107,7 +107,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify that the workout is still present
-      expect(find.text('Evening Run'), findsOneWidget);
+      expect(find.text('Bench Press'), findsOneWidget);
 
       // This test verifies the user story requirement that data should persist even after the user exits the application,
       // testing the Firebase integration indirectly by checking data persistence.
