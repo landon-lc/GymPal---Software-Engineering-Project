@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'profile_editor_screen.dart';
+import './profile_editor_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 // Stateful Widget for the Profile Screen.
