@@ -22,6 +22,7 @@ dependencies:
   image_picker: ^1.0.7
   flutter_date_pickers: ^0.4.2
   intl: ^0.18.1
+  test: ^1.24.9
 
 dev_dependencies:
   flutter_test:
