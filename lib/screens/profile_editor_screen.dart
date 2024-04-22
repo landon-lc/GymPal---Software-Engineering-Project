@@ -50,7 +50,7 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     // Getting Image
-                    _openImagePicker();
+                    await _openImagePicker();
                     // Storing image to Firebase Storage. 
                     final Reference storageRef = FirebaseStorage.instance.ref();
                     User? currentUser = FirebaseAuth.instance.currentUser;

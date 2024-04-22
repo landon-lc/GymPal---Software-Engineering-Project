@@ -26,7 +26,7 @@ class _UserProfileScreen extends State<UserProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                   // Calls to each screen.
-                  // ProfileImage(),
+                  ProfileImage(),
                   ProfileUsername(),
                   ProfileEditorButton(),
                   ProfileAboutMe(),
@@ -55,7 +55,8 @@ class ProfileImage extends StatelessWidget {
                 Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: CircleAvatar(
-                  radius: 80,
+                  minRadius: 80,
+                  maxRadius: 80,
                   foregroundImage: imageAccess,
         ));
             }
