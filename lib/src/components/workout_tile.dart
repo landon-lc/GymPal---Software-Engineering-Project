@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/models/workout.dart';
+import 'package:test_drive/src/models/workout.dart';
 
 class WorkoutTile extends StatelessWidget {
   final Workout workout;

@@ -1,4 +1,4 @@
-import '../models/gym.dart';
+import 'gym.dart';
 import 'friend.dart';
 
 class Profile {
