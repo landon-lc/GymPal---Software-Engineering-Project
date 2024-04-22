@@ -1,7 +1,7 @@
-import '../models/workout.dart';
-import '../data/workout_record.dart';
-import '../models/exercise.dart';
-import '../models/profile.dart';
+import 'workout.dart';
+import 'workout_record.dart';
+import 'exercise.dart';
+import 'profile.dart';
 
 class User extends Profile {
   // Dynamic lists for user attributes - lists can be empty.
