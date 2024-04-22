@@ -18,6 +18,10 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   StreamSubscription? _friendsSubscription;
 
+  TextEditingController _searchController = TextEditingController();
+
+  List<Map<dynamic, dynamic>> _searchResults = [];
+
   @override
   void initState() {
     super.initState();
@@ -49,26 +53,47 @@ class FriendsListScreenState extends State<FriendsListScreen> {
     });
   }
 
+  void _performSearch(String query) {
+  _dbRef.orderByChild('username')
+    .startAt(query)
+    .endAt(query + "\uf8ff")
+    .once()
+    .then((DatabaseEvent event) {
+      DataSnapshot snapshot = event.snapshot;
+      setState(() {
+        _searchResults.clear();
+        if (snapshot.value != null) {
+          Map<dynamic, dynamic>? values = snapshot.value as Map<dynamic, dynamic>?; // Explicit cast
+          if (values != null) {
+            values.forEach((key, value) {
+              _searchResults.add(value);
+            });
+          }
+        }
+      });
+    });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Friends List'),
+        title: TextField(
+          controller: _searchController,
+          onChanged: _performSearch,
+          decoration: InputDecoration(
+            hintText: 'Search for users...',
+          ),
+        ),
       ),
-      body: friends.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: friends.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(friends[index]),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => removeFriend(index),
-                  ),
-                );
-              },
-            ),
+      body: ListView.builder(
+        itemCount: _searchResults.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_searchResults[index]['username']),
+          );
+        },
+      ),
     );
   }
 
