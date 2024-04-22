@@ -34,7 +34,7 @@ class _UserProfileScreen extends State<UserProfileScreen> {
   }
 }
 
-class ProfileImage extends StatefulWidget{
+class ProfileImage extends StatefulWidget {
   const ProfileImage({super.key});
 
   @override
@@ -52,15 +52,17 @@ class _ProfileImage extends State<ProfileImage> {
 
   // Fetching Image from Firebase Storage
   Future<String> fetchImage() async {
-  // Getting the current user.
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  // Ensuring user exists.
+    // Getting the current user.
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    // Ensuring user exists.
     if (currentUser != null) {
       String currentUID = currentUser.uid;
       // With the users UID, we can now access that user within the database.
       final storageRef = FirebaseStorage.instance.ref();
-      final imageRef = await storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg').getDownloadURL();
-      return imageRef; 
+      final imageRef = await storageRef
+          .child('UserImages/$currentUID/userProfilePhoto.jpg')
+          .getDownloadURL();
+      return imageRef;
     }
     return 'no image';
   }
@@ -75,23 +77,20 @@ class _ProfileImage extends State<ProfileImage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 160,
-      height: 160,
-      alignment: null,
-      child: Scaffold(
-        body: Center(
-        child: finalImageURL != null
-        ? CircleAvatar(
-          radius: 80,
-          foregroundImage: NetworkImage(finalImageURL ?? 'null'),
-        )
-         : const CircularProgressIndicator(),
-      )
-      )
-    );
+        width: 160,
+        height: 160,
+        alignment: null,
+        child: Scaffold(
+            body: Center(
+          child: finalImageURL != null
+              ? CircleAvatar(
+                  radius: 80,
+                  foregroundImage: NetworkImage(finalImageURL ?? 'null'),
+                )
+              : const CircularProgressIndicator(),
+        )));
   }
 }
-
 
 // Code for the profile editor button.
 class ProfileEditorButton extends StatelessWidget {

@@ -91,12 +91,15 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                             // Creates reference position - working.
                             FirebaseStorage storage = FirebaseStorage.instance;
                             Reference storageRef = storage.ref();
-                            Reference usersImageLocation = storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg');
+                            Reference usersImageLocation = storageRef.child(
+                                'UserImages/$currentUID/userProfilePhoto.jpg');
                             // Getting absolute file path.
-                            const String imagePath = 'lib/images/ProfilePlaceholder.jpg';
-                            ByteData imageData = await rootBundle.load(imagePath);
+                            const String imagePath =
+                                'lib/images/ProfilePlaceholder.jpg';
+                            ByteData imageData =
+                                await rootBundle.load(imagePath);
                             Uint8List byteList = imageData.buffer.asUint8List();
-                            // Placing image in firebase. 
+                            // Placing image in firebase.
                             await usersImageLocation.putData(byteList);
                           }
 
