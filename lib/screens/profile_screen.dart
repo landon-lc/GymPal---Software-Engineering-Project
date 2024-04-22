@@ -26,7 +26,7 @@ class _UserProfileScreen extends State<UserProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                   // Calls to each screen.
-                  ProfileImage(),
+                  // ProfileImage(),
                   ProfileUsername(),
                   ProfileEditorButton(),
                   ProfileAboutMe(),
