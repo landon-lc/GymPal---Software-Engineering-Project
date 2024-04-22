@@ -1,4 +1,4 @@
-import 'package:test_drive/models/exercise.dart';
+import 'package:test_drive/src/models/exercise.dart';
 
 class Workout {
   String name;

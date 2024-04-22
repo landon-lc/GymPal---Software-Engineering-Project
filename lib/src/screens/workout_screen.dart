@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:test_drive/components/exercise_tile.dart';
-import 'package:test_drive/models/workout_record.dart';
-import 'package:test_drive/models/exercise.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:test_drive/src/components/exercise_tile.dart';
+import 'package:test_drive/src/models/workout_record.dart';
+import 'package:test_drive/src/models/exercise.dart';
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({
@@ -65,70 +64,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
-  void _editExercise(BuildContext context, Exercise exercise) {
-  TextEditingController nameController = TextEditingController(text: exercise.name);
-  TextEditingController weightController = TextEditingController(text: exercise.weight);
-  TextEditingController repsController = TextEditingController(text: exercise.reps);
-  TextEditingController setsController = TextEditingController(text: exercise.sets);
-  
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Edit Exercise'),
-        content: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: 'Exercise Name'),
-              ),
-              TextField(
-                controller: weightController,
-                decoration: const InputDecoration(labelText: 'Weight'),
-              ),
-              TextField(
-                controller: repsController,
-                decoration: const InputDecoration(labelText: 'Reps'),
-              ),
-              TextField(
-                controller: setsController,
-                decoration: const InputDecoration(labelText: 'Sets'),
-              ),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: const Text('Save'),
-            onPressed: () {
-              if (exercise.key != null) {
-                Provider.of<WorkoutRecord>(context, listen: false).editExercise(
-                  widget.workoutId,
-                  exercise.key!,
-                  nameController.text.trim(),
-                  weightController.text.trim(),
-                  repsController.text.trim(),
-                  setsController.text.trim(),
-                  exercise.isCompleted,
-                );
-              }
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
-
   void _saveExercise() {
     final String exerciseName = exerciseNameController.text.trim();
     final String weight = weightController.text.trim();
@@ -182,40 +117,17 @@ class _WorkoutPageState extends State<WorkoutPage> {
             itemCount: exercises.length,
             itemBuilder: (context, index) {
               final exercise = exercises[index];
-              return Slidable(
-                key: ValueKey(exercise.key),
-                startActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (context) => _editExercise(context, exercise),
-                      backgroundColor: Colors.blue,
-                      icon: Icons.edit,
-                      label: 'Edit',
-                    ),
-                    SlidableAction(
-                      onPressed: (context) {
-                        Provider.of<WorkoutRecord>(context, listen: false)
-                            .deleteExercise(widget.workoutId, exercise.key ?? '');
-                      },
-                      backgroundColor: Colors.red,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                    ),
-                  ],
-                ),
-                child: ExerciseTile(
-                  exerciseName: exercise.name,
-                  weight: exercise.weight,
-                  reps: exercise.reps,
-                  sets: exercise.sets,
-                  isCompleted: exercise.isCompleted,
-                  onCheckBoxChanged: (val) {
-                    Provider.of<WorkoutRecord>(context, listen: false)
-                        .checkOffExercise(
-                            widget.workoutId, exercise.key ?? '', val ?? false);
-                  },
-                ),
+              return ExerciseTile(
+                exerciseName: exercise.name,
+                weight: exercise.weight,
+                reps: exercise.reps,
+                sets: exercise.sets,
+                isCompleted: exercise.isCompleted,
+                onCheckBoxChanged: (val) {
+                  Provider.of<WorkoutRecord>(context, listen: false)
+                      .checkOffExercise(
+                          widget.workoutId, exercise.key ?? '', val ?? false);
+                },
               );
             },
           );
