@@ -103,6 +103,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
           );
         },
       ),
+      
     );
   }
 

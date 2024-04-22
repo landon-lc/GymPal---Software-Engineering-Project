@@ -12,7 +12,7 @@ class FriendsProfileScreen extends StatelessWidget {
         title: Text(user['username']),
       ),
       body: Center(
-        child: Text('Friend Profile Screen'),
+        child: Text(user['bio']),
       ),
     );
   }
