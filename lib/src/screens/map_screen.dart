@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/places.dart' as gmaps;  // Aliased import
+import 'package:google_maps_webservice/places.dart' as gmaps;
 import 'package:location/location.dart' as loc;
-
-class GymMapApp extends StatelessWidget {
-  const GymMapApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Gym Finder',
-      home: GymMaps(),
-    );
-  }
-}
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class GymMaps extends StatefulWidget {
   const GymMaps({super.key});
@@ -100,7 +90,7 @@ class _GymMapsState extends State<GymMaps> {
               markerId: MarkerId(result.placeId),
               position: LatLng(result.geometry?.location.lat ?? 0.0, result.geometry?.location.lng ?? 0.0),
               infoWindow: InfoWindow(title: result.name),
-              onTap: () => _onMarkerTapped(result.name, result.placeId),
+              onTap: () => _onMarkerTapped(result.name),
             ),
           );
         }
@@ -110,13 +100,13 @@ class _GymMapsState extends State<GymMaps> {
     }
   }
 
-  void _onMarkerTapped(String gymName, String placeId) {
+  void _onMarkerTapped(String gymName) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Favorite Gym'),
-          content: Text('Do you want to save "$gymName" as your favorite Gym?'),
+          content: Text('Do you want to save "$gymName" as your favorite gym?'),
           actions: <Widget>[
             TextButton(
               child: Text('No'),
@@ -124,9 +114,9 @@ class _GymMapsState extends State<GymMaps> {
             ),
             TextButton(
               child: Text('Yes'),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                _selectGym(placeId);
+                await _selectGym(gymName);
               },
             ),
           ],
@@ -135,8 +125,18 @@ class _GymMapsState extends State<GymMaps> {
     );
   }
 
-  void _selectGym(String placeId) {
-    // Can code actions after selecting gym here.
+  Future<void> _selectGym(String gymName) async {
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      DatabaseReference userRef = FirebaseDatabase.instance.ref('users/${currentUser.uid}');
+      await userRef.update({'favGym': gymName});
+      // Show a confirmation message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Favorite gym is now $gymName.')),
+      );
+    } else {
+      print('No user is currently signed in.');
+    }
   }
 
   @override
@@ -167,6 +167,7 @@ class _GymMapsState extends State<GymMaps> {
                 zoom: 11,
               ),
               markers: _markers,
+              myLocationEnabled: true,
             ),
     );
   }
