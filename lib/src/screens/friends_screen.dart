@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'friends_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -89,8 +89,17 @@ class FriendsListScreenState extends State<FriendsListScreen> {
       body: ListView.builder(
         itemCount: _searchResults.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_searchResults[index]['username']),
+          return GestureDetector(
+            onTap: () {
+              // Navigate to the friends profile screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FriendsProfileScreen(user: _searchResults[index])),
+              );
+            },
+            child: ListTile(
+              title: Text(_searchResults[index]['username']),
+            ),
           );
         },
       ),
