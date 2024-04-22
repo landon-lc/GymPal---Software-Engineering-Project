@@ -58,7 +58,16 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                       String currentUID = currentUser.uid;
                       Reference usersImage = storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg');
                       await usersImage.putFile(userImage);
-                    } 
+                    }
+                    if (context.mounted) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const UserProfileScreen()),
+                            // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
+                            (Route<dynamic> route) => false);
+                      } 
                   },
                   child: const Text('Upload Image'),
                 ),

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'profile_editor_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -35,60 +34,64 @@ class _UserProfileScreen extends State<UserProfileScreen> {
   }
 }
 
-// Code for displaying the users profile picture.
-class ProfileImage extends StatelessWidget {
-  const ProfileImage({
-    super.key,
-  });
-
-  // final Image usersImage = fetchImage();
+class ProfileImage extends StatefulWidget{
+  const ProfileImage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: fetchImage(),
-        builder: (BuildContext context, AsyncSnapshot<Image> usersImageData) {
-          if (usersImageData.hasData) {
-            final finalUserImage = usersImageData.data;
-            if (finalUserImage != null) {
-              final ImageProvider imageAccess = finalUserImage.image;
-                Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: CircleAvatar(
-                  minRadius: 80,
-                  maxRadius: 80,
-                  foregroundImage: imageAccess,
-        ));
-            }
-          }
-          return const Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: CircleAvatar(
-                  radius: 80,
-                  foregroundImage: null,
-              ));
-            
-          });
-  }
+  State<ProfileImage> createState() => _ProfileImage();
 }
 
-// Image Fetcher
-// This method fetches the About Me (or bio) for displaying on the profile screen.
-Future<Image> fetchImage() async {
+class _ProfileImage extends State<ProfileImage> {
+  String? finalImageURL;
+
+  @override
+  void initState() {
+    super.initState();
+    finalImageSetter();
+  }
+
+  // Fetching Image from Firebase Storage
+  Future<String> fetchImage() async {
   // Getting the current user.
   User? currentUser = FirebaseAuth.instance.currentUser;
   // Ensuring user exists.
-  if (currentUser != null) {
-    String currentUID = currentUser.uid;
-    // With the users UID, we can now access that user within the database.
-    final storageRef = FirebaseStorage.instance.ref();
-    final imageRef = await storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg').getDownloadURL();
-    final userProfilePhoto = Image.network(imageRef);
-    return userProfilePhoto; 
+    if (currentUser != null) {
+      String currentUID = currentUser.uid;
+      // With the users UID, we can now access that user within the database.
+      final storageRef = FirebaseStorage.instance.ref();
+      final imageRef = await storageRef.child('UserImages/$currentUID/userProfilePhoto.jpg').getDownloadURL();
+      return imageRef; 
+    }
+    return 'no image';
   }
-  final Image placeholderImage = Image.file(File('images/ProfilePlaceholder.jpg'));
-  return placeholderImage;
+
+  Future<void> finalImageSetter() async {
+    String theURL = await fetchImage();
+    setState(() {
+      finalImageURL = theURL;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 160,
+      height: 160,
+      alignment: null,
+      child: Scaffold(
+        body: Center(
+        child: finalImageURL != null
+        ? CircleAvatar(
+          radius: 80,
+          foregroundImage: NetworkImage(finalImageURL ?? 'null'),
+        )
+         : const CircularProgressIndicator(),
+      )
+      )
+    );
+  }
 }
+
 
 // Code for the profile editor button.
 class ProfileEditorButton extends StatelessWidget {
