@@ -1,118 +1,158 @@
+import 'dart:async';
+import 'friends_profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-class FriendsScreen extends StatelessWidget {
-  const FriendsScreen({super.key});
+class FriendsListScreen extends StatefulWidget {
+  const FriendsListScreen({super.key});
+
+  @override
+  FriendsListScreenState createState() => FriendsListScreenState();
+}
+
+class FriendsListScreenState extends State<FriendsListScreen> {
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
+
+  List<String> friends = [];
+
+  StreamSubscription? friendsSubscription;
+
+  final TextEditingController _searchController = TextEditingController();
+
+  final List<Map<dynamic, dynamic>> _searchResults = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadFriends();
+  }
+
+  @override
+  void dispose() {
+    friendsSubscription
+        ?.cancel(); // Removes database handle when screen not in use.
+    super.dispose();
+  }
+
+  void loadFriends() {
+    friendsSubscription = _dbRef
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child('friends')
+        .onValue
+        .listen((event) {
+      final List<String> loadFriends = [];
+      final data = event.snapshot.value as Map<dynamic, dynamic>? ??
+          {}; // Allows for NULL, instead providing empty map.
+      data.forEach((key, value) {
+        loadFriends.add(value.toString());
+      });
+      setState(() {
+        friends = loadFriends;
+      });
+    });
+  }
+
+  void _performSearch(String query) {
+    _dbRef
+        .orderByChild('username')
+        .startAt(query)
+        .endAt('$query\uf8ff')
+        .once()
+        .then((DatabaseEvent event) {
+      DataSnapshot snapshot = event.snapshot;
+      setState(() {
+        _searchResults.clear();
+        if (snapshot.value != null) {
+          Map<dynamic, dynamic>? values =
+              snapshot.value as Map<dynamic, dynamic>?; // Explicit cast
+          if (values != null) {
+            values.forEach((key, value) {
+              _searchResults.add(value);
+            });
+          }
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // This does not look like a lot, but this took me a long time to figure out (For Dr. Layman)
     return Scaffold(
-      body: ListView.builder(
-          itemCount: 3,
+      appBar: AppBar(
+        title: TextField(
+          controller: _searchController,
+          onChanged: _performSearch,
+          decoration: const InputDecoration(
+            hintText: 'Search for users...',
+          ),
+        ),
+      ),
+      body: Column(children: [
+        Expanded(
+            child: ListView.builder(
+          itemCount: _searchResults.length,
           itemBuilder: (context, index) {
-            // item count will change to the length of the list that is storing the friends of the user
-            return const MySquare();
-          }),
+            return GestureDetector(
+              onTap: () {
+                // Navigate to the friends profile screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          FriendsProfileScreen(user: _searchResults[index])),
+                );
+              },
+              child: ListTile(
+                title: Text(_searchResults[index]['username']),
+              ),
+            );
+          },
+        )),
+        Container(
+          height: 25,
+          decoration:
+              BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
+          child: const Text(
+            'Your Current Friends',
+          ),
+        ),
+        Expanded(
+            child: ListView.builder(
+          itemCount: 20,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FriendsProfileScreen(
+                            user: _searchResults[index]
+                                ['UID'])) // need a call to list of friends
+                    );
+              },
+              child: const ListTile(
+                title: Text('Friends'), // this will be friends name
+              ),
+            );
+          },
+        ))
+      ]),
     );
   }
-}
 
-// Used for displaying friends usernames, don't really know how
-class FriendsUsernames extends StatelessWidget {
-  const FriendsUsernames({
-    super.key,
-    required this.friendUsername,
-  });
+  void removeFriend(int index) {
+    // TODO
 
-  final String friendUsername;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Text(
-        friendUsername, // you'll change this to something with flutter once we store friends
-      ),
-    );
-  }
-}
-
-class FriendsGyms extends StatelessWidget {
-  const FriendsGyms({
-    super.key,
-    required this.friendGyms,
-  });
-
-  final String friendGyms;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Text(
-        friendGyms, // you'll change this to something with flutter once we store friends
-      ),
-    );
-  }
-}
-
-class FriendImages extends StatelessWidget {
-  const FriendImages({
-    super.key,
-    required this.friendImage,
-  });
-
-  final String friendImage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(60),
-        child: CircleAvatar(
-          radius: 40,
-          backgroundImage: AssetImage(friendImage),
-        ));
-  }
-}
-
-// Getting an exception saying the render box was not layed out?
-class FriendsList extends StatelessWidget {
-  // Used to display a list of people that are friends with the user
-
-  const FriendsList({
-    // was a const before
-    super.key,
-    required this.friendsList,
-  });
-
-  final List<String>
-      friendsList; // This is temporary, change the type of the list to Friend
-
-  @override
-  Widget build(BuildContext context) {
-    // used to display the actual list
-    return Scaffold(
-        body: ListView.builder(
-            itemCount: friendsList
-                .length, // Change this to a call to the length of the list of the users friends list friendsList.length
-            itemBuilder: (context, index) {
-              return const Card();
-            }));
-  }
-}
-
-class MySquare extends StatelessWidget {
-  const MySquare({super.key});
-
-  // This is used to define the square for each section of the list
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-        child: Container(
-          height: 20,
-          color: Colors
-              .deepPurple, // color can change, just a random color I chose
-        ));
+    // String friendIdToRemove = friends[index];
+    // _dbRef.child(FirebaseAuth.instance.currentUser!.uid)
+    //     .child('friends')
+    //     .child(friendIdToRemove)
+    //     .remove()
+    //     .then((_) {
+    //   setState(() {
+    //     friends.removeAt(index);
+    //   });
+    // });
   }
 }
