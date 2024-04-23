@@ -18,9 +18,9 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   StreamSubscription? _friendsSubscription;
 
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
-  List<Map<dynamic, dynamic>> _searchResults = [];
+  final List<Map<dynamic, dynamic>> _searchResults = [];
 
   @override
   void initState() {
@@ -54,16 +54,18 @@ class FriendsListScreenState extends State<FriendsListScreen> {
   }
 
   void _performSearch(String query) {
-  _dbRef.orderByChild('username')
-    .startAt(query)
-    .endAt(query + "\uf8ff")
-    .once()
-    .then((DatabaseEvent event) {
+    _dbRef
+        .orderByChild('username')
+        .startAt(query)
+        .endAt('$query\uf8ff')
+        .once()
+        .then((DatabaseEvent event) {
       DataSnapshot snapshot = event.snapshot;
       setState(() {
         _searchResults.clear();
         if (snapshot.value != null) {
-          Map<dynamic, dynamic>? values = snapshot.value as Map<dynamic, dynamic>?; // Explicit cast
+          Map<dynamic, dynamic>? values =
+              snapshot.value as Map<dynamic, dynamic>?; // Explicit cast
           if (values != null) {
             values.forEach((key, value) {
               _searchResults.add(value);
@@ -72,7 +74,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
         }
       });
     });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
         title: TextField(
           controller: _searchController,
           onChanged: _performSearch,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Search for users...',
           ),
         ),
@@ -94,7 +96,9 @@ class FriendsListScreenState extends State<FriendsListScreen> {
               // Navigate to the friends profile screen
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => FriendsProfileScreen(user: _searchResults[index])),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        FriendsProfileScreen(user: _searchResults[index])),
               );
             },
             child: ListTile(
@@ -103,7 +107,6 @@ class FriendsListScreenState extends State<FriendsListScreen> {
           );
         },
       ),
-      
     );
   }
 
