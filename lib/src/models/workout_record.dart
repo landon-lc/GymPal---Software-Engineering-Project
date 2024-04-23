@@ -17,12 +17,12 @@ class WorkoutRecord extends ChangeNotifier {
 
   /// The current user's ID from FirebaseAuth, used to scope data access.
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-    
+
   /// Tracks the current page for pagination of workouts.
   int _currentPage = 0;
-  
+
   /// Defines the number of workouts to be loaded per page.
-  final int _pageSize = 10;  // Number of workouts per page
+  final int _pageSize = 10; // Number of workouts per page
 
   /// Initializes workouts by setting up a listener on the paginated workout stream.
   WorkoutRecord() {
@@ -33,8 +33,12 @@ class WorkoutRecord extends ChangeNotifier {
   ///
   /// Each call retrieves one page of workouts. Subsequent calls retrieve the next page.
   /// If `start` and/or `end` are provided, filters the workouts to those within the given date range.
-  Stream<List<Workout>> paginatedWorkoutsStream({DateTime? start, DateTime? end}) {
-    Query query = dbRef.child('users/$userId/workouts').orderByChild('timestamp').limitToFirst((_currentPage + 1) * _pageSize);
+  Stream<List<Workout>> paginatedWorkoutsStream(
+      {DateTime? start, DateTime? end}) {
+    Query query = dbRef
+        .child('users/$userId/workouts')
+        .orderByChild('timestamp')
+        .limitToFirst((_currentPage + 1) * _pageSize);
 
     if (start != null && end == null) {
       // Assuming end date is today if not provided
@@ -50,7 +54,10 @@ class WorkoutRecord extends ChangeNotifier {
     return query.onValue.map((event) {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
-        return data.entries.map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString())).toList();
+        return data.entries
+            .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value),
+                key: e.key.toString()))
+            .toList();
       } else {
         return [];
       }
@@ -74,13 +81,14 @@ class WorkoutRecord extends ChangeNotifier {
   /// Adds a new workout to Firebase under the current user's ID with the current timestamp.
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('users/$userId/workouts').push();
-    final now = DateTime.now().toUtc();  // Convert to UTC
+    final now = DateTime.now().toUtc(); // Convert to UTC
     newWorkoutRef.set({
       'name': name,
       'exercises': [],
       'timestamp': now.toIso8601String(),
     }).then((_) {
-      workoutList.add(Workout(name: name, exercises: [], key: newWorkoutRef.key, timestamp: now));
+      workoutList.add(Workout(
+          name: name, exercises: [], key: newWorkoutRef.key, timestamp: now));
       notifyListeners();
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
@@ -89,7 +97,8 @@ class WorkoutRecord extends ChangeNotifier {
   }
 
   /// Adds exercises to a specific workout in Firebase.
-  void addExercises(String workoutId, String exerciseName, String weight, String reps, String sets) {
+  void addExercises(String workoutId, String exerciseName, String weight,
+      String reps, String sets) {
     dbRef.child('users/$userId/workouts/$workoutId/exercises').push().set({
       'name': exerciseName,
       'weight': weight,
@@ -114,14 +123,15 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-
   void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
-    dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').update({
+    dbRef
+        .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
+        .update({
       'isCompleted': isCompleted,
-      }).then((_) {
-    print('Exercise status updated successfully.');
-  }).catchError((error) {
-    print('Failed to update exercise status: $error');
+    }).then((_) {
+      print('Exercise status updated successfully.');
+    }).catchError((error) {
+      print('Failed to update exercise status: $error');
     });
   }
 
@@ -146,41 +156,51 @@ class WorkoutRecord extends ChangeNotifier {
     }
   }
 
-/// Deletes an exercise from a workout.
+  /// Deletes an exercise from a workout.
   void deleteExercise(String workoutId, String exerciseId) {
-  dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').remove().then((_) {
-    print('Exercise deleted successfully from Firebase');
-    notifyListeners();  
-  }).catchError((error) {
-    print('Failed to delete exercise: $error');
-  });
-}
+    dbRef
+        .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
+        .remove()
+        .then((_) {
+      print('Exercise deleted successfully from Firebase');
+      notifyListeners();
+    }).catchError((error) {
+      print('Failed to delete exercise: $error');
+    });
+  }
 
   /// Edits an exercise in a workout.
-  void editExercise(String workoutId, String exerciseId, String newName, String newWeight, String newReps, String newSets, bool newIsCompleted) {
-  dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').update({
-    'name': newName,
-    'weight': newWeight,
-    'reps': newReps,
-    'sets': newSets,
-    'isCompleted': newIsCompleted
-  }).then((_) {
-    print('Exercise updated successfully');
-    notifyListeners();  
-  }).catchError((error) {
-    print('Failed to update exercise: $error');
-  });
-}
+  void editExercise(String workoutId, String exerciseId, String newName,
+      String newWeight, String newReps, String newSets, bool newIsCompleted) {
+    dbRef
+        .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
+        .update({
+      'name': newName,
+      'weight': newWeight,
+      'reps': newReps,
+      'sets': newSets,
+      'isCompleted': newIsCompleted
+    }).then((_) {
+      print('Exercise updated successfully');
+      notifyListeners();
+    }).catchError((error) {
+      print('Failed to update exercise: $error');
+    });
+  }
 
   /// Retrieves a stream of exercises for a specific workout.
   ///
   /// This method listens for real-time updates to a workout's exercises, reflecting any additions, deletions, or modifications.
   Stream<List<Exercise>> getExercisesStream(String workoutId) {
-    return dbRef.child('users/$userId/workouts/$workoutId/exercises').onValue.map((event) {
+    return dbRef
+        .child('users/$userId/workouts/$workoutId/exercises')
+        .onValue
+        .map((event) {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
         return data.entries
-            .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString()))
+            .map((e) => Exercise.fromMap(Map<String, dynamic>.from(e.value),
+                key: e.key.toString()))
             .toList();
       } else {
         return [];

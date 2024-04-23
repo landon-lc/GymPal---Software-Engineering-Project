@@ -33,8 +33,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<Workout>>(
-        stream:
-            Provider.of<WorkoutRecord>(context, listen: false).paginatedWorkoutsStream(),
+        stream: Provider.of<WorkoutRecord>(context, listen: false)
+            .paginatedWorkoutsStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

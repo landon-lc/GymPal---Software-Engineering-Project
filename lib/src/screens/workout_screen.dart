@@ -5,7 +5,7 @@ import 'package:test_drive/src/models/workout_record.dart';
 import 'package:test_drive/src/models/exercise.dart';
 
 /// A page that displays details of a specific workout including a list of exercises.
-/// 
+///
 /// Allows users to add, edit, and delete exercises within a workout. Exercises can
 /// also be marked as completed.
 class WorkoutPage extends StatefulWidget {
@@ -52,17 +52,17 @@ class _WorkoutPageState extends State<WorkoutPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              controller: exerciseNameController,
-              decoration: const InputDecoration(labelText: 'Exercise Name')),
+                controller: exerciseNameController,
+                decoration: const InputDecoration(labelText: 'Exercise Name')),
             TextField(
-              controller: weightController,
-              decoration: const InputDecoration(labelText: 'Weight')),
+                controller: weightController,
+                decoration: const InputDecoration(labelText: 'Weight')),
             TextField(
-              controller: setsController,
-              decoration: const InputDecoration(labelText: 'Sets')),
+                controller: setsController,
+                decoration: const InputDecoration(labelText: 'Sets')),
             TextField(
-              controller: repsController,
-              decoration: const InputDecoration(labelText: 'Reps')),
+                controller: repsController,
+                decoration: const InputDecoration(labelText: 'Reps')),
           ],
         ),
         actions: [
@@ -121,7 +121,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _createNewExercise,
         tooltip: 'Add New Exercise',
-        child: const Icon(Icons.add),  // Tooltip for better accessibility and user guidance.
+        child: const Icon(
+            Icons.add), // Tooltip for better accessibility and user guidance.
       ),
       body: StreamBuilder<List<Exercise>>(
         stream: Provider.of<WorkoutRecord>(context)

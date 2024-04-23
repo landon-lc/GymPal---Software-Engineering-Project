@@ -48,12 +48,14 @@ class WorkoutTile extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: onEdit,
-            tooltip: 'Edit Workout',  // Tooltip provides additional context for accessibility.
+            tooltip:
+                'Edit Workout', // Tooltip provides additional context for accessibility.
           ),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: onDelete,
-            tooltip: 'Delete Workout',  // Tooltip provides additional context for accessibility.
+            tooltip:
+                'Delete Workout', // Tooltip provides additional context for accessibility.
           ),
         ],
       ),

@@ -8,7 +8,8 @@ void main() {
 
   group('Workout App System Tests', () {
     // Test for US #1: Adding workouts and tracking daily progress
-    testWidgets('Add workout and verify it is tracked (US #1)', (WidgetTester tester) async {
+    testWidgets('Add workout and verify it is tracked (US #1)',
+        (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -29,7 +30,8 @@ void main() {
     });
 
     // Test for US #39: Saving changes to the checklist
-    testWidgets('Save changes to the checklist and verify persistence (US #39)', (WidgetTester tester) async {
+    testWidgets('Save changes to the checklist and verify persistence (US #39)',
+        (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -42,14 +44,18 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify that the checkbox remains checked after saving
-      expect(find.byWidgetPredicate((Widget widget) => widget is Checkbox && widget.value == true), findsOneWidget);
+      expect(
+          find.byWidgetPredicate(
+              (Widget widget) => widget is Checkbox && widget.value == true),
+          findsOneWidget);
 
       // This test checks if the app correctly saves states in the checklist, allowing users
       // to track completed workouts.
     });
 
     // Test for US #40: Viewing sets and reps for exercises
-    testWidgets('Display sets and reps for exercises (US #40)', (WidgetTester tester) async {
+    testWidgets('Display sets and reps for exercises (US #40)',
+        (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -66,7 +72,8 @@ void main() {
     });
 
     // Test for US #45: Editing saved workouts
-    testWidgets('Edit a saved workout and verify changes (US #45)', (WidgetTester tester) async {
+    testWidgets('Edit a saved workout and verify changes (US #45)',
+        (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -91,7 +98,8 @@ void main() {
     });
 
     // Test for US #46: Continuous data saving
-    testWidgets('Ensure data is saved across sessions (US #46)', (WidgetTester tester) async {
+    testWidgets('Ensure data is saved across sessions (US #46)',
+        (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 

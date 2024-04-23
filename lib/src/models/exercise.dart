@@ -41,7 +41,7 @@ class Exercise {
     required this.sets,
     this.isCompleted = false,
     this.key,
-    this.createdAt, 
+    this.createdAt,
     this.lastModified,
   });
 

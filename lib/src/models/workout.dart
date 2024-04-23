@@ -19,12 +19,11 @@ class Workout {
 
   /// Constructs a [Workout] with the required parameters [name], [exercises], and [timestamp].
   /// An optional [key] can also be provided if the workout needs to be associated with a unique identifier.
-  Workout({
-    required this.name,
-    required this.exercises,
-    this.key,
-    required this.timestamp
-  });
+  Workout(
+      {required this.name,
+      required this.exercises,
+      this.key,
+      required this.timestamp});
 
   /// Converts a [Workout] instance into a map of key/value pairs.
   ///
@@ -43,12 +42,14 @@ class Workout {
   /// The [map] argument is expected to contain keys for 'name', 'exercises', and 'timestamp'.
   /// [exercises] should be a list of maps where each map contains details of an [Exercise].
   /// If [key] is provided, it is used as the workout's unique identifier.
-  /// 
+  ///
   /// The timestamp is parsed into a DateTime object. If the timestamp is missing, the current time is used.
   factory Workout.fromMap(Map<String, dynamic> map, {String? key}) {
     var exercisesData = map['exercises'];
     List<Exercise> exercises;
-    DateTime parsedTimestamp = map['timestamp'] != null ? DateTime.parse(map['timestamp']) : DateTime.now();
+    DateTime parsedTimestamp = map['timestamp'] != null
+        ? DateTime.parse(map['timestamp'])
+        : DateTime.now();
 
     if (exercisesData is List<dynamic>) {
       exercises = exercisesData

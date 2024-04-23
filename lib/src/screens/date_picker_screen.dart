@@ -41,16 +41,22 @@ class _DatePickerScreenState extends State<DatePickerScreen> {
                   _selectedDate = date; // Update the selected date.
                 });
               },
-              firstDate: DateTime.now().subtract(const Duration(days: 30)), // Earliest selectable date.
-              lastDate: DateTime.now().add(const Duration(days: 30)), // Latest selectable date.
+              firstDate: DateTime.now().subtract(
+                  const Duration(days: 30)), // Earliest selectable date.
+              lastDate: DateTime.now()
+                  .add(const Duration(days: 30)), // Latest selectable date.
               datePickerLayoutSettings: const DatePickerLayoutSettings(
-                maxDayPickerRowCount: 6, // Maximum number of rows for days to display.
-                showPrevMonthEnd: true, // Whether to show the end of the previous month.
-                showNextMonthStart: true, // Whether to show the start of the next month.
+                maxDayPickerRowCount:
+                    6, // Maximum number of rows for days to display.
+                showPrevMonthEnd:
+                    true, // Whether to show the end of the previous month.
+                showNextMonthStart:
+                    true, // Whether to show the start of the next month.
               ),
             ),
             ElevatedButton(
-              onPressed: () => Navigator.pop(context, _selectedDate), // Passes back the selected date on button press.
+              onPressed: () => Navigator.pop(context,
+                  _selectedDate), // Passes back the selected date on button press.
               child: const Text('Confirm'), // Button label.
             ),
           ],
