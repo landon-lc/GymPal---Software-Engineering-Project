@@ -7,14 +7,21 @@ import 'package:test_drive/src/models/workout_record.dart';
 import 'package:test_drive/src/models/workout.dart';
 import 'workout_screen.dart';
 
+/// A page that displays a list of workouts with options to edit, delete, or add new workouts.
+///
+/// This stateful widget uses [WorkoutRecord] to manage state and interact with the data model.
 class ChecklistPage extends StatefulWidget {
+  /// Constructs the [ChecklistPage] widget.
   const ChecklistPage({super.key});
 
   @override
   _ChecklistPageState createState() => _ChecklistPageState();
 }
 
+/// The state for [ChecklistPage] that handles user interaction and updates the UI accordingly.
+
 class _ChecklistPageState extends State<ChecklistPage> {
+  /// Controls the text field input for adding a new workout.
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -26,8 +33,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<Workout>>(
-        stream:
-            Provider.of<WorkoutRecord>(context, listen: false).workoutsStream,
+        stream: Provider.of<WorkoutRecord>(context, listen: false)
+            .paginatedWorkoutsStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -87,6 +94,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
+  /// Opens a dialog to create a new workout.
   void _createNewWorkout() {
     showDialog(
       context: context,
@@ -115,6 +123,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
+  /// Opens a dialog to edit the name of an existing workout.
   void _editWorkout(String? workoutKey) {
     if (workoutKey == null) return;
     final TextEditingController editController = TextEditingController();

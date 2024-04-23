@@ -12,7 +12,8 @@ class UserProfileScreen extends StatefulWidget {
   State<UserProfileScreen> createState() => _UserProfileScreen();
 }
 
-// User Profile Screen Handler. Controls all classes that create the screen.
+/// User Profile Screen Handler. Controls all classes that create the screen.
+/// These include [ProfileImage], [ProfileUsername], [ProfileEditorButton], [ProfileAboutMe], [ProfileFavoriteGym]
 class _UserProfileScreen extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
