@@ -23,3 +23,8 @@ Should be associated with the screens. If a screen is to be created it should re
 
 Created by James Burriss.
 
+# Testing 
+
+To run the automated black box tests, put the command "flutter test 'filepath to test'"
+For example: "flutter test test/brandon_tests.dart"
+
