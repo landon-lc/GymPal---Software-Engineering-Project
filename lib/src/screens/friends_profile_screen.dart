@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import './profile_editor_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class FriendsProfileScreen extends StatelessWidget {
   final Map<dynamic, dynamic> user;
