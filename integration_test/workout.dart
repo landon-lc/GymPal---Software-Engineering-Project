@@ -10,7 +10,7 @@ void main() {
     // Test for US #1: Adding workouts and tracking daily progress
     testWidgets('Add workout and verify it is tracked (US #1)',
         (WidgetTester tester) async {
-          IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
       await tester.pumpWidget(const MaterialApp(home: ChecklistPage()));
       await tester.pumpAndSettle();
 
@@ -33,7 +33,7 @@ void main() {
     // Test for US #39: Saving changes to the checklist
     testWidgets('Save changes to the checklist and verify persistence (US #39)',
         (WidgetTester tester) async {
-          IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
       await tester.pumpWidget(const MaterialApp(home: ChecklistPage()));
       await tester.pumpAndSettle();
 
@@ -58,7 +58,7 @@ void main() {
     // Test for US #40: Viewing sets and reps for exercises
     testWidgets('Display sets and reps for exercises (US #40)',
         (WidgetTester tester) async {
-          IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
       await tester.pumpWidget(const MaterialApp(home: ChecklistPage()));
       await tester.pumpAndSettle();
 
@@ -77,7 +77,7 @@ void main() {
     // Test for US #45: Editing saved workouts
     testWidgets('Edit a saved workout and verify changes (US #45)',
         (WidgetTester tester) async {
-          IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
       await tester.pumpWidget(const MaterialApp(home: ChecklistPage()));
       await tester.pumpAndSettle();
 
