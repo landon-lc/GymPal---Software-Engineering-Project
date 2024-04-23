@@ -140,19 +140,4 @@ class FriendsListScreenState extends State<FriendsListScreen> {
       ]),
     );
   }
-
-  void removeFriend(int index) {
-    // TODO
-
-    // String friendIdToRemove = friends[index];
-    // _dbRef.child(FirebaseAuth.instance.currentUser!.uid)
-    //     .child('friends')
-    //     .child(friendIdToRemove)
-    //     .remove()
-    //     .then((_) {
-    //   setState(() {
-    //     friends.removeAt(index);
-    //   });
-    // });
-  }
 }
