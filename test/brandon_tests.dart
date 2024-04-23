@@ -7,22 +7,23 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Testing for searching for user', () {
-    
     testWidgets('Searching for users', (WidgetTester tester) async {
       await tester.pumpWidget(const MaterialApp(
-      home: FriendsListScreen(),
+        home: FriendsListScreen(),
       ));
       await tester.pumpAndSettle();
 
       // Navigating to search / friends screen
-      await tester.tap(find.byIcon(Icons.search)); // Seems to be cause of current test fail
+      await tester.tap(
+          find.byIcon(Icons.search)); // Seems to be cause of current test fail
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), 'tester222'); // change name as test account
+      await tester.enterText(
+          find.byType(TextField), 'tester222'); // change name as test account
       await tester.tap(find.byType(ListTile).first);
       await tester.pumpAndSettle();
-      expect(find.text('tester222'), findsOneWidget); // making sure that the next screen displays the users username
+      expect(find.text('tester222'),
+          findsOneWidget); // making sure that the next screen displays the users username
     });
-    
   });
 }
