@@ -12,8 +12,11 @@ class FriendsProfileScreen extends StatelessWidget {
         title: Text(user['username']),
       ),
       body: Column(children: [
+        // ignore: prefer_interpolation_to_compose_strings
         Expanded(child: Text('Bio: ' + user['bio'])),
+        // ignore: prefer_interpolation_to_compose_strings
         Expanded(child: Text('Email: ' + user['email'])),
+        // ignore: prefer_interpolation_to_compose_strings
         Expanded(child: Text('Favorite Gym: ' + user['favGym'])),
       ]),
     );
