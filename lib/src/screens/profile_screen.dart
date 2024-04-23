@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import './profile_editor_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // Stateful Widget for the Profile Screen.
 class UserProfileScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _UserProfileScreen extends State<UserProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                   // Calls to each screen.
-                  ProfileImage(profileImage: 'images/Background 2.jpg'),
+                  ProfileImage(),
                   ProfileUsername(),
                   ProfileEditorButton(),
                   ProfileAboutMe(),
@@ -33,23 +34,61 @@ class _UserProfileScreen extends State<UserProfileScreen> {
   }
 }
 
-// Code for displaying the users profile picture.
-class ProfileImage extends StatelessWidget {
-  const ProfileImage({
-    super.key,
-    required this.profileImage,
-  });
+class ProfileImage extends StatefulWidget {
+  const ProfileImage({super.key});
 
-  final String profileImage;
+  @override
+  State<ProfileImage> createState() => _ProfileImage();
+}
+
+class _ProfileImage extends State<ProfileImage> {
+  String? finalImageURL;
+
+  @override
+  void initState() {
+    super.initState();
+    finalImageSetter();
+  }
+
+  // Fetching Image from Firebase Storage
+  Future<String> fetchImage() async {
+    // Getting the current user.
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    // Ensuring user exists.
+    if (currentUser != null) {
+      String currentUID = currentUser.uid;
+      // With the users UID, we can now access that user within the database.
+      final storageRef = FirebaseStorage.instance.ref();
+      final imageRef = await storageRef
+          .child('UserImages/$currentUID/userProfilePhoto.jpg')
+          .getDownloadURL();
+      return imageRef;
+    }
+    return 'no image';
+  }
+
+  Future<void> finalImageSetter() async {
+    String theURL = await fetchImage();
+    setState(() {
+      finalImageURL = theURL;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: CircleAvatar(
-          radius: 80,
-          backgroundImage: AssetImage(profileImage),
-        ));
+    return Container(
+        width: 160,
+        height: 160,
+        alignment: null,
+        child: Scaffold(
+            body: Center(
+          child: finalImageURL != null
+              ? CircleAvatar(
+                  radius: 80,
+                  foregroundImage: NetworkImage(finalImageURL ?? 'null'),
+                )
+              : const CircularProgressIndicator(),
+        )));
   }
 }
 

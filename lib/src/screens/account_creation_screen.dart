@@ -1,7 +1,12 @@
+import 'dart:typed_data';
 import 'page_navigation_screen.dart';
 import 'package:flutter/material.dart';
+//import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 // The user is creating an account for the first time.
 class AccountCreationScreen extends StatefulWidget {
@@ -84,7 +89,21 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                               'favGym': 'No gym yet!',
                               'friends': [],
                             });
+                            // Creates reference position - working.
+                            FirebaseStorage storage = FirebaseStorage.instance;
+                            Reference storageRef = storage.ref();
+                            Reference usersImageLocation = storageRef.child(
+                                'UserImages/$currentUID/userProfilePhoto.jpg');
+                            // Getting absolute file path.
+                            const String imagePath =
+                                'lib/images/ProfilePlaceholder.jpg';
+                            ByteData imageData =
+                                await rootBundle.load(imagePath);
+                            Uint8List byteList = imageData.buffer.asUint8List();
+                            // Placing image in firebase.
+                            await usersImageLocation.putData(byteList);
                           }
+
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
                             Navigator.pushAndRemoveUntil(
