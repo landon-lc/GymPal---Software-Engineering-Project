@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:test_drive/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
 import '../lib/src/screens/friends_screen.dart';
 
@@ -10,14 +9,13 @@ void main() {
   group('Testing for searching for user', () {
     
     testWidgets('Searching for users', (WidgetTester tester) async {
-      app.main();
       await tester.pumpWidget(const MaterialApp(
       home: FriendsListScreen(),
       ));
       await tester.pumpAndSettle();
 
       // Navigating to search / friends screen
-      await tester.tap(find.byIcon(Icons.search));
+      await tester.tap(find.byIcon(Icons.search)); // Seems to be cause of current test fail
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), 'tester222'); // change name as test account
