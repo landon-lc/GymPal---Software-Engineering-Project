@@ -12,7 +12,6 @@ import './friends.mocks.dart';
 
 @GenerateMocks(
     [DatabaseReference, DatabaseEvent, DataSnapshot, StreamSubscription])
-    
 void main() {
   group('FriendsListScreen Tests', () {
     testWidgets('Init State sets up the friends stream subscription',
