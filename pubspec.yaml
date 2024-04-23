@@ -20,11 +20,14 @@ dependencies:
   flutter_slidable: ^3.1.0
   firebase_database: ^10.4.10
   image_picker: ^1.0.7
+  test: ^1.24.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
+  integration_test:
+    sdk: flutter
   
 flutter:
   uses-material-design: true

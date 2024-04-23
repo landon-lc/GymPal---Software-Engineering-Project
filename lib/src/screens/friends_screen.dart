@@ -120,12 +120,11 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                   onTap: () {
                     Navigator.push(
                       context, 
-                      MaterialPageRoute(builder: (context) => FriendsProfileScreen(user: _searchResults[index]['UID'])) // need a call to list of friends
+                      MaterialPageRoute(builder: (context) => FriendsProfileScreen(user: _searchResults[index]['friends'])) // need a call to list of friends
                     );
                   },
                   child: ListTile(
                     title: Text('Friends'), // this will be friends name
-                    
                   ),
                 );
               },
