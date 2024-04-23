@@ -3,29 +3,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:test_drive/src/screens/profile_editor_screen.dart';
 
-
 void main() {
-  testWidgets('Profile Editor - Upload Image Test', (WidgetTester tester) async {
-    
+  testWidgets('Profile Editor - Upload Image Test',
+      (WidgetTester tester) async {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-    // Opens app and move to profile screen. 
+    // Opens app and move to profile screen.
     await tester.pumpWidget(const MaterialApp(
       home: ProfileEditorScreen(),
     ));
 
-    // Ensures that the upload button is present, and taps the button. Image picker should open. 
+    // Ensures that the upload button is present, and taps the button. Image picker should open.
     expect(find.text('Upload Image'), findsOneWidget);
     await tester.tap(find.text('Upload Image'));
     await tester.pump();
-
   });
 
-   testWidgets('Profile Editor - Bio Text Test', (WidgetTester tester) async {
-    
+  testWidgets('Profile Editor - Bio Text Test', (WidgetTester tester) async {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-    // Opens app and move to profile screen. 
+    // Opens app and move to profile screen.
     await tester.pumpWidget(const MaterialApp(
       home: ProfileEditorScreen(),
     ));
@@ -40,8 +37,7 @@ void main() {
     await tester.pump();
   });
 
-     testWidgets('Profile Editor - Logout Test', (WidgetTester tester) async {
-    
+  testWidgets('Profile Editor - Logout Test', (WidgetTester tester) async {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
     // Uses logout button, should take user to the intital login screen.

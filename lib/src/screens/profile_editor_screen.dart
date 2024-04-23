@@ -115,15 +115,14 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                 TextButton(
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
-                      if (context.mounted) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const LoginScreen()),
-                            // Ensures a one-way route - user cannot return.
-                            (Route<dynamic> route) => false);
-                      }
+                    if (context.mounted) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()),
+                          // Ensures a one-way route - user cannot return.
+                          (Route<dynamic> route) => false);
+                    }
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.blue,
