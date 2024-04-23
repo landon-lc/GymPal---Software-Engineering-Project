@@ -92,6 +92,7 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                               'email': newEmailController.text,
                               'bio': 'No bio yet!',
                               'favGym': 'No gym yet!',
+                              'workouts': [], // initializes workouts
                             });
                             // Creates reference position - working.
                             FirebaseStorage storage = FirebaseStorage.instance;

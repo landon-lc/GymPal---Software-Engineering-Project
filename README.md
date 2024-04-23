@@ -23,3 +23,15 @@ Should be associated with the screens. If a screen is to be created it should re
 
 Created by James Burriss.
 
+# Integration Tests for Workout Tracker
+
+To run the integration tests for the workout tracker portion of the app, follow these steps. 
+
+1. Ensure you have a working Flutter environment and your device or emulator is running. 
+2. Open terminal in the root of your project. 
+3. Run the following command to begin the integration test: 
+    
+    flutter test integration_test/user_stories_tests.dart
+
+4. This command will run all tests defined in the user_stories_tests.dart file and provide output in the terminal. 
+
