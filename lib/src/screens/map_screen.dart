@@ -135,12 +135,15 @@ class _GymMapsState extends State<GymMaps> {
       DatabaseReference userRef =
           FirebaseDatabase.instance.ref('users/${currentUser.uid}');
       await userRef.update({'favGym': gymName});
-      // Show a confirmation message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Favorite gym is now $gymName.')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Favorite gym is now $gymName.')),
+        );
+      }
     } else {
-      print('No user is currently signed in.');
+      if (mounted) {
+        print('No user is currently signed in.');
+      }
     }
   }
 
