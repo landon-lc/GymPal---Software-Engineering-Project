@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_drive/src/models/workout.dart';
+import '../models/workout.dart';
 
 /// A StatelessWidget that represents a single workout item in a list.
 ///

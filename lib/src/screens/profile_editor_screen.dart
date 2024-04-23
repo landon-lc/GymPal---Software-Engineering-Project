@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_drive/src/screens/login_screen.dart';
 import 'profile_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -105,6 +106,28 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                     backgroundColor: Colors.blue,
                   ),
                   child: const Text('Save About Me',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )),
+                ),
+                // Save button, takes user back to profile.
+                TextButton(
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    if (context.mounted) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()),
+                          // Ensures a one-way route - user cannot return.
+                          (Route<dynamic> route) => false);
+                    }
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: const Text('Logout',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

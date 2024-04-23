@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'profile_editor_screen.dart';
+import './profile_editor_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -12,7 +12,8 @@ class UserProfileScreen extends StatefulWidget {
   State<UserProfileScreen> createState() => _UserProfileScreen();
 }
 
-// User Profile Screen Handler. Controls all classes that create the screen.
+/// User Profile Screen Handler. Controls all classes that create the screen.
+/// These include [ProfileImage], [ProfileUsername], [ProfileEditorButton], [ProfileAboutMe], [ProfileFavoriteGym]
 class _UserProfileScreen extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {

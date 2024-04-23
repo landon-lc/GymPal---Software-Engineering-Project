@@ -16,6 +16,8 @@ class AccountCreationScreen extends StatefulWidget {
   State<AccountCreationScreen> createState() => _AccountCreationScreen();
 }
 
+/// This class builds the entire screen - all three text fields including username, password, and email.
+/// To create the account the text from [newUsernameController], [newPasswordController], and [newEmailController] is used.
 class _AccountCreationScreen extends State<AccountCreationScreen> {
   final newUsernameController = TextEditingController();
   final newPasswordController = TextEditingController();
@@ -49,8 +51,7 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                       TextField(
                         decoration: const InputDecoration(
                             labelText: 'Create a Password'),
-                        // MAY SET TO TRUE LATER - DO NOT DELETE
-                        obscureText: false,
+                        obscureText: true,
                         controller: newPasswordController,
                       ),
                       TextField(
@@ -58,26 +59,30 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                             labelText: 'Enter your Email'),
                         controller: newEmailController,
                       ),
-                      // CREATING THE USERS ACCOUNT
-                      // For a detailed explanation of this section, see Issue #65.
+
+                      /// CREATING THE USERS ACCOUNT
+                      /// For a detailed explanation of this section, see Issue #65.
                       ElevatedButton(
                         onPressed: () async {
-                          // The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)
+                          /// The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)
                           await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
                                   email: newEmailController.text,
                                   password: newPasswordController.text);
-                          // The user will now be logged in.
+
+                          /// The user will now be logged in.
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                             email: newEmailController.text,
                             password: newPasswordController.text,
                           );
-                          // The current users unique identifier (UID) will now be fetched.
+
+                          /// The current users unique identifier (UID) will now be fetched.
                           User? currentUser = FirebaseAuth.instance.currentUser;
                           if (currentUser != null) {
                             String currentUID = currentUser.uid;
-                            // Creates the user within the Realtime Database using their UID.
+
+                            /// Creates the user within the Realtime Database using their UID.
                             DatabaseReference ref = FirebaseDatabase.instance
                                 .ref('users/$currentUID');
                             await ref.set({
@@ -111,7 +116,8 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         const PageNavigation()),
-                                // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
+
+                                /// Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
                                 (Route<dynamic> route) => false);
                           }
                         },
