@@ -13,8 +13,17 @@ class FriendsProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(user['username']),
       ),
-      body: Center(
-        child: Text(user['bio']),
+        body: Column(children: [
+          Expanded (
+            child: Text('Bio: ' + user['bio'])
+          ),
+          Expanded (
+            child: Text('Email: ' + user['email'])
+          ),
+          Expanded (
+            child: Text('Favorite Gym: ' + user['favGym'])
+          ),
+        ]
       ),
     );
   }
