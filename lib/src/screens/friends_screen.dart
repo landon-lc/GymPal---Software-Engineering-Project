@@ -16,7 +16,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   List<String> friends = [];
 
-  StreamSubscription? _friendsSubscription;
+  StreamSubscription? friendsSubscription;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -30,13 +30,13 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   @override
   void dispose() {
-    _friendsSubscription
+    friendsSubscription
         ?.cancel(); // Removes database handle when screen not in use.
     super.dispose();
   }
 
   void loadFriends() {
-    _friendsSubscription = _dbRef
+    friendsSubscription = _dbRef
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child('friends')
         .onValue
