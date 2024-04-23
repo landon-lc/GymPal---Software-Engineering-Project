@@ -86,24 +86,53 @@ class FriendsListScreenState extends State<FriendsListScreen> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: _searchResults.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              // Navigate to the friends profile screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FriendsProfileScreen(user: _searchResults[index])),
-              );
-            },
-            child: ListTile(
-              title: Text(_searchResults[index]['username']),
-            ),
-          );
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: _searchResults.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    // Navigate to the friends profile screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FriendsProfileScreen(user: _searchResults[index])),
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(_searchResults[index]['username']),
+                  ),
+                );
+              },
+            )
+          ),
+          Container (
+            height: 25,
+            decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
+            child: Text("Your Current Friends",),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 20,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => FriendsProfileScreen(user: _searchResults[index]['UID'])) // need a call to list of friends
+                    );
+                  },
+                  child: ListTile(
+                    title: Text('Friends'), // this will be friends name
+                    
+                  ),
+                );
+              },
+            )
+          )
+        ]
       ),
-      
     );
   }
 
