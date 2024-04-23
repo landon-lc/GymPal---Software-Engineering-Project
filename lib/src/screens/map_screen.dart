@@ -16,9 +16,11 @@ class _GymMapsState extends State<GymMaps> {
   GoogleMapController? _mapController;
   final Set<Marker> _markers = {};
   final TextEditingController _searchController = TextEditingController();
-  loc.Location _locationService = loc.Location();
+  final loc.Location _locationService = loc.Location();
   loc.LocationData? _currentLocation;
-  gmaps.GoogleMapsPlaces _places = gmaps.GoogleMapsPlaces(apiKey: 'AIzaSyCTIZuY972s7eTxV1S0TcMz82mgi-Wa2J0'); // Use your actual API key
+  final gmaps.GoogleMapsPlaces _places = gmaps.GoogleMapsPlaces(
+      apiKey:
+          'AIzaSyCTIZuY972s7eTxV1S0TcMz82mgi-Wa2J0'); // Use your actual API key
 
   @override
   void initState() {
@@ -35,7 +37,8 @@ class _GymMapsState extends State<GymMaps> {
       }
     }
 
-    loc.PermissionStatus permissionGranted = await _locationService.hasPermission();
+    loc.PermissionStatus permissionGranted =
+        await _locationService.hasPermission();
     if (permissionGranted == loc.PermissionStatus.denied) {
       permissionGranted = await _locationService.requestPermission();
       if (permissionGranted != loc.PermissionStatus.granted) {
@@ -48,7 +51,8 @@ class _GymMapsState extends State<GymMaps> {
 
   Future<void> _getCurrentLocation() async {
     try {
-      final loc.LocationData locationData = await _locationService.getLocation();
+      final loc.LocationData locationData =
+          await _locationService.getLocation();
       setState(() {
         _currentLocation = locationData;
         _updateCameraPosition();
@@ -62,8 +66,7 @@ class _GymMapsState extends State<GymMaps> {
     if (_mapController != null && _currentLocation != null) {
       _mapController!.moveCamera(
         CameraUpdate.newLatLng(
-          LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!)
-        ),
+            LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!)),
       );
     }
   }
@@ -75,7 +78,8 @@ class _GymMapsState extends State<GymMaps> {
     }
 
     final response = await _places.searchNearbyWithRadius(
-      gmaps.Location(lat: _currentLocation!.latitude!, lng: _currentLocation!.longitude!),
+      gmaps.Location(
+          lat: _currentLocation!.latitude!, lng: _currentLocation!.longitude!),
       10000,
       keyword: query,
       type: 'gym',
@@ -88,7 +92,8 @@ class _GymMapsState extends State<GymMaps> {
           _markers.add(
             Marker(
               markerId: MarkerId(result.placeId),
-              position: LatLng(result.geometry?.location.lat ?? 0.0, result.geometry?.location.lng ?? 0.0),
+              position: LatLng(result.geometry?.location.lat ?? 0.0,
+                  result.geometry?.location.lng ?? 0.0),
               infoWindow: InfoWindow(title: result.name),
               onTap: () => _onMarkerTapped(result.name),
             ),
@@ -105,15 +110,15 @@ class _GymMapsState extends State<GymMaps> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Favorite Gym'),
+          title: const Text('Favorite Gym'),
           content: Text('Do you want to save "$gymName" as your favorite gym?'),
           actions: <Widget>[
             TextButton(
-              child: Text('No'),
+              child: const Text('No'),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text('Yes'),
+              child: const Text('Yes'),
               onPressed: () async {
                 Navigator.of(context).pop();
                 await _selectGym(gymName);
@@ -128,14 +133,18 @@ class _GymMapsState extends State<GymMaps> {
   Future<void> _selectGym(String gymName) async {
     final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      DatabaseReference userRef = FirebaseDatabase.instance.ref('users/${currentUser.uid}');
+      DatabaseReference userRef =
+          FirebaseDatabase.instance.ref('users/${currentUser.uid}');
       await userRef.update({'favGym': gymName});
-      // Show a confirmation message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Favorite gym is now $gymName.')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Favorite gym is now $gymName.')),
+        );
+      }
     } else {
-      print('No user is currently signed in.');
+      if (mounted) {
+        print('No user is currently signed in.');
+      }
     }
   }
 
@@ -163,7 +172,8 @@ class _GymMapsState extends State<GymMaps> {
                 _updateCameraPosition();
               },
               initialCameraPosition: CameraPosition(
-                target: LatLng(_currentLocation?.latitude ?? 0.0, _currentLocation?.longitude ?? 0.0),
+                target: LatLng(_currentLocation?.latitude ?? 0.0,
+                    _currentLocation?.longitude ?? 0.0),
                 zoom: 11,
               ),
               markers: _markers,
