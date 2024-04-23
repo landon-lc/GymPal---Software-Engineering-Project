@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:test_drive/src/components/exercise_tile.dart';
-import 'package:test_drive/src/models/workout_record.dart';
-import 'package:test_drive/src/models/exercise.dart';
+import '../components/exercise_tile.dart';
+import '../models/workout_record.dart';
+import '../models/exercise.dart';
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({
