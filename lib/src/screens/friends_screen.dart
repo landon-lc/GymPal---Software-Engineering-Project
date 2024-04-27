@@ -14,8 +14,8 @@ class FriendsListScreen extends StatefulWidget {
 class FriendsListScreenState extends State<FriendsListScreen> {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
 
-  List<String> friends = [];
-
+  List<String> friendsIds = [];
+  Map<String, String> friendsData = {};
   StreamSubscription? friendsSubscription;
 
   final TextEditingController _searchController = TextEditingController();
@@ -37,21 +37,32 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   void loadFriends() {
     friendsSubscription = _dbRef
-        .child(FirebaseAuth.instance.currentUser!.uid)
-        .child('friends')
+        .child('users/${FirebaseAuth.instance.currentUser!.uid}/friends')
         .onValue
         .listen((event) {
-      final List<String> loadFriends = [];
-      final data = event.snapshot.value as Map<dynamic, dynamic>? ??
-          {}; // Allows for NULL, instead providing empty map.
-      data.forEach((key, value) {
-        loadFriends.add(value.toString());
-      });
+      final data = event.snapshot.value as List<dynamic>? ?? [];
       setState(() {
-        friends = loadFriends;
+        friendsIds = List<String>.from(data.map((friend) => friend.toString()));
       });
+      fetchFriendsData();
     });
   }
+
+  void fetchFriendsData() async {
+  for (String friendId in friendsIds) {
+    try {
+      DatabaseEvent event = await _dbRef.child('users/$friendId/username').once();
+      DataSnapshot snapshot = event.snapshot;
+      if (snapshot.value != null) {
+        setState(() {
+          friendsData[friendId] = snapshot.value.toString();
+        });
+      }
+    } catch (error) {
+      print("Error fetching friend data: $error");
+    }
+  }
+}
 
   void _performSearch(String query) {
     _dbRef
@@ -119,21 +130,25 @@ class FriendsListScreenState extends State<FriendsListScreen> {
         ),
         Expanded(
             child: ListView.builder(
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
+              itemCount: friendsData.length,
+              itemBuilder: (context, index) {
+                final friendId = friendsData.keys.elementAt(index);
+                final friendUsername = friendsData[friendId]!;
+                return GestureDetector(
+                  onTap: () {
+                    // Navigate to the friend's profile screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) => FriendsProfileScreen(
-                            user: _searchResults[index]
-                                ['UID'])) // need a call to list of friends
+                          user: {'userId': friendId, 'username': friendUsername},
+                        ),
+                      ),
                     );
-              },
-              child: const ListTile(
-                title: Text('Friends'), // this will be friends name
-              ),
+                  },
+                  child: ListTile(
+                    title: Text(friendUsername),
+                  ),
             );
           },
         ))
