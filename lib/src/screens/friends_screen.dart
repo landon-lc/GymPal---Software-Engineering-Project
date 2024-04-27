@@ -119,19 +119,22 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                 return GestureDetector(
                   onTap: () {
                     _dbRef
-                        .child(friends[index])
-                        .once()
-                        .then((DataSnapshot snapshot) {
-                      final userData = snapshot.value as Map<dynamic, dynamic>;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FriendsProfileScreen(
-                            user: userData,
+                      .child(friends[index])
+                      .once()
+                      .then((DatabaseEvent event) {
+                        DataSnapshot snapshot = event.snapshot;
+                        final userData = snapshot.value as Map<dynamic, dynamic>;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FriendsProfileScreen(
+                              user: userData,
+                            ),
                           ),
-                        ),
-                      );
-                    } as FutureOr Function(DatabaseEvent value));
+                        );
+                      }).catchError((error) {
+                        print("Error loading friend's data: $error");
+                      });
                   },
                   child: ListTile(
                     title: Text(friends[index]),
