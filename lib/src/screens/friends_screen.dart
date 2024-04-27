@@ -14,6 +14,8 @@ class FriendsListScreen extends StatefulWidget {
 class FriendsListScreenState extends State<FriendsListScreen> {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
 
+  List<String> friends = [];
+
   List<String> friendsIds = [];
   Map<String, String> friendsData = {};
   StreamSubscription? friendsSubscription;
@@ -36,33 +38,14 @@ class FriendsListScreenState extends State<FriendsListScreen> {
   }
 
   void loadFriends() {
-    friendsSubscription = _dbRef
-        .child('users/${FirebaseAuth.instance.currentUser!.uid}/friends')
-        .onValue
-        .listen((event) {
-      final data = event.snapshot.value as List<dynamic>? ?? [];
+    final currentUserID = FirebaseAuth.instance.currentUser!.uid;
+    _dbRef.child(currentUserID).child('friends').onValue.listen((event) {
+      final data = event.snapshot.value as Map<dynamic, dynamic>? ?? {};
       setState(() {
-        friendsIds = List<String>.from(data.map((friend) => friend.toString()));
+        friends = data.values.cast<String>().toList();
       });
-      fetchFriendsData();
     });
   }
-
-  void fetchFriendsData() async {
-  for (String friendId in friendsIds) {
-    try {
-      DatabaseEvent event = await _dbRef.child('users/$friendId/username').once();
-      DataSnapshot snapshot = event.snapshot;
-      if (snapshot.value != null) {
-        setState(() {
-          friendsData[friendId] = snapshot.value.toString();
-        });
-      }
-    } catch (error) {
-      print("Error fetching friend data: $error");
-    }
-  }
-}
 
   void _performSearch(String query) {
     _dbRef
@@ -121,33 +104,37 @@ class FriendsListScreenState extends State<FriendsListScreen> {
           },
         )),
         Container(
-          height: 25,
-          decoration:
-              BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
-          child: const Text(
-            'Your Current Friends',
+            height: 25,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 1),
+            ),
+            child: const Text(
+              'Your Current Friends',
+            ),
           ),
-        ),
-        Expanded(
+          Expanded(
             child: ListView.builder(
-              itemCount: friendsData.length,
+              itemCount: friends.length,
               itemBuilder: (context, index) {
-                final friendId = friendsData.keys.elementAt(index);
-                final friendUsername = friendsData[friendId]!;
                 return GestureDetector(
                   onTap: () {
-                    // Navigate to the friend's profile screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FriendsProfileScreen(
-                          user: {'userId': friendId, 'username': friendUsername},
+                    _dbRef
+                        .child(friends[index])
+                        .once()
+                        .then((DataSnapshot snapshot) {
+                      final userData = snapshot.value as Map<dynamic, dynamic>;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FriendsProfileScreen(
+                            user: userData,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } as FutureOr Function(DatabaseEvent value));
                   },
                   child: ListTile(
-                    title: Text(friendUsername),
+                    title: Text(friends[index]),
                   ),
             );
           },
