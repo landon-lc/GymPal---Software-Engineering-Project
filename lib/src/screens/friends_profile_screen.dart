@@ -11,7 +11,8 @@ class FriendsProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(user['username']),
       ),
-      body: Column(children: [
+      body: Center(
+        child: Column(children: [
         // ignore: prefer_interpolation_to_compose_strings
         Expanded(child: Text('Bio: ' + user['bio'])),
         // ignore: prefer_interpolation_to_compose_strings
@@ -19,6 +20,7 @@ class FriendsProfileScreen extends StatelessWidget {
         // ignore: prefer_interpolation_to_compose_strings
         Expanded(child: Text('Favorite Gym: ' + user['favGym'])),
       ]),
+      )
     );
   }
 }
