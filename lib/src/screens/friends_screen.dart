@@ -16,6 +16,8 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   List<String> friends = [];
 
+  Map<String, Map<dynamic, dynamic>> friendsUserData = {};
+
   List<String> friendsIds = [];
   Map<String, String> friendsData = {};
   StreamSubscription? friendsSubscription;
@@ -43,6 +45,17 @@ class FriendsListScreenState extends State<FriendsListScreen> {
       final data = event.snapshot.value as Map<dynamic, dynamic>? ?? {};
       setState(() {
         friends = data.values.cast<String>().toList();
+        // Fetch and store user data for each friend
+        for (String friendID in friends) {
+          _dbRef.child(friendID).once().then((DatabaseEvent event) {
+            DataSnapshot snapshot = event.snapshot;
+            setState(() {
+              friendsUserData[friendID] = snapshot.value as Map<dynamic, dynamic>;
+            });
+          }).catchError((error) {
+            print("Error loading friend's data: $error");
+          });
+        }
       });
     });
   }
@@ -116,32 +129,31 @@ class FriendsListScreenState extends State<FriendsListScreen> {
             child: ListView.builder(
               itemCount: friends.length,
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    _dbRef
-                      .child(friends[index])
-                      .once()
-                      .then((DatabaseEvent event) {
-                        DataSnapshot snapshot = event.snapshot;
-                        final userData = snapshot.value as Map<dynamic, dynamic>;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FriendsProfileScreen(
-                              user: userData,
-                            ),
+                // Get user data for the friend
+                Map<dynamic, dynamic>? userData = friendsUserData[friends[index]];
+                if (userData != null) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FriendsProfileScreen(
+                            user: userData,
                           ),
-                        );
-                      }).catchError((error) {
-                        print("Error loading friend's data: $error");
-                      });
-                  },
-                  child: ListTile(
-                    title: Text(friends[index]),
-                  ),
-            );
-          },
-        ))
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      title: Text(userData['username']),
+                    ),
+                  );
+                } else {
+                  // You may want to show a loading indicator here
+                  return Container();
+                }
+              },
+            ),
+          ),
       ]),
     );
   }
