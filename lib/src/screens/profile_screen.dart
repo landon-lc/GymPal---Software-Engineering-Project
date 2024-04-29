@@ -36,9 +36,9 @@ class _UserProfileScreen extends State<UserProfileScreen> {
                 // Calls to each screen.
                 ProfileImage(),
                 ProfileUsername(),
-                ProfileEditorButton(),
                 ProfileAboutMe(),
-                ProfileFavoriteGym()
+                ProfileFavoriteGym(),
+                ProfileEditorButton(),
               ]))));
   }
 }
@@ -85,7 +85,9 @@ class _ProfileImage extends State<ProfileImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Container(
         width: 160,
         height: 160,
         alignment: null,
@@ -97,7 +99,8 @@ class _ProfileImage extends State<ProfileImage> {
                   foregroundImage: NetworkImage(finalImageURL ?? 'null'),
                 )
               : const CircularProgressIndicator(),
-        )));
+        )))
+      );
   }
 }
 
@@ -119,12 +122,13 @@ class ProfileEditorButton extends StatelessWidget {
                     builder: (context) => const ProfileEditorScreen()));
           },
           style: TextButton.styleFrom(
-            backgroundColor: const Color(0xff3ea9a9),
+            backgroundColor: const Color(0xfffffff4),
           ),
-          child: const Text('Editor',
+          child: const Text('Edit Profile',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color(0xfffffff4),
+                color: Color(0xff3ea9a9),
+                fontSize: 16.0,
               )),
         ));
   }
@@ -142,14 +146,14 @@ class ProfileUsername extends StatelessWidget {
         future: fetchUsername(),
         builder: (BuildContext context, AsyncSnapshot<String> text) {
           return Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(2),
             child: Text(text.data ?? 'USERNAME_FETCH_FAIL',
                 softWrap: true,
                 textDirection: TextDirection.ltr,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  color: Color(0xff3ea9a9),
+                  color: Color(0xfffffff4),
+                  fontSize: 20.0,
                 )),
           );
         });
@@ -193,12 +197,26 @@ class ProfileAboutMe extends StatelessWidget {
                   const Text('About Me',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Color(0xfffffff4),
                       )),
-                  Text(
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration( 
+                      color: Color(0xff3ea9a9),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))
+                    ),
+                    child: Text(
                     bioText.data ?? 'BIO_FETCH_FAIL',
                     textDirection: TextDirection.ltr,
                     softWrap: true,
+                    style: const TextStyle( 
+                      color: Color(0xfffffff4),
+                      height: 1.0,
+                    ), 
                   )
+                  ),
                 ],
               ));
         });
@@ -243,11 +261,25 @@ class ProfileFavoriteGym extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
-                  Text(
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration( 
+                      color: Color(0xff3ea9a9),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))
+                    ),
+                    child: Text(
                     gymText.data ?? 'GYM_FETCH_FAIL',
                     textDirection: TextDirection.ltr,
                     softWrap: true,
+                    style: const TextStyle( 
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xfffffff4),
+                      height: 1.0,
+                    ), 
                   )
+                  ),
                 ],
               ));
         });

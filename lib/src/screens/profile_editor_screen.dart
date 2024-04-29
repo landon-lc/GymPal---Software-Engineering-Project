@@ -130,7 +130,7 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                   style: TextButton.styleFrom(
                     backgroundColor: const Color(0xff3ea9a9),
                     foregroundColor: const Color(0xfffffff4), 
-                                              textStyle: const TextStyle(
+                    textStyle: const TextStyle(
                             fontWeight: FontWeight.bold
                           ),
                   ),
