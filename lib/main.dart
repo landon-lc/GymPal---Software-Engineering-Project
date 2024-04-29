@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
       create: (context) => WorkoutRecord(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'GymPal',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color(0xfffffff4),

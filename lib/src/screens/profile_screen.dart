@@ -17,21 +17,29 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreen extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            appBar: null,
-            body: Center(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                  // Calls to each screen.
-                  ProfileImage(),
-                  ProfileUsername(),
-                  ProfileEditorButton(),
-                  ProfileAboutMe(),
-                  ProfileFavoriteGym()
-                ]))));
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xfffffff4),
+          primary: const Color(0xff3ea9a9),
+          brightness: Brightness.dark),
+        useMaterial3: true, 
+        scaffoldBackgroundColor: const Color(0xff2f2f2f)
+      ),
+      debugShowCheckedModeBanner: false,
+      home: const Scaffold(
+          appBar: null,
+          body: Center(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                // Calls to each screen.
+                ProfileImage(),
+                ProfileUsername(),
+                ProfileEditorButton(),
+                ProfileAboutMe(),
+                ProfileFavoriteGym()
+              ]))));
   }
 }
 
@@ -111,12 +119,12 @@ class ProfileEditorButton extends StatelessWidget {
                     builder: (context) => const ProfileEditorScreen()));
           },
           style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: const Color(0xff3ea9a9),
           ),
           child: const Text('Editor',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Color(0xfffffff4),
               )),
         ));
   }
@@ -141,7 +149,7 @@ class ProfileUsername extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
-                  color: Colors.blue,
+                  color: Color(0xff3ea9a9),
                 )),
           );
         });

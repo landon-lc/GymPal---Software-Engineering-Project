@@ -49,6 +49,11 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
               children: [
                 // Opens image picker so user can select an image.
                 ElevatedButton(
+                  // Color and styling for the button. 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xfffffff4),
+                    foregroundColor: const Color(0xff3ea9a9), 
+                  ),
                   onPressed: () async {
                     // Getting Image
                     await _openImagePicker();
@@ -74,14 +79,23 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                 ),
                 // Bio text editing field.
                 TextField(
+                  style: const TextStyle(
+                    color: Color(0xfffffff4)
+                  ),
                   maxLines: 5,
                   expands: false,
                   decoration: const InputDecoration(
                       labelText: 'Type a new about me...'),
                   controller: userBioController,
+                  
                 ),
                 // Save button, takes user back to profile.
                 TextButton(
+                  // Color and styling for the button. 
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xff3ea9a9),
+                    foregroundColor: const Color(0xfffffff4), 
+                  ),
                   onPressed: () async {
                     User? currentUser = FirebaseAuth.instance.currentUser;
                     if (currentUser != null) {
@@ -102,17 +116,15 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                       }
                     }
                   },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                  child: const Text('Save About Me',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      )),
+                  child: const Text('Save About Me'),
                 ),
                 // Save button, takes user back to profile.
                 TextButton(
+                  // Color and styling for the button. 
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xff3ea9a9),
+                    foregroundColor: const Color(0xfffffff4), 
+                  ),
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
                     if (context.mounted) {
@@ -124,14 +136,7 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                           (Route<dynamic> route) => false);
                     }
                   },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                  child: const Text('Logout',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      )),
+                  child: const Text('Logout'),
                 )
               ],
             )));

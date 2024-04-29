@@ -34,9 +34,7 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Account Creation'),
-        ),
+        appBar: null,
         body: Center(
             child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -63,6 +61,11 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                       /// CREATING THE USERS ACCOUNT
                       /// For a detailed explanation of this section, see Issue #65.
                       ElevatedButton(
+                        // Color and styling for the button. 
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff3ea9a9),
+                          foregroundColor: const Color(0xfffffff4), 
+                        ),
                         onPressed: () async {
                           /// The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)
                           await FirebaseAuth.instance
