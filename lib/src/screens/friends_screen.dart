@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class FriendsListScreen extends StatefulWidget {
-  const FriendsListScreen({super.key});
+  const FriendsListScreen({Key? key});
 
   @override
   FriendsListScreenState createState() => FriendsListScreenState();
@@ -15,15 +15,11 @@ class FriendsListScreenState extends State<FriendsListScreen> {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
 
   List<String> friends = [];
-
   Map<String, Map<dynamic, dynamic>> friendsUserData = {};
-
   List<String> friendsIds = [];
   Map<String, String> friendsData = {};
   StreamSubscription? friendsSubscription;
-
   final TextEditingController _searchController = TextEditingController();
-
   final List<Map<dynamic, dynamic>> _searchResults = [];
 
   @override
@@ -34,8 +30,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
 
   @override
   void dispose() {
-    friendsSubscription
-        ?.cancel(); // Removes database handle when screen not in use.
+    friendsSubscription?.cancel();
     super.dispose();
   }
 
@@ -45,7 +40,6 @@ class FriendsListScreenState extends State<FriendsListScreen> {
       final data = event.snapshot.value as Map<dynamic, dynamic>? ?? {};
       setState(() {
         friends = data.values.cast<String>().toList();
-        // Fetch and store user data for each friend
         for (String friendID in friends) {
           _dbRef.child(friendID).once().then((DatabaseEvent event) {
             DataSnapshot snapshot = event.snapshot;
@@ -72,7 +66,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
         _searchResults.clear();
         if (snapshot.value != null) {
           Map<dynamic, dynamic>? values =
-              snapshot.value as Map<dynamic, dynamic>?; // Explicit cast
+              snapshot.value as Map<dynamic, dynamic>?; 
           if (values != null) {
             values.forEach((key, value) {
               _searchResults.add(value);
@@ -87,6 +81,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.teal,
         title: TextField(
           controller: _searchController,
           onChanged: _performSearch,
@@ -97,63 +92,74 @@ class FriendsListScreenState extends State<FriendsListScreen> {
       ),
       body: Column(children: [
         Expanded(
-            child: ListView.builder(
-          itemCount: _searchResults.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                // Navigate to the friends profile screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
+          child: ListView.builder(
+            itemCount: _searchResults.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
                       builder: (context) =>
-                          FriendsProfileScreen(user: _searchResults[index])),
-                );
-              },
-              child: ListTile(
-                title: Text(_searchResults[index]['username']),
-              ),
-            );
-          },
-        )),
+                          FriendsProfileScreen(user: _searchResults[index]),
+                    ),
+                  );
+                },
+                child: Card(
+                  elevation: 2,
+                  margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  child: ListTile(
+                    title: Text(_searchResults[index]['username']),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
         Container(
-            height: 25,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1),
-            ),
-            child: const Text(
+          height: 25,
+          decoration: BoxDecoration(
+            color: Colors.teal,
+            border: Border.all(color: Colors.black, width: 1),
+          ),
+          child: const Center(
+            child: Text(
               'Your Current Friends',
+              style: TextStyle(color: Colors.white),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: friends.length,
-              itemBuilder: (context, index) {
-                // Get user data for the friend
-                Map<dynamic, dynamic>? userData = friendsUserData[friends[index]];
-                if (userData != null) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FriendsProfileScreen(
-                            user: userData,
-                          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: friends.length,
+            itemBuilder: (context, index) {
+              Map<dynamic, dynamic>? userData = friendsUserData[friends[index]];
+              if (userData != null) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FriendsProfileScreen(
+                          user: userData,
                         ),
-                      );
-                    },
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 2,
+                    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     child: ListTile(
                       title: Text(userData['username']),
                     ),
-                  );
-                } else {
-                  // You may want to show a loading indicator here
-                  return Container();
-                }
-              },
-            ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
           ),
+        ),
       ]),
     );
   }
