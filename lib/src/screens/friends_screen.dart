@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class FriendsListScreen extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const FriendsListScreen({Key? key});
 
   @override
@@ -108,7 +109,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                 },
                 child: Card(
                   elevation: 2,
-                  margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   child: ListTile(
                     title: Text(_searchResults[index]['username']),
                   ),
@@ -149,7 +150,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
                   },
                   child: Card(
                     elevation: 2,
-                    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     child: ListTile(
                       title: Text(userData['username']),
                     ),

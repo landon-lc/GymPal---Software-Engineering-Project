@@ -6,9 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 class FriendsProfileScreen extends StatefulWidget {
   final Map<dynamic, dynamic> user;
 
-  const FriendsProfileScreen({Key? key, required this.user}) : super(key: key);
+  const FriendsProfileScreen({super.key, required this.user});
 
   @override
+  // ignore: library_private_types_in_public_api
   _FriendsProfileScreenState createState() => _FriendsProfileScreenState();
 }
 
@@ -28,11 +29,11 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ProfileImage(user: widget.user),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text('Bio: ${widget.user['bio']}'),
               Text('Email: ${widget.user['email']}'),
               Text('Favorite Gym: ${widget.user['favGym']}'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Visibility(
                 visible: true,
                 child: ElevatedButton(
@@ -42,7 +43,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.teal,
                   ),
-                  child: Text('Add Friend'),
+                  child: const Text('Add Friend'),
                 ),
               ),
               Visibility(
@@ -54,7 +55,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
-                  child: Text('Remove Friend'),
+                  child: const Text('Remove Friend'),
                 ),
               ),
             ],
@@ -66,8 +67,8 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
 
   void _addFriend() async {
     final currentUserID = FirebaseAuth.instance.currentUser!.uid;
-    DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
-    DatabaseReference currentUserRef = _dbRef.child(currentUserID);
+    DatabaseReference dbRef = FirebaseDatabase.instance.ref('users');
+    DatabaseReference currentUserRef = dbRef.child(currentUserID);
 
     try {
       DatabaseEvent event = await currentUserRef.child('friends').once();
@@ -88,13 +89,14 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
 
       if (!isFriendAlreadyAdded) {
         await currentUserRef.child('friends').push().set(widget.user['UID']);
-        DatabaseReference friendRef = _dbRef.child(widget.user['UID']);
+        DatabaseReference friendRef = dbRef.child(widget.user['UID']);
         await friendRef.child('friends').push().set(currentUserID);
         setState(() {
           isFriendAdded = true;
         });
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Friend added successfully!'),
           ),
         );
@@ -102,13 +104,15 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
         setState(() {
           isFriendAdded = true;
         });
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Friend already added!'),
           ),
         );
       }
     } catch (error) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $error'),
@@ -119,8 +123,8 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
 
   void _removeFriend() async {
     final currentUserID = FirebaseAuth.instance.currentUser!.uid;
-    DatabaseReference _dbRef = FirebaseDatabase.instance.ref('users');
-    DatabaseReference currentUserRef = _dbRef.child(currentUserID);
+    DatabaseReference dbRef = FirebaseDatabase.instance.ref('users');
+    DatabaseReference currentUserRef = dbRef.child(currentUserID);
 
     try {
       late DataSnapshot snapshot;
@@ -141,7 +145,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
           if (friendKey != null) {
             await currentUserRef.child('friends').child(friendKey!).remove();
             DatabaseReference friendRef =
-                _dbRef.child(widget.user['UID']).child('friends');
+                dbRef.child(widget.user['UID']).child('friends');
             await friendRef
                 .orderByValue()
                 .equalTo(currentUserID)
@@ -161,27 +165,31 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
             setState(() {
               isFriendAdded = false;
             });
+            // ignore: use_build_context_synchronously
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Friend removed successfully!'),
               ),
             );
           } else {
+            // ignore: use_build_context_synchronously
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Friend not found in the list!'),
               ),
             );
           }
         }
       } else {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('You have no friends in the list!'),
           ),
         );
       }
     } catch (error) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $error'),
@@ -192,7 +200,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
 }
 
 class ProfileImage extends StatefulWidget {
-  const ProfileImage({Key? key, required this.user}) : super(key: key);
+  const ProfileImage({super.key, required this.user});
 
   final Map<dynamic, dynamic> user;
 
