@@ -61,13 +61,12 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                       /// CREATING THE USERS ACCOUNT
                       /// For a detailed explanation of this section, see Issue #65.
                       ElevatedButton(
-                        // Color and styling for the button. 
+                        // Color and styling for the button.
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff3ea9a9),
-                          foregroundColor: const Color(0xfffffff4), 
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),
+                          foregroundColor: const Color(0xfffffff4),
+                          textStyle:
+                              const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         onPressed: () async {
                           /// The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)

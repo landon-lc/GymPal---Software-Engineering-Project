@@ -18,28 +18,27 @@ class _UserProfileScreen extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xfffffff4),
-          primary: const Color(0xff3ea9a9),
-          brightness: Brightness.dark),
-        useMaterial3: true, 
-        scaffoldBackgroundColor: const Color(0xff2f2f2f)
-      ),
-      debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-          appBar: null,
-          body: Center(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                // Calls to each screen.
-                ProfileImage(),
-                ProfileUsername(),
-                ProfileAboutMe(),
-                ProfileFavoriteGym(),
-                ProfileEditorButton(),
-              ]))));
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xfffffff4),
+                primary: const Color(0xff3ea9a9),
+                brightness: Brightness.dark),
+            useMaterial3: true,
+            scaffoldBackgroundColor: const Color(0xff2f2f2f)),
+        debugShowCheckedModeBanner: false,
+        home: const Scaffold(
+            appBar: null,
+            body: Center(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                  // Calls to each screen.
+                  ProfileImage(),
+                  ProfileUsername(),
+                  ProfileAboutMe(),
+                  ProfileFavoriteGym(),
+                  ProfileEditorButton(),
+                ]))));
   }
 }
 
@@ -86,21 +85,20 @@ class _ProfileImage extends State<ProfileImage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Container(
-        width: 160,
-        height: 160,
-        alignment: null,
-        child: Scaffold(
-            body: Center(
-          child: finalImageURL != null
-              ? CircleAvatar(
-                  radius: 80,
-                  foregroundImage: NetworkImage(finalImageURL ?? 'null'),
-                )
-              : const CircularProgressIndicator(),
-        )))
-      );
+        padding: const EdgeInsets.only(top: 8),
+        child: Container(
+            width: 160,
+            height: 160,
+            alignment: null,
+            child: Scaffold(
+                body: Center(
+              child: finalImageURL != null
+                  ? CircleAvatar(
+                      radius: 80,
+                      foregroundImage: NetworkImage(finalImageURL ?? 'null'),
+                    )
+                  : const CircularProgressIndicator(),
+            ))));
   }
 }
 
@@ -200,23 +198,22 @@ class ProfileAboutMe extends StatelessWidget {
                         color: Color(0xfffffff4),
                       )),
                   Container(
-                    margin: const EdgeInsets.all(10),
-                    padding: const EdgeInsets.all(10),
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration( 
-                      color: Color(0xff3ea9a9),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))
-                    ),
-                    child: Text(
-                    bioText.data ?? 'BIO_FETCH_FAIL',
-                    textDirection: TextDirection.ltr,
-                    softWrap: true,
-                    style: const TextStyle( 
-                      color: Color(0xfffffff4),
-                      height: 1.0,
-                    ), 
-                  )
-                  ),
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                          color: Color(0xff3ea9a9),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Text(
+                        bioText.data ?? 'BIO_FETCH_FAIL',
+                        textDirection: TextDirection.ltr,
+                        softWrap: true,
+                        style: const TextStyle(
+                          color: Color(0xfffffff4),
+                          height: 1.0,
+                        ),
+                      )),
                 ],
               ));
         });
@@ -262,24 +259,23 @@ class ProfileFavoriteGym extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       )),
                   Container(
-                    margin: const EdgeInsets.all(10),
-                    padding: const EdgeInsets.all(10),
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration( 
-                      color: Color(0xff3ea9a9),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))
-                    ),
-                    child: Text(
-                    gymText.data ?? 'GYM_FETCH_FAIL',
-                    textDirection: TextDirection.ltr,
-                    softWrap: true,
-                    style: const TextStyle( 
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xfffffff4),
-                      height: 1.0,
-                    ), 
-                  )
-                  ),
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                          color: Color(0xff3ea9a9),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Text(
+                        gymText.data ?? 'GYM_FETCH_FAIL',
+                        textDirection: TextDirection.ltr,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xfffffff4),
+                          height: 1.0,
+                        ),
+                      )),
                 ],
               ));
         });

@@ -49,13 +49,11 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
               children: [
                 // Opens image picker so user can select an image.
                 ElevatedButton(
-                  // Color and styling for the button. 
+                  // Color and styling for the button.
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xfffffff4),
-                    foregroundColor: const Color(0xff3ea9a9), 
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.bold
-                          ),
+                    foregroundColor: const Color(0xff3ea9a9),
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: () async {
                     // Getting Image
@@ -81,26 +79,33 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                   child: const Text('Upload Image'),
                 ),
                 // Bio text editing field.
-                TextField(
-                  style: const TextStyle(
-                    color: Color(0xfffffff4)
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff2f2f2f),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                    border:
+                        Border.all(color: const Color(0xfffffff4), width: 4.0),
                   ),
-                  maxLines: 5,
-                  expands: false,
-                  decoration: const InputDecoration(
-                      labelText: 'Type a new about me...'),
-                  controller: userBioController,
-                  
+                  child: TextField(
+                    style: const TextStyle(color: Color(0xfffffff4)),
+                    maxLines: 5,
+                    expands: false,
+                    decoration: const InputDecoration(
+                        labelText: 'Type a new about me...'),
+                    controller: userBioController,
+                  ),
                 ),
+
                 // Save button, takes user back to profile.
                 TextButton(
-                  // Color and styling for the button. 
+                  // Color and styling for the button.
                   style: TextButton.styleFrom(
                     backgroundColor: const Color(0xff3ea9a9),
-                    foregroundColor: const Color(0xfffffff4), 
-                    textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),
+                    foregroundColor: const Color(0xfffffff4),
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: () async {
                     User? currentUser = FirebaseAuth.instance.currentUser;
@@ -126,13 +131,11 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                 ),
                 // Save button, takes user back to profile.
                 TextButton(
-                  // Color and styling for the button. 
+                  // Color and styling for the button.
                   style: TextButton.styleFrom(
                     backgroundColor: const Color(0xff3ea9a9),
-                    foregroundColor: const Color(0xfffffff4), 
-                    textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),
+                    foregroundColor: const Color(0xfffffff4),
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
