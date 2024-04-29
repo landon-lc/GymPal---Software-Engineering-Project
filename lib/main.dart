@@ -22,11 +22,14 @@ class MyApp extends StatelessWidget {
       create: (context) => WorkoutRecord(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'GymPal',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xfffffff4),
+                primary: const Color(0xff3ea9a9),
+                brightness: Brightness.dark),
+            useMaterial3: true,
+            // Append xff for full opacity (255). Last six digits are Hex color code.
+            scaffoldBackgroundColor: const Color(0xff2f2f2f)),
         home: const AuthGate(),
       ),
     );
