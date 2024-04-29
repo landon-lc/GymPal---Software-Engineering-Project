@@ -53,6 +53,9 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xfffffff4),
                     foregroundColor: const Color(0xff3ea9a9), 
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold
+                          ),
                   ),
                   onPressed: () async {
                     // Getting Image
@@ -95,6 +98,9 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                   style: TextButton.styleFrom(
                     backgroundColor: const Color(0xff3ea9a9),
                     foregroundColor: const Color(0xfffffff4), 
+                    textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold
+                          ),
                   ),
                   onPressed: () async {
                     User? currentUser = FirebaseAuth.instance.currentUser;
@@ -124,6 +130,9 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                   style: TextButton.styleFrom(
                     backgroundColor: const Color(0xff3ea9a9),
                     foregroundColor: const Color(0xfffffff4), 
+                                              textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold
+                          ),
                   ),
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();

@@ -65,6 +65,9 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff3ea9a9),
                           foregroundColor: const Color(0xfffffff4), 
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
                         onPressed: () async {
                           /// The user account is created in Auth. If the email is already in use the account will not be created. (See Email Enumeration, Issue #65)
@@ -111,7 +114,6 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                             // Placing image in firebase.
                             await usersImageLocation.putData(byteList);
                           }
-
                           // Continues to the users' profile screen. They are logged in and ready to begin using the app.
                           if (context.mounted) {
                             Navigator.pushAndRemoveUntil(
