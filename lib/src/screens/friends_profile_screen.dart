@@ -52,7 +52,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
                     _removeFriend();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red, // Change to a contrasting color
+                    backgroundColor: Colors.red, 
                   ),
                   child: Text('Remove Friend'),
                 ),
@@ -70,11 +70,9 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
     DatabaseReference currentUserRef = _dbRef.child(currentUserID);
 
     try {
-      // Wait for the result of once() using await
       DatabaseEvent event = await currentUserRef.child('friends').once();
       DataSnapshot snapshot = event.snapshot;
 
-      // Check if the friend's ID already exists in the friend list
       bool isFriendAlreadyAdded = false;
       if (snapshot.value != null) {
         Map<dynamic, dynamic>? friends = snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
@@ -88,13 +86,11 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
       }
 
       if (!isFriendAlreadyAdded) {
-        // Add friend's ID to current user's friends list
         await currentUserRef.child('friends').push().set(widget.user['UID']);
-        // Add current user's ID to the friend's friend list
         DatabaseReference friendRef = _dbRef.child(widget.user['UID']);
         await friendRef.child('friends').push().set(currentUserID);
         setState(() {
-          isFriendAdded = true; // Update the state to hide the button
+          isFriendAdded = true; 
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -103,7 +99,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
         );
       } else {
         setState(() {
-          isFriendAdded = true; // Update the state to hide the button
+          isFriendAdded = true; 
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -126,13 +122,11 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
     DatabaseReference currentUserRef = _dbRef.child(currentUserID);
 
     try {
-      // Listen for changes using once() instead of await
-      late DataSnapshot snapshot; // Declare snapshot as late
+      late DataSnapshot snapshot; 
       await currentUserRef.child('friends').once().then((event) {
-        snapshot = event.snapshot; // Assign snapshot inside then callback
+        snapshot = event.snapshot; 
       });
-      
-      // Check if the friend's ID exists in the friend list
+  
       if (snapshot.value != null) {
         Map<dynamic, dynamic>? friends = snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
         if (friends != null) {
@@ -143,11 +137,8 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
             }
           });
           if (friendKey != null) {
-            // Remove friend's ID from current user's friends list
             await currentUserRef.child('friends').child(friendKey!).remove();
-            // Remove current user's ID from the friend's friend list
             DatabaseReference friendRef = _dbRef.child(widget.user['UID']).child('friends');
-            // Listen for changes using orderByValue().equalTo().onValue()
             await friendRef.orderByValue().equalTo(currentUserID).onValue.first.then((event) {
               if (event.snapshot.value != null) {
                 Map<dynamic, dynamic>? friendFriends = event.snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
@@ -159,7 +150,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
               }
             });
             setState(() {
-              isFriendAdded = false; // Update the state to show the button
+              isFriendAdded = false; 
             });
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
