@@ -12,10 +12,12 @@ class WorkoutRecord extends ChangeNotifier {
 
   WorkoutRecord() {
     initWorkouts();
- }
+  }
+
   /// Returns a stream of workout records within a specified date range.
   Stream<List<Workout>> workoutsStream({DateTime? start, DateTime? end}) {
-    Query query = dbRef.child('users/$userId/workouts').orderByChild('timestamp');
+    Query query =
+        dbRef.child('users/$userId/workouts').orderByChild('timestamp');
     if (start != null) {
       query = query.startAt(start.toIso8601String());
     }
@@ -27,13 +29,15 @@ class WorkoutRecord extends ChangeNotifier {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
         return data.entries
-            .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value), key: e.key.toString()))
+            .map((e) => Workout.fromMap(Map<String, dynamic>.from(e.value),
+                key: e.key.toString()))
             .toList();
       } else {
         return [];
       }
     });
   }
+
   /// Initializes the workout records.
   Future<void> initWorkouts() async {
     workoutsStream().listen((workouts) {
@@ -41,6 +45,7 @@ class WorkoutRecord extends ChangeNotifier {
       notifyListeners();
     });
   }
+
   /// Adds a new workout record to the database.
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('users/$userId/workouts').push();
@@ -50,15 +55,18 @@ class WorkoutRecord extends ChangeNotifier {
       'exercises': [],
       'timestamp': now.toIso8601String(),
     }).then((_) {
-      workoutList.add(Workout(name: name, exercises: [], key: newWorkoutRef.key, timestamp: now));
+      workoutList.add(Workout(
+          name: name, exercises: [], key: newWorkoutRef.key, timestamp: now));
       notifyListeners();
       print('Workout added successfully with key ${newWorkoutRef.key}');
     }).catchError((error) {
       print('Failed to add workout: $error');
     });
   }
+
   /// Adds a new exercise to a workout record.
-  void addExercises(String workoutId, String exerciseName, String weight, String reps, String sets) {
+  void addExercises(String workoutId, String exerciseName, String weight,
+      String reps, String sets) {
     dbRef.child('users/$userId/workouts/$workoutId/exercises').push().set({
       'name': exerciseName,
       'weight': weight,
@@ -67,6 +75,7 @@ class WorkoutRecord extends ChangeNotifier {
       'isCompleted': false,
     });
   }
+
   /// Updates the name of a workout record.
   void updateWorkoutName(String workoutId, String newName) {
     dbRef.child('users/$userId/workouts/$workoutId').update({
@@ -81,16 +90,20 @@ class WorkoutRecord extends ChangeNotifier {
       print('Failed to update workout name: $error');
     });
   }
+
   /// Updates the completion status of an exercise.
   void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
-    dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').update({
+    dbRef
+        .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
+        .update({
       'isCompleted': isCompleted,
-      }).then((_) {
-    print('Exercise status updated successfully.');
-  }).catchError((error) {
-    print('Failed to update exercise status: $error');
+    }).then((_) {
+      print('Exercise status updated successfully.');
+    }).catchError((error) {
+      print('Failed to update exercise status: $error');
     });
   }
+
   /// Deletes a workout record from the database.
   void deleteWorkout(String workoutId) {
     dbRef.child('users/$userId/workouts/$workoutId').remove().then((_) {
@@ -101,6 +114,7 @@ class WorkoutRecord extends ChangeNotifier {
       print('Failed to delete workout: $error');
     });
   }
+
   /// Deletes an exercise from a workout record.
   void editWorkout(String workoutId, String newName) {
     dbRef.child('users/$userId/workouts/$workoutId').update({'name': newName});
@@ -110,34 +124,45 @@ class WorkoutRecord extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   /// Deletes an exercise from a workout record.
   void deleteExercise(String workoutId, String exerciseId) {
-  dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').remove().then((_) {
-    print('Exercise deleted successfully from Firebase');
-    notifyListeners();  
-  }).catchError((error) {
-    print('Failed to delete exercise: $error');
-  });
-}
+    dbRef
+        .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
+        .remove()
+        .then((_) {
+      print('Exercise deleted successfully from Firebase');
+      notifyListeners();
+    }).catchError((error) {
+      print('Failed to delete exercise: $error');
+    });
+  }
+
   /// Edits an exercise in a workout record.
-  void editExercise(String workoutId, String exerciseId, String newName, String newWeight, String newReps, String newSets, bool newIsCompleted) {
-  dbRef.child('users/$userId/workouts/$workoutId/exercises/$exerciseId').update({
-    'name': newName,
-    'weight': newWeight,
-    'reps': newReps,
-    'sets': newSets,
-    'isCompleted': newIsCompleted
-  }).then((_) {
-    print('Exercise updated successfully');
-    notifyListeners();  
-  }).catchError((error) {
-    print('Failed to update exercise: $error');
-  });
-}
+  void editExercise(String workoutId, String exerciseId, String newName,
+      String newWeight, String newReps, String newSets, bool newIsCompleted) {
+    dbRef
+        .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
+        .update({
+      'name': newName,
+      'weight': newWeight,
+      'reps': newReps,
+      'sets': newSets,
+      'isCompleted': newIsCompleted
+    }).then((_) {
+      print('Exercise updated successfully');
+      notifyListeners();
+    }).catchError((error) {
+      print('Failed to update exercise: $error');
+    });
+  }
 
   /// Returns a stream of exercises within a specified workout.
   Stream<List<Exercise>> getExercisesStream(String workoutId) {
-    return dbRef.child('users/$userId/workouts/$workoutId/exercises').onValue.map((event) {
+    return dbRef
+        .child('users/$userId/workouts/$workoutId/exercises')
+        .onValue
+        .map((event) {
       final data = event.snapshot.value;
       if (data is Map<dynamic, dynamic>) {
         return data.entries
