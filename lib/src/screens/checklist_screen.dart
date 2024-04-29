@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:test_drive/src/models/workout_record.dart';
 import 'package:test_drive/src/models/workout.dart';
 import 'package:test_drive/src/screens/workout_screen.dart'; 
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 
@@ -15,11 +16,13 @@ class ChecklistPage extends StatefulWidget {
   _ChecklistPageState createState() => _ChecklistPageState();
 }
 
+/// State for [ChecklistPage] which displays a list of workouts.
 class _ChecklistPageState extends State<ChecklistPage> {
   final TextEditingController _controller = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
 
+  /// Displays a date picker dialog to select a date range.
   void _showDatePicker() async {
     final DateTimeRange? picked = await showDateRangePicker(
       context: context,
@@ -38,16 +41,21 @@ class _ChecklistPageState extends State<ChecklistPage> {
     }
   }
 
+  /// Builds the widget with a list of workouts.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff2f2f2f),
       appBar: AppBar(
-        title: const Text('Workout Tracker'),
+        title: const Text('Workout Tracker', textAlign: TextAlign.center, style: TextStyle(color: Color(0xfffffff4))),
+        backgroundColor: const Color(0xff3ea9a9),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.calendar_today),
             onPressed: _showDatePicker,
           ),
+          Expanded(child: Container()),
+          const Text('Workout Tracker', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.black )),
           IconButton(
             icon: const Icon(Icons.clear_all),
             onPressed: () {
@@ -111,13 +119,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     ),
                   ],
                 ),
-                child: ListTile(
-                  title: Text(workout.name),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => WorkoutPage(
-                        workoutId: workout.key ?? '',
-                        workoutName: workout.name,
+                child: Card(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  child: ListTile(
+                    title: Text(workout.name),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => WorkoutPage(
+                          workoutId: workout.key ?? '',
+                          workoutName: workout.name,
+                        ),
                       ),
                     ),
                   ),
@@ -130,6 +143,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
+  /// Displays a dialog to create a new workout.
   void _createNewWorkout() {
     showDialog(
       context: context,
@@ -156,7 +170,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
       ),
     );
   }
-
+  /// Displays a dialog to edit a workout.
   void _editWorkout(String? workoutKey) {
     if (workoutKey == null) return;
     final TextEditingController editController = TextEditingController();

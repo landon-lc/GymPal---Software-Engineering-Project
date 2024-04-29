@@ -1,48 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../components/exercise_tile.dart';
-import '../models/workout_record.dart';
-import '../models/exercise.dart';
+import 'package:test_drive/src/components/exercise_tile.dart';
+import 'package:test_drive/src/models/workout_record.dart';
+import 'package:test_drive/src/models/exercise.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
-/// A page that displays details of a specific workout including a list of exercises.
-///
-/// Allows users to add, edit, and delete exercises within a workout. Exercises can
-/// also be marked as completed.
 class WorkoutPage extends StatefulWidget {
-  /// The name of the workout to display.
-  final String workoutName;
-
-  /// The unique identifier for the workout. Used to fetch and manipulate exercise data.
-  final String workoutId;
-
-  /// Constructs a [WorkoutPage] widget.
-  ///
-  /// Requires [workoutName] and [workoutId] to instantiate.
   const WorkoutPage({
     super.key,
     required this.workoutName,
     required this.workoutId,
   });
 
+  final String workoutName;
+  final String workoutId;
+
   @override
   State<WorkoutPage> createState() => _WorkoutPageState();
 }
 
-/// The state for [WorkoutPage] that manages exercise data and interactions.
 class _WorkoutPageState extends State<WorkoutPage> {
-  /// Controller for the exercise name input field.
   final TextEditingController exerciseNameController = TextEditingController();
-
-  /// Controller for the weight input field.
   final TextEditingController weightController = TextEditingController();
-
-  /// Controller for the sets input field.
   final TextEditingController setsController = TextEditingController();
-
-  /// Controller for the reps input field.
   final TextEditingController repsController = TextEditingController();
 
-  /// Displays a dialog for adding a new exercise to the workout.
   void _createNewExercise() {
     showDialog(
       context: context,
@@ -67,11 +49,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
         ),
         actions: [
           MaterialButton(
-            onPressed: _saveExercise,
+            onPressed: () {
+              _saveExercise();
+            },
             child: const Text('Save'),
           ),
           MaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: const Text('Cancel'),
           ),
         ],
@@ -79,11 +65,70 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
-  /// Saves a new exercise to the database via the [WorkoutRecord] provider.
-  ///
-  /// This function retrieves the text from input fields, validates them, and calls
-  /// the provider's method to save the data. It clears the form fields and closes
-  /// the dialog upon successful saving.
+  void _editExercise(BuildContext context, Exercise exercise) {
+  TextEditingController nameController = TextEditingController(text: exercise.name);
+  TextEditingController weightController = TextEditingController(text: exercise.weight);
+  TextEditingController repsController = TextEditingController(text: exercise.reps);
+  TextEditingController setsController = TextEditingController(text: exercise.sets);
+  
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Edit Exercise'),
+        content: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Exercise Name'),
+              ),
+              TextField(
+                controller: weightController,
+                decoration: const InputDecoration(labelText: 'Weight'),
+              ),
+              TextField(
+                controller: repsController,
+                decoration: const InputDecoration(labelText: 'Reps'),
+              ),
+              TextField(
+                controller: setsController,
+                decoration: const InputDecoration(labelText: 'Sets'),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Save'),
+            onPressed: () {
+              if (exercise.key != null) {
+                Provider.of<WorkoutRecord>(context, listen: false).editExercise(
+                  widget.workoutId,
+                  exercise.key!,
+                  nameController.text.trim(),
+                  weightController.text.trim(),
+                  repsController.text.trim(),
+                  setsController.text.trim(),
+                  exercise.isCompleted,
+                );
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
   void _saveExercise() {
     final String exerciseName = exerciseNameController.text.trim();
     final String weight = weightController.text.trim();
@@ -106,7 +151,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
     }
   }
 
-  /// Clears all input fields after an exercise is saved or cancelled.
   void _clearFormFields() {
     exerciseNameController.clear();
     weightController.clear();
@@ -115,32 +159,61 @@ class _WorkoutPageState extends State<WorkoutPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.workoutName)),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _createNewExercise,
-        tooltip: 'Add New Exercise',
-        child: const Icon(
-            Icons.add), // Tooltip for better accessibility and user guidance.
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color(0xff2f2f2f),
+    appBar: AppBar(
+      title: Text(
+        widget.workoutName,
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.white), // White text color
       ),
-      body: StreamBuilder<List<Exercise>>(
-        stream: Provider.of<WorkoutRecord>(context)
-            .getExercisesStream(widget.workoutId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No exercises found'));
-          }
+      centerTitle: true, // Centers the title text in AppBar
+      backgroundColor: const Color(0xff3ea9a9), // Sets the AppBar background to teal
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: _createNewExercise,
+      backgroundColor: const Color(0xff3ea9a9),
+      child: const Icon(Icons.add), // Sets the FloatingActionButton color to teal
+    ),
+    body: StreamBuilder<List<Exercise>>(
+      stream: Provider.of<WorkoutRecord>(context).getExercisesStream(widget.workoutId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No exercises found'));
+        }
 
-          final exercises = snapshot.data!;
-          return ListView.builder(
-            itemCount: exercises.length,
-            itemBuilder: (context, index) {
-              final exercise = exercises[index];
-              return ExerciseTile(
+        final exercises = snapshot.data!;
+        return ListView.builder(
+          itemCount: exercises.length,
+          itemBuilder: (context, index) {
+            final exercise = exercises[index];
+            return Slidable(
+              key: ValueKey(exercise.key),
+              startActionPane: ActionPane(
+                motion: const DrawerMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (context) => _editExercise(context, exercise),
+                    backgroundColor: Colors.blue,
+                    icon: Icons.edit,
+                    label: 'Edit',
+                  ),
+                  SlidableAction(
+                    onPressed: (context) {
+                      Provider.of<WorkoutRecord>(context, listen: false)
+                          .deleteExercise(widget.workoutId, exercise.key ?? '');
+                    },
+                    backgroundColor: Colors.red,
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  ),
+                ],
+              ),
+              child: ExerciseTile(
                 exerciseName: exercise.name,
                 weight: exercise.weight,
                 reps: exercise.reps,
@@ -150,10 +223,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   Provider.of<WorkoutRecord>(context, listen: false)
                       .checkOffExercise(
                           widget.workoutId, exercise.key ?? '', val ?? false);
-                },
+                  },
+                ),
               );
             },
-          );
+        ) ;
         },
       ),
     );
