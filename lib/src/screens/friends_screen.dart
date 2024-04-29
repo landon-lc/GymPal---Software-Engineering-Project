@@ -44,7 +44,8 @@ class FriendsListScreenState extends State<FriendsListScreen> {
           _dbRef.child(friendID).once().then((DatabaseEvent event) {
             DataSnapshot snapshot = event.snapshot;
             setState(() {
-              friendsUserData[friendID] = snapshot.value as Map<dynamic, dynamic>;
+              friendsUserData[friendID] =
+                  snapshot.value as Map<dynamic, dynamic>;
             });
           }).catchError((error) {
             print("Error loading friend's data: $error");
@@ -66,7 +67,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
         _searchResults.clear();
         if (snapshot.value != null) {
           Map<dynamic, dynamic>? values =
-              snapshot.value as Map<dynamic, dynamic>?; 
+              snapshot.value as Map<dynamic, dynamic>?;
           if (values != null) {
             values.forEach((key, value) {
               _searchResults.add(value);

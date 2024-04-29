@@ -52,7 +52,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
                     _removeFriend();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red, 
+                    backgroundColor: Colors.red,
                   ),
                   child: Text('Remove Friend'),
                 ),
@@ -75,7 +75,8 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
 
       bool isFriendAlreadyAdded = false;
       if (snapshot.value != null) {
-        Map<dynamic, dynamic>? friends = snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
+        Map<dynamic, dynamic>? friends =
+            snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
         if (friends != null) {
           friends.forEach((key, value) {
             if (value == widget.user['UID']) {
@@ -90,7 +91,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
         DatabaseReference friendRef = _dbRef.child(widget.user['UID']);
         await friendRef.child('friends').push().set(currentUserID);
         setState(() {
-          isFriendAdded = true; 
+          isFriendAdded = true;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -99,7 +100,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
         );
       } else {
         setState(() {
-          isFriendAdded = true; 
+          isFriendAdded = true;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -122,13 +123,14 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
     DatabaseReference currentUserRef = _dbRef.child(currentUserID);
 
     try {
-      late DataSnapshot snapshot; 
+      late DataSnapshot snapshot;
       await currentUserRef.child('friends').once().then((event) {
-        snapshot = event.snapshot; 
+        snapshot = event.snapshot;
       });
-  
+
       if (snapshot.value != null) {
-        Map<dynamic, dynamic>? friends = snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
+        Map<dynamic, dynamic>? friends =
+            snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
         if (friends != null) {
           String? friendKey;
           friends.forEach((key, value) {
@@ -138,10 +140,17 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
           });
           if (friendKey != null) {
             await currentUserRef.child('friends').child(friendKey!).remove();
-            DatabaseReference friendRef = _dbRef.child(widget.user['UID']).child('friends');
-            await friendRef.orderByValue().equalTo(currentUserID).onValue.first.then((event) {
+            DatabaseReference friendRef =
+                _dbRef.child(widget.user['UID']).child('friends');
+            await friendRef
+                .orderByValue()
+                .equalTo(currentUserID)
+                .onValue
+                .first
+                .then((event) {
               if (event.snapshot.value != null) {
-                Map<dynamic, dynamic>? friendFriends = event.snapshot.value as Map<dynamic, dynamic>?; // Cast snapshot.value
+                Map<dynamic, dynamic>? friendFriends = event.snapshot.value
+                    as Map<dynamic, dynamic>?; // Cast snapshot.value
                 if (friendFriends != null) {
                   friendFriends.forEach((key, value) {
                     friendRef.child(key).remove();
@@ -150,7 +159,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
               }
             });
             setState(() {
-              isFriendAdded = false; 
+              isFriendAdded = false;
             });
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
