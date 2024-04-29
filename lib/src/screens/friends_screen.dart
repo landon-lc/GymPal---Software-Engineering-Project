@@ -82,8 +82,9 @@ class FriendsListScreenState extends State<FriendsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff2f2f2f),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: const Color(0xff3ea9a9),
         title: TextField(
           controller: _searchController,
           onChanged: _performSearch,
@@ -122,7 +123,7 @@ class FriendsListScreenState extends State<FriendsListScreen> {
         Container(
           height: 25,
           decoration: BoxDecoration(
-            color: Colors.teal,
+            color: const Color(0xff3ea9a9),
             border: Border.all(color: Colors.black, width: 1),
           ),
           child: const Center(

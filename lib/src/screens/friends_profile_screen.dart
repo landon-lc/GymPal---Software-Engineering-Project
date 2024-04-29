@@ -19,9 +19,11 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff2f2f2f),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: Text(widget.user['username']),
+        backgroundColor: const Color(0xff3ea9a9),
+        title: Text(widget.user['username'],
+            style: const TextStyle(color: Color(0xfffffff4))),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -30,9 +32,12 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
             children: [
               ProfileImage(user: widget.user),
               const SizedBox(height: 20),
-              Text('Bio: ${widget.user['bio']}'),
-              Text('Email: ${widget.user['email']}'),
-              Text('Favorite Gym: ${widget.user['favGym']}'),
+              Text('Bio: ${widget.user['bio']}',
+                  style: const TextStyle(color: Color(0xfffffff4))),
+              Text('Email: ${widget.user['email']}',
+                  style: const TextStyle(color: Color(0xfffffff4))),
+              Text('Favorite Gym: ${widget.user['favGym']}',
+                  style: const TextStyle(color: Color(0xfffffff4))),
               const SizedBox(height: 20),
               Visibility(
                 visible: true,
@@ -41,7 +46,7 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
                     _addFriend();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
+                    backgroundColor: const Color(0xff3ea9a9),
                   ),
                   child: const Text('Add Friend'),
                 ),
@@ -243,6 +248,7 @@ class _ProfileImage extends State<ProfileImage> {
       height: 160,
       alignment: null,
       child: Scaffold(
+        backgroundColor: const Color(0xff2f2f2f),
         body: Center(
           child: finalImageURL != null
               ? CircleAvatar(
