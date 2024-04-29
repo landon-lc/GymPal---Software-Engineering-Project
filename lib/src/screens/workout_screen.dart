@@ -65,6 +65,19 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
+  /// Edits the details of an existing exercise.
+///
+/// This function takes in a [BuildContext] and an [Exercise] object. It initializes
+/// four [TextEditingController]s with the current details of the exercise. These controllers
+/// are used to read text from and insert text into the text fields of the exercise form.
+///
+/// The [nameController] is initialized with the current name of the exercise.
+/// The [weightController] is initialized with the current weight used in the exercise.
+/// The [repsController] is initialized with the current number of repetitions of the exercise.
+/// The [setsController] is initialized with the current number of sets of the exercise.
+///
+/// [context] is the build context in which this function is being called.
+/// [exercise] is the exercise object whose details are to be edited.
   void _editExercise(BuildContext context, Exercise exercise) {
   TextEditingController nameController = TextEditingController(text: exercise.name);
   TextEditingController weightController = TextEditingController(text: exercise.weight);
@@ -151,6 +164,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
     }
   }
 
+  ///Clears all information from the following fields
   void _clearFormFields() {
     exerciseNameController.clear();
     weightController.clear();
@@ -213,21 +227,26 @@ Widget build(BuildContext context) {
                   ),
                 ],
               ),
-              child: ExerciseTile(
-                exerciseName: exercise.name,
-                weight: exercise.weight,
-                reps: exercise.reps,
-                sets: exercise.sets,
-                isCompleted: exercise.isCompleted,
-                onCheckBoxChanged: (val) {
-                  Provider.of<WorkoutRecord>(context, listen: false)
-                      .checkOffExercise(
-                          widget.workoutId, exercise.key ?? '', val ?? false);
-                  },
+              child: Card(
+                margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                child: ExerciseTile(
+                  exerciseName: exercise.name,
+                  weight: exercise.weight,
+                  reps: exercise.reps,
+                  sets: exercise.sets,
+                  isCompleted: exercise.isCompleted,
+                  onCheckBoxChanged: (val) {
+                    Provider.of<WorkoutRecord>(context, listen: false)
+                        .checkOffExercise(
+                            widget.workoutId, exercise.key ?? '', val ?? false);
+                    },
+                  ),
                 ),
               );
             },
-        ) ;
+          );
         },
       ),
     );

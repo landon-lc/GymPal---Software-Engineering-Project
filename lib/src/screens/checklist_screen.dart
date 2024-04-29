@@ -47,7 +47,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
     return Scaffold(
       backgroundColor: const Color(0xff2f2f2f),
       appBar: AppBar(
-        title: const Text('Workout Tracker', textAlign: TextAlign.center, style: TextStyle(color: Color(0xfffffff4))),
+        title: const Text('Workout Tracker', style: TextStyle(color: Color(0xfffffff4))),
+        centerTitle: true,
         backgroundColor: const Color(0xff3ea9a9),
         actions: <Widget>[
           IconButton(
