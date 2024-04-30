@@ -20,11 +20,17 @@ class _GymMapsState extends State<GymMaps> {
   loc.LocationData? _currentLocation;
   final gmaps.GoogleMapsPlaces _places =
       gmaps.GoogleMapsPlaces(apiKey: 'AIzaSyCTIZuY972s7eTxV1S0TcMz82mgi-Wa2J0');
+  Widget? _infoWidget;
+  LatLng? _infoWidgetPosition;
 
   @override
   void initState() {
     super.initState();
     _requestLocationPermission();
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
   }
 
   Future<void> _requestLocationPermission() async {
@@ -63,10 +69,8 @@ class _GymMapsState extends State<GymMaps> {
 
   void _updateCameraPosition() {
     if (_mapController != null && _currentLocation != null) {
-      _mapController!.moveCamera(
-        CameraUpdate.newLatLng(
-            LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!)),
-      );
+      _mapController!.moveCamera(CameraUpdate.newLatLng(
+          LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!)));
     }
   }
 
@@ -91,10 +95,12 @@ class _GymMapsState extends State<GymMaps> {
           _markers.add(
             Marker(
               markerId: MarkerId(result.placeId),
-              position: LatLng(result.geometry?.location.lat ?? 0.0,
-                  result.geometry?.location.lng ?? 0.0),
-              infoWindow: InfoWindow(title: result.name),
-              onTap: () => _onMarkerTapped(result.name),
+              position: LatLng(
+                  result.geometry!.location.lat, result.geometry!.location.lng),
+              onTap: () => _showCustomInfoWindow(
+                  result.name,
+                  LatLng(result.geometry!.location.lat,
+                      result.geometry!.location.lng)),
             ),
           );
         }
@@ -104,29 +110,29 @@ class _GymMapsState extends State<GymMaps> {
     }
   }
 
-  void _onMarkerTapped(String gymName) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Favorite Gym'),
-          content: Text('Do you want to save "$gymName" as your favorite gym?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('No'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('Yes'),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await _selectGym(gymName);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void _showCustomInfoWindow(String gymName, LatLng position) {
+    setState(() {
+      _infoWidgetPosition = position;
+      _infoWidget = Card(
+        elevation: 8,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(gymName,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold)),
+              ElevatedButton(
+                  onPressed: () => _selectGym(gymName),
+                  child: const Text('Favorite this Gym'))
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Future<void> _selectGym(String gymName) async {
@@ -137,8 +143,10 @@ class _GymMapsState extends State<GymMaps> {
       await userRef.update({'favGym': gymName});
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Favorite gym is now $gymName.')),
-        );
+            SnackBar(content: Text('Favorite gym is now $gymName.')));
+        setState(() {
+          _infoWidget = null; // Hide the info window after selection
+        });
       }
     } else {
       if (mounted) {
@@ -163,21 +171,44 @@ class _GymMapsState extends State<GymMaps> {
           onSubmitted: (value) => _searchGyms(value),
         ),
       ),
-      body: _currentLocation == null
-          ? const Center(child: CircularProgressIndicator())
-          : GoogleMap(
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-                _updateCameraPosition();
-              },
-              initialCameraPosition: CameraPosition(
-                target: LatLng(_currentLocation?.latitude ?? 0.0,
-                    _currentLocation?.longitude ?? 0.0),
-                zoom: 11,
-              ),
-              markers: _markers,
-              myLocationEnabled: true,
-            ),
+      body: Stack(
+        children: [
+          _currentLocation == null
+              ? const Center(child: CircularProgressIndicator())
+              : GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(_currentLocation?.latitude ?? 0.0,
+                        _currentLocation?.longitude ?? 0.0),
+                    zoom: 11,
+                  ),
+                  markers: _markers,
+                  myLocationEnabled: true,
+                  onTap: (LatLng pos) {
+                    setState(() {
+                      _infoWidget =
+                          null; // Hide the custom info window on map tap
+                    });
+                  },
+                ),
+          if (_infoWidget != null && _infoWidgetPosition != null)
+            Positioned(
+                top: MediaQuery.of(context).padding.top +
+                    10, // Positioned at the top
+                left: MediaQuery.of(context).size.width / 2 -
+                    175, // Centered horizontally
+                child: SizedBox(
+                  width: 300,
+                  child: _infoWidget!,
+                ))
+        ],
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
   }
 }

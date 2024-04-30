@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="generator" content="made with love by dartdoc 8.0.3">
   <meta name="description" content="test_drive API docs, for the Dart programming language.">
   <title>test_drive - Dart API docs</title>
 
@@ -12,7 +11,7 @@
   
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
   
   <link rel="stylesheet" href="static-assets/github.css?v1">
   <link rel="stylesheet" href="static-assets/styles.css?v1">
@@ -35,14 +34,14 @@
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
-  <div class="toggle" id="theme-button">
+  <div class="toggle" id="theme-button" title="Toggle brightness">
     <label for="theme">
       <input type="checkbox" id="theme" value="light-theme">
       <span id="dark-theme-button" class="material-symbols-outlined">
-        brightness_4
+        dark_mode
       </span>
       <span id="light-theme-button" class="material-symbols-outlined">
-        brightness_5
+        light_mode
       </span>
     </label>
   </div>
@@ -70,6 +69,23 @@ Should be associated mainly with the backend, basically the computational portio
 <p>Screens:
 Should be associated with the screens. If a screen is to be created it should reside in the screens folder (lib\screens).</p>
 <p>Created by James Burriss.</p>
+<h1 id="integration-tests-for-workout-tracker">Integration Tests for Workout Tracker</h1>
+<p>To run the integration tests for the workout tracker portion of the app, follow these steps.</p>
+<ol>
+<li>
+<p>Ensure you have a working Flutter environment and your device or emulator is running.</p>
+</li>
+<li>
+<p>Open terminal in the root of your project.</p>
+</li>
+<li>
+<p>Run the following command to begin the integration test:</p>
+<p>flutter test integration_test/user_stories_tests.dart</p>
+</li>
+<li>
+<p>This command will run all tests defined in the user_stories_tests.dart file and provide output in the terminal.</p>
+</li>
+</ol>
 </section>
 
 
