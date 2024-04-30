@@ -38,6 +38,9 @@ class _PageNavigation extends State<PageNavigation> {
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xfffffff4),
+        selectedItemColor: const Color(0xff3ea9a9),
+        unselectedItemColor: const Color(0xff2f2f2f),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(

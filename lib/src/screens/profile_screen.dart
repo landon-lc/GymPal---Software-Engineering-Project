@@ -17,9 +17,16 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreen extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xfffffff4),
+                primary: const Color(0xff3ea9a9),
+                brightness: Brightness.dark),
+            useMaterial3: true,
+            scaffoldBackgroundColor: const Color(0xff2f2f2f)),
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
+        home: const Scaffold(
             appBar: null,
             body: Center(
                 child: Column(
@@ -28,9 +35,9 @@ class _UserProfileScreen extends State<UserProfileScreen> {
                   // Calls to each screen.
                   ProfileImage(),
                   ProfileUsername(),
-                  ProfileEditorButton(),
                   ProfileAboutMe(),
-                  ProfileFavoriteGym()
+                  ProfileFavoriteGym(),
+                  ProfileEditorButton(),
                 ]))));
   }
 }
@@ -77,19 +84,21 @@ class _ProfileImage extends State<ProfileImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: 160,
-        height: 160,
-        alignment: null,
-        child: Scaffold(
-            body: Center(
-          child: finalImageURL != null
-              ? CircleAvatar(
-                  radius: 80,
-                  foregroundImage: NetworkImage(finalImageURL ?? 'null'),
-                )
-              : const CircularProgressIndicator(),
-        )));
+    return Padding(
+        padding: const EdgeInsets.only(top: 14),
+        child: Container(
+            width: 160,
+            height: 160,
+            alignment: null,
+            child: Scaffold(
+                body: Center(
+              child: finalImageURL != null
+                  ? CircleAvatar(
+                      radius: 80,
+                      foregroundImage: NetworkImage(finalImageURL ?? 'null'),
+                    )
+                  : const CircularProgressIndicator(),
+            ))));
   }
 }
 
@@ -102,7 +111,7 @@ class ProfileEditorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.only(top: 60),
         child: TextButton(
           onPressed: () {
             Navigator.push(
@@ -111,13 +120,17 @@ class ProfileEditorButton extends StatelessWidget {
                     builder: (context) => const ProfileEditorScreen()));
           },
           style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: const Color(0xfffffff4),
           ),
-          child: const Text('Editor',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              )),
+          child: const Text(
+            'Edit Profile',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xff3ea9a9),
+              fontSize: 16.0,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ));
   }
 }
@@ -134,14 +147,14 @@ class ProfileUsername extends StatelessWidget {
         future: fetchUsername(),
         builder: (BuildContext context, AsyncSnapshot<String> text) {
           return Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(2),
             child: Text(text.data ?? 'USERNAME_FETCH_FAIL',
                 softWrap: true,
                 textDirection: TextDirection.ltr,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.blue,
+                  color: Color(0xfffffff4),
+                  fontSize: 20.0,
                 )),
           );
         });
@@ -178,19 +191,40 @@ class ProfileAboutMe extends StatelessWidget {
         future: fetchBio(),
         builder: (BuildContext context, AsyncSnapshot<String> bioText) {
           return Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(
+                  top: 36, left: 10, right: 10, bottom: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text('About Me',
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(left: 12),
+                    child: const Text(
+                      'About Me',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Color(0xfffffff4),
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                          color: Color(0xff3ea9a9),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Text(
+                        bioText.data ?? 'BIO_FETCH_FAIL',
+                        textDirection: TextDirection.ltr,
+                        softWrap: true,
+                        style: const TextStyle(
+                          color: Color(0xfffffff4),
+                          height: 1.0,
+                        ),
                       )),
-                  Text(
-                    bioText.data ?? 'BIO_FETCH_FAIL',
-                    textDirection: TextDirection.ltr,
-                    softWrap: true,
-                  )
                 ],
               ));
         });
@@ -227,19 +261,39 @@ class ProfileFavoriteGym extends StatelessWidget {
         future: fetchGym(),
         builder: (BuildContext context, AsyncSnapshot<String> gymText) {
           return Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('My Gym',
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(left: 12),
+                    child: const Text(
+                      'My Gym',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                          color: Color(0xff3ea9a9),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Text(
+                        gymText.data ?? 'GYM_FETCH_FAIL',
+                        textDirection: TextDirection.ltr,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xfffffff4),
+                          height: 1.0,
+                        ),
                       )),
-                  Text(
-                    gymText.data ?? 'GYM_FETCH_FAIL',
-                    textDirection: TextDirection.ltr,
-                    softWrap: true,
-                  )
                 ],
               ));
         });
