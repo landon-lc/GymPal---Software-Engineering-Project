@@ -85,7 +85,7 @@ class _ProfileImage extends State<ProfileImage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.only(top: 14),
         child: Container(
             width: 160,
             height: 160,
@@ -111,7 +111,7 @@ class ProfileEditorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.only(top: 60),
         child: TextButton(
           onPressed: () {
             Navigator.push(
@@ -127,7 +127,9 @@ class ProfileEditorButton extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Color(0xff3ea9a9),
                 fontSize: 16.0,
-              )),
+              ),
+              textAlign: TextAlign.center,
+              ),
         ));
   }
 }
@@ -188,15 +190,21 @@ class ProfileAboutMe extends StatelessWidget {
         future: fetchBio(),
         builder: (BuildContext context, AsyncSnapshot<String> bioText) {
           return Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(top: 36, left: 10, right: 10, bottom: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text('About Me',
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(left: 12),
+                    child: const Text('About Me',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xfffffff4),
-                      )),
+                      ),
+                      textAlign: TextAlign.left,
+                      ),
+                  ),
                   Container(
                       margin: const EdgeInsets.all(10),
                       padding: const EdgeInsets.all(10),
@@ -250,14 +258,21 @@ class ProfileFavoriteGym extends StatelessWidget {
         future: fetchGym(),
         builder: (BuildContext context, AsyncSnapshot<String> gymText) {
           return Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('My Gym',
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(left: 12),
+                    child: const Text('My Gym',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                      )),
+                      ),
+                      textAlign: TextAlign.start,
+                      ),
+                  ),
+
                   Container(
                       margin: const EdgeInsets.all(10),
                       padding: const EdgeInsets.all(10),

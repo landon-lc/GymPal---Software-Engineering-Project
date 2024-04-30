@@ -48,7 +48,9 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
             child: Column(
               children: [
                 // Opens image picker so user can select an image.
-                ElevatedButton(
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 40),
+                  child: ElevatedButton(
                   // Color and styling for the button.
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xfffffff4),
@@ -77,6 +79,7 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                     }
                   },
                   child: const Text('Upload Image'),
+                ),
                 ),
                 // Bio text editing field.
                 Container(
@@ -129,13 +132,15 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                   },
                   child: const Text('Save About Me'),
                 ),
-                // Save button, takes user back to profile.
-                TextButton(
+                // Logout button, logs user out of app.
+                Container(
+                  margin: const EdgeInsets.only(top: 60),
+                  child: TextButton(
                   // Color and styling for the button.
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xff3ea9a9),
+                    backgroundColor: const Color(0xff5E0000),
                     foregroundColor: const Color(0xfffffff4),
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
@@ -150,6 +155,8 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                   },
                   child: const Text('Logout'),
                 )
+                ),
+                
               ],
             )));
   }

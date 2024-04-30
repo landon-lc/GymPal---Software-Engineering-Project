@@ -37,10 +37,10 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
         appBar: null,
         body: Center(
             child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: [
                       TextField(
                         decoration: const InputDecoration(
                             labelText: 'Create a Username'),
@@ -57,9 +57,9 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                             labelText: 'Enter your Email'),
                         controller: newEmailController,
                       ),
-
                       /// CREATING THE USERS ACCOUNT
                       /// For a detailed explanation of this section, see Issue #65.
+                      Padding(padding: const EdgeInsets.only(top: 40), child: 
                       ElevatedButton(
                         // Color and styling for the button.
                         style: ElevatedButton.styleFrom(
@@ -126,7 +126,7 @@ class _AccountCreationScreen extends State<AccountCreationScreen> {
                           }
                         },
                         child: const Text('Create Account'),
-                      ),
+                      ),),
                     ]))));
   }
 }
