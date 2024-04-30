@@ -36,8 +36,15 @@ dev_dependencies:
   mockito: ^5.4.0
   firebase_auth_mocks: ^0.13.0
   firebase_database_mocks: ^0.6.0
+  flutter_launcher_icons: 0.13.1
   
 flutter:
   uses-material-design: true
   assets:
     - lib/images/ProfilePlaceholder.jpg
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "lib/images/GymPal logo.png"
