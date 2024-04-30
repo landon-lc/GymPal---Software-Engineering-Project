@@ -48,8 +48,8 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff3ea9a9),
                   ),
-                  child: const Text('Add Friend', 
-                    style: const TextStyle(color: Color(0xfffffff4))),
+                  child: const Text('Add Friend',
+                      style: TextStyle(color: Color(0xfffffff4))),
                 ),
               ),
               Visibility(
@@ -61,8 +61,8 @@ class _FriendsProfileScreenState extends State<FriendsProfileScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
-                  child: const Text('Remove Friend', 
-                    style: const TextStyle(color: Color(0xfffffff4))),
+                  child: const Text('Remove Friend',
+                      style: TextStyle(color: Color(0xfffffff4))),
                 ),
               ),
             ],
