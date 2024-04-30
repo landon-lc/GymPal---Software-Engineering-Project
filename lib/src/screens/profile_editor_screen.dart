@@ -51,35 +51,37 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                 Container(
                   margin: const EdgeInsets.only(top: 10, bottom: 40),
                   child: ElevatedButton(
-                  // Color and styling for the button.
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xfffffff4),
-                    foregroundColor: const Color(0xff3ea9a9),
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    // Color and styling for the button.
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xfffffff4),
+                      foregroundColor: const Color(0xff3ea9a9),
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      // Getting Image
+                      await _openImagePicker();
+                      // Storing image to Firebase Storage.
+                      final Reference storageRef =
+                          FirebaseStorage.instance.ref();
+                      User? currentUser = FirebaseAuth.instance.currentUser;
+                      if (currentUser != null) {
+                        String currentUID = currentUser.uid;
+                        Reference usersImage = storageRef.child(
+                            'UserImages/$currentUID/userProfilePhoto.jpg');
+                        await usersImage.putFile(userImage);
+                      }
+                      if (context.mounted) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const UserProfileScreen()),
+                            // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
+                            (Route<dynamic> route) => false);
+                      }
+                    },
+                    child: const Text('Upload Image'),
                   ),
-                  onPressed: () async {
-                    // Getting Image
-                    await _openImagePicker();
-                    // Storing image to Firebase Storage.
-                    final Reference storageRef = FirebaseStorage.instance.ref();
-                    User? currentUser = FirebaseAuth.instance.currentUser;
-                    if (currentUser != null) {
-                      String currentUID = currentUser.uid;
-                      Reference usersImage = storageRef
-                          .child('UserImages/$currentUID/userProfilePhoto.jpg');
-                      await usersImage.putFile(userImage);
-                    }
-                    if (context.mounted) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const UserProfileScreen()),
-                          // Ensures a one-way route - user cannot return to account creation or login screen (without logging out).
-                          (Route<dynamic> route) => false);
-                    }
-                  },
-                  child: const Text('Upload Image'),
-                ),
                 ),
                 // Bio text editing field.
                 Container(
@@ -134,29 +136,28 @@ class _ProfileEditorScreen extends State<ProfileEditorScreen> {
                 ),
                 // Logout button, logs user out of app.
                 Container(
-                  margin: const EdgeInsets.only(top: 60),
-                  child: TextButton(
-                  // Color and styling for the button.
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xff5E0000),
-                    foregroundColor: const Color(0xfffffff4),
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    if (context.mounted) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginScreen()),
-                          // Ensures a one-way route - user cannot return.
-                          (Route<dynamic> route) => false);
-                    }
-                  },
-                  child: const Text('Logout'),
-                )
-                ),
-                
+                    margin: const EdgeInsets.only(top: 60),
+                    child: TextButton(
+                      // Color and styling for the button.
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color(0xff5E0000),
+                        foregroundColor: const Color(0xfffffff4),
+                        textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                        if (context.mounted) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                              // Ensures a one-way route - user cannot return.
+                              (Route<dynamic> route) => false);
+                        }
+                      },
+                      child: const Text('Logout'),
+                    )),
               ],
             )));
   }
