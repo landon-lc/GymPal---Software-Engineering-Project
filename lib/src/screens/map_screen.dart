@@ -123,7 +123,8 @@ class _GymMapsState extends State<GymMaps> {
             children: [
               Text(gymName,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold)),
               ElevatedButton(
                   onPressed: () => _selectGym(gymName),
                   child: const Text('Favorite this Gym'))
