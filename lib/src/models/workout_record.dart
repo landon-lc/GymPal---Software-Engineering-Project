@@ -4,52 +4,26 @@ import 'package:test_drive/src/models/exercise.dart';
 import 'package:test_drive/src/models/workout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-/// Manages the state and database operations for workout records in a Firebase database.
-///
-/// This class provides functionality to create, read, update, and delete workouts
-/// and exercises for a specific user. It uses Firebase Realtime Database to store and manage data.
-
+/// A class that manages the user's workout records.
 class WorkoutRecord extends ChangeNotifier {
   List<Workout> workoutList = [];
-
-  /// Firebase database reference used to perform CRUD operations.
   final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-
-  /// The current user's ID from FirebaseAuth, used to scope data access.
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-  /// Tracks the current page for pagination of workouts.
-  int _currentPage = 0;
-
-  /// Defines the number of workouts to be loaded per page.
-  final int _pageSize = 10; // Number of workouts per page
-
-  /// Initializes workouts by setting up a listener on the paginated workout stream.
   WorkoutRecord() {
     initWorkouts();
   }
 
-  /// Provides a stream of paginated workouts, optionally filtered by a start and end date.
-  ///
-  /// Each call retrieves one page of workouts. Subsequent calls retrieve the next page.
-  /// If `start` and/or `end` are provided, filters the workouts to those within the given date range.
-  Stream<List<Workout>> paginatedWorkoutsStream(
-      {DateTime? start, DateTime? end}) {
-    Query query = dbRef
-        .child('users/$userId/workouts')
-        .orderByChild('timestamp')
-        .limitToFirst((_currentPage + 1) * _pageSize);
-
-    if (start != null && end == null) {
-      // Assuming end date is today if not provided
-      end = DateTime.now();
+  /// Returns a stream of workout records within a specified date range.
+  Stream<List<Workout>> workoutsStream({DateTime? start, DateTime? end}) {
+    Query query =
+        dbRef.child('users/$userId/workouts').orderByChild('timestamp');
+    if (start != null) {
+      query = query.startAt(start.toIso8601String());
     }
-    if (start == null && end != null) {
-      // Assuming start date is a reasonable past limit if not provided
-      start = DateTime.now().subtract(const Duration(days: 365));
+    if (end != null) {
+      query = query.endAt(end.toIso8601String());
     }
-    if (start != null) query = query.startAt(start.toUtc().toIso8601String());
-    if (end != null) query = query.endAt(end.toUtc().toIso8601String());
 
     return query.onValue.map((event) {
       final data = event.snapshot.value;
@@ -64,24 +38,18 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  /// Advances to the next page of workouts.
-  void nextPage() {
-    _currentPage++;
-    notifyListeners();
-  }
-
-  /// Initializes the workout list and sets up a listener to update local data on changes.
+  /// Initializes the workout records.
   Future<void> initWorkouts() async {
-    paginatedWorkoutsStream().listen((workouts) {
+    workoutsStream().listen((workouts) {
       workoutList = workouts;
       notifyListeners();
     });
   }
 
-  /// Adds a new workout to Firebase under the current user's ID with the current timestamp.
+  /// Adds a new workout record to the database.
   void addWorkout(String name) {
     final newWorkoutRef = dbRef.child('users/$userId/workouts').push();
-    final now = DateTime.now().toUtc(); // Convert to UTC
+    final now = DateTime.now();
     newWorkoutRef.set({
       'name': name,
       'exercises': [],
@@ -96,7 +64,7 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  /// Adds exercises to a specific workout in Firebase.
+  /// Adds a new exercise to a workout record.
   void addExercises(String workoutId, String exerciseName, String weight,
       String reps, String sets) {
     dbRef.child('users/$userId/workouts/$workoutId/exercises').push().set({
@@ -108,7 +76,7 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  /// Updates the name of an existing workout.
+  /// Updates the name of a workout record.
   void updateWorkoutName(String workoutId, String newName) {
     dbRef.child('users/$userId/workouts/$workoutId').update({
       'name': newName,
@@ -123,6 +91,7 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
+  /// Updates the completion status of an exercise.
   void checkOffExercise(String workoutId, String exerciseId, bool isCompleted) {
     dbRef
         .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
@@ -135,7 +104,7 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  /// Marks an exercise as completed or not completed.
+  /// Deletes a workout record from the database.
   void deleteWorkout(String workoutId) {
     dbRef.child('users/$userId/workouts/$workoutId').remove().then((_) {
       workoutList.removeWhere((workout) => workout.key == workoutId);
@@ -146,7 +115,7 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  /// Edits the name of a workout.
+  /// Deletes an exercise from a workout record.
   void editWorkout(String workoutId, String newName) {
     dbRef.child('users/$userId/workouts/$workoutId').update({'name': newName});
     int index = workoutList.indexWhere((workout) => workout.key == workoutId);
@@ -156,7 +125,7 @@ class WorkoutRecord extends ChangeNotifier {
     }
   }
 
-  /// Deletes an exercise from a workout.
+  /// Deletes an exercise from a workout record.
   void deleteExercise(String workoutId, String exerciseId) {
     dbRef
         .child('users/$userId/workouts/$workoutId/exercises/$exerciseId')
@@ -169,7 +138,7 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  /// Edits an exercise in a workout.
+  /// Edits an exercise in a workout record.
   void editExercise(String workoutId, String exerciseId, String newName,
       String newWeight, String newReps, String newSets, bool newIsCompleted) {
     dbRef
@@ -188,9 +157,7 @@ class WorkoutRecord extends ChangeNotifier {
     });
   }
 
-  /// Retrieves a stream of exercises for a specific workout.
-  ///
-  /// This method listens for real-time updates to a workout's exercises, reflecting any additions, deletions, or modifications.
+  /// Returns a stream of exercises within a specified workout.
   Stream<List<Exercise>> getExercisesStream(String workoutId) {
     return dbRef
         .child('users/$userId/workouts/$workoutId/exercises')
