@@ -1,5 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/25QNtE92)
-
 # GymPal
 
 This project was created by James Burriss, Landon Casstevens, Brandon Plyler, Michael Gogarty, and Riley Simpson. A general description of the project is to allow users to find gym partners in their area, as well as have a fitness tracking system. There are various implementations to reach these goals. Programming Languages that this project will consist of are Dart and Flutter. Database implementation will be through Firebase. Additionally, Google Maps will be used for geo-location tracking and finding a gym. Created by James Burriss.
